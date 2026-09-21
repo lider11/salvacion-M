@@ -124,3 +124,33 @@ El formulario está preparado para enviar datos a `POST /api/leads`, pero delibe
 - validación servidor;
 - publicación/configuración definitiva de GitHub Pages;
 - completar responsable de tratamiento y textos legales definitivos.
+
+
+## Actualización — 20 de septiembre de 2026 — accesibilidad del header
+
+### Cambio
+
+Se mejoró la accesibilidad de la navegación principal y del menú móvil.
+
+### Mejoras
+
+- etiqueta accesible dinámica para abrir/cerrar menú;
+- actualización de `aria-expanded`;
+- icono visual alterna entre menú y cierre;
+- movimiento de foco al primer enlace al abrir;
+- cierre con tecla Escape y retorno de foco al botón;
+- control de foco mediante teclado;
+- cierre automático al cambiar a escritorio;
+- objetivos táctiles mínimos de 44–48 px;
+- soporte para `prefers-reduced-motion`;
+- mejoras para modos de alto contraste / forced colors.
+
+### Archivos afectados
+
+- index.html
+- script.js
+- styles.css
+
+### Validación
+
+Se mantuvo la estructura semántica `header > nav`, el enlace de salto al contenido y la navegación por teclado.
