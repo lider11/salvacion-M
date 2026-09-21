@@ -14,17 +14,76 @@ if (yearTarget) {
 }
 
 if (menuToggle && mainNav) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = mainNav.classList.toggle("is-open");
+  const menuLabel = menuToggle.querySelector(".menu-toggle-label");
+  const menuIcon = menuToggle.querySelector(".menu-toggle-icon");
+  const navLinks = Array.from(mainNav.querySelectorAll("a"));
+
+  const setMenuState = (isOpen, returnFocus = false) => {
+    mainNav.classList.toggle("is-open", isOpen);
     menuToggle.setAttribute("aria-expanded", String(isOpen));
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"
+    );
+
+    if (menuLabel) {
+      menuLabel.textContent = isOpen
+        ? "Cerrar menú de navegación"
+        : "Abrir menú de navegación";
+    }
+
+    if (menuIcon) {
+      menuIcon.textContent = isOpen ? "✕" : "☰";
+    }
+
     document.body.classList.toggle("menu-open", isOpen);
+
+    if (isOpen) {
+      navLinks[0]?.focus();
+    } else if (returnFocus) {
+      menuToggle.focus();
+    }
+  };
+
+  menuToggle.addEventListener("click", () => {
+    const isOpen = menuToggle.getAttribute("aria-expanded") !== "true";
+    setMenuState(isOpen);
   });
 
   mainNav.addEventListener("click", (event) => {
     if (event.target.matches("a")) {
-      mainNav.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      document.body.classList.remove("menu-open");
+      setMenuState(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+
+    if (!isOpen) return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setMenuState(false, true);
+      return;
+    }
+
+    if (event.key === "Tab" && navLinks.length > 0) {
+      const firstLink = navLinks[0];
+      const lastLink = navLinks[navLinks.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstLink) {
+        event.preventDefault();
+        menuToggle.focus();
+      } else if (!event.shiftKey && document.activeElement === lastLink) {
+        event.preventDefault();
+        menuToggle.focus();
+      }
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 760 && menuToggle.getAttribute("aria-expanded") === "true") {
+      setMenuState(false);
     }
   });
 }
