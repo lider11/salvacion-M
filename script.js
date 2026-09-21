@@ -117,21 +117,22 @@
     desktopQuery.addEventListener?.("change", handleDesktopChange);
   };
 
-  const initCharacterCounter = () => {
+  const updateCharacterCounter = () => {
     const { description, charCount } = elements;
     if (!description || !charCount) return;
 
-    const update = () => {
-      const length = description.value.length;
-      charCount.textContent = `${length} / ${CONFIG.descriptionMaxLength}`;
-      charCount.setAttribute(
-        "aria-label",
-        `${length} de ${CONFIG.descriptionMaxLength} caracteres`
-      );
-    };
+    const length = description.value.length;
+    charCount.textContent = `${length} / ${CONFIG.descriptionMaxLength}`;
+    charCount.setAttribute(
+      "aria-label",
+      `${length} de ${CONFIG.descriptionMaxLength} caracteres`
+    );
+  };
 
-    description.addEventListener("input", update);
-    update();
+  const initCharacterCounter = () => {
+    if (!elements.description) return;
+    elements.description.addEventListener("input", updateCharacterCounter);
+    updateCharacterCounter();
   };
 
   const getField = (name) =>
@@ -396,7 +397,7 @@
 
         leadForm.reset();
         clearErrors();
-        initCharacterCounter();
+        updateCharacterCounter();
         elements.formStatus?.focus();
       } catch (error) {
         if (error?.name === "AbortError") {
