@@ -8,6 +8,9 @@ on:
       - "**/*.css"
       - "**/*.js"
       - "package.json"
+      - ".pa11yci.json"
+      - "playwright.config.js"
+      - "tests/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -18,6 +21,9 @@ on:
       - "**/*.css"
       - "**/*.js"
       - "package.json"
+      - ".pa11yci.json"
+      - "playwright.config.js"
+      - "tests/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -43,5 +49,11 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Validate HTML, CSS and JavaScript
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate HTML, CSS, JavaScript and WCAG
         run: npm run validate
+
+      - name: Run axe WCAG 2.2 audit
+        run: npx playwright test
