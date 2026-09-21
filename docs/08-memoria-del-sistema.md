@@ -253,3 +253,29 @@ El pipeline debe fallar cuando se detecten violaciones automáticas de accesibil
 ### Limitación
 
 La automatización no sustituye pruebas manuales con teclado, zoom, reflow ni tecnologías de asistencia reales.
+
+
+## Actualización — 20 de septiembre de 2026 — corrección de pruebas WCAG en Windows
+
+### Incidencia
+
+La ejecución local de las pruebas de accesibilidad fallaba en Windows por dos causas:
+
+- dependencia del comando `python -m http.server`, cuando Python no estaba disponible en PATH;
+- configuración de Playwright importando `@playwright/test` sin tener ese paquete declarado directamente.
+
+También se observó un error secundario de `wmic.exe ENOENT` provocado por el intento fallido de gestionar el proceso del servidor.
+
+### Corrección
+
+- se eliminó la dependencia de Python para levantar el servidor local;
+- se añadió `http-server` como servidor Node multiplataforma;
+- se añadió `@playwright/test` como dependencia directa;
+- se reemplazó la dependencia genérica `playwright`;
+- se creó el script `npm run serve`;
+- Pa11y y Playwright ahora usan el mismo servidor Node;
+- el workflow usa `npm run test:a11y:axe`.
+
+### Resultado esperado
+
+Las pruebas deben poder ejecutarse tanto en Windows como en GitHub Actions sin requerir Python ni WMIC.
