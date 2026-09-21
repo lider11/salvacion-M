@@ -34,3 +34,27 @@ Toda modificación importante del sistema debe añadir una entrada con:
 - Archivos afectados.
 - Validación realizada.
 - Pendientes.
+
+
+## Actualización — 20 de septiembre de 2026 — preparación para desarrollo
+
+### Cambio
+
+Se amplió el repositorio para que la documentación pueda utilizarse directamente como base de implementación del sitio web.
+
+### Archivos añadidos
+
+- docs/10-contenido-del-sitio.md
+- docs/11-arquitectura-del-frontend.md
+- docs/12-especificacion-formulario-api.md
+- docs/13-sistema-de-diseno.md
+- docs/14-checklist-implementacion.md
+- .env.example
+
+### Resultado
+
+Quedaron definidos el contenido público, la arquitectura del frontend, el contrato inicial del formulario y API, la separación del CRM, el sistema de diseño base y la lista de tareas para comenzar a programar.
+
+### Pendiente inmediato
+
+Inicializar el código del frontend y conectar progresivamente la interfaz con el backend y el CRM.
