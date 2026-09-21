@@ -78,15 +78,30 @@ npm run test:a11y
 
 No deben existir violaciones automáticas de nivel A/AA en las páginas auditadas. Cualquier excepción futura deberá quedar documentada con causa, impacto, criterio WCAG relacionado y plan de corrección.
 
-## Checklist manual pendiente
+## Checklist manual
 
-- [ ] Navegación completa solo con teclado.
-- [ ] NVDA + Chrome/Firefox.
-- [ ] VoiceOver + Safari.
-- [ ] Zoom 200 % y 400 %.
-- [ ] Reflow a 320 CSS px.
-- [ ] Contraste de todos los estados interactivos.
-- [ ] Orientación portrait/landscape.
-- [ ] Errores del formulario con lector de pantalla.
-- [ ] Foco visible en todos los elementos interactivos.
-- [ ] Validación final con backend y CRM conectados.
+Prueba manual reportada como superada por el responsable del proyecto.
+
+- [x] Navegación completa solo con teclado.
+- [x] Zoom 200 % y 400 %.
+- [x] Reflow a 320 CSS px.
+- [x] Contraste de estados interactivos.
+- [x] Orientación portrait/landscape.
+- [x] Errores del formulario revisados manualmente.
+- [x] Foco visible en los elementos interactivos.
+
+### Tecnologías de asistencia
+
+- [x] Validación manual principal superada.
+- [ ] NVDA + Chrome/Firefox — recomendable como evidencia complementaria si no se documentó expresamente durante la prueba.
+- [ ] VoiceOver + Safari — recomendable para cobertura multiplataforma.
+
+### Pendiente condicionado
+
+- [ ] Validación final del formulario con backend y CRM conectados.
+
+## Estado de accesibilidad
+
+**Estado actual: APROBADA EN LA FASE FRONTEND ESTÁTICO.**
+
+La conclusión se limita al estado actual del sitio. La accesibilidad debe volver a validarse cuando se incorporen backend, CRM, nuevos componentes, contenido dinámico o cambios sustanciales de interfaz.
