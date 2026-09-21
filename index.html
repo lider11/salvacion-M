@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Salvación M brinda orientación a usuarios del sistema de salud colombiano frente a demoras, negaciones, medicamentos, autorizaciones y otras barreras de acceso." />
-  <meta name="theme-color" content="#0b5f5a" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Salvación M brinda orientación a usuarios del sistema de salud colombiano frente a demoras, negaciones, medicamentos, autorizaciones y otras barreras de acceso.">
+  <meta name="theme-color" content="#0b5f5a">
   <title>Salvación M | Orientación en salud en Colombia</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
@@ -56,7 +56,8 @@
             </a>
           </div>
 
-          <ul class="trust-list" aria-label="Aspectos importantes del servicio">
+          <p id="trust-list-title" class="sr-only">Aspectos importantes del servicio</p>
+          <ul class="trust-list" aria-labelledby="trust-list-title">
             <li>Consulta inicial gratuita.</li>
             <li>Evaluación individual del caso.</li>
             <li>El alcance y precio se definen después de la consulta.</li>
@@ -205,31 +206,31 @@
           <div class="form-grid">
             <div class="field">
               <label for="nombre">Nombre completo <span class="required-mark" aria-hidden="true">*</span></label>
-              <input id="nombre" name="nombre" type="text" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="nombre-error" aria-invalid="false" />
+              <input id="nombre" name="nombre" type="text" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="nombre-error" aria-invalid="false">
               <small id="nombre-error" class="field-error" data-error-for="nombre" hidden></small>
             </div>
 
             <div class="field">
               <label for="telefono">Teléfono <span class="required-mark" aria-hidden="true">*</span></label>
-              <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required maxlength="25" aria-describedby="telefono-error" aria-invalid="false" />
+              <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required maxlength="25" aria-describedby="telefono-error" aria-invalid="false">
               <small id="telefono-error" class="field-error" data-error-for="telefono" hidden></small>
             </div>
 
             <div class="field">
               <label for="correo">Correo electrónico <span class="required-mark" aria-hidden="true">*</span></label>
-              <input id="correo" name="correo" type="email" autocomplete="email" required maxlength="160" aria-describedby="correo-error" aria-invalid="false" />
+              <input id="correo" name="correo" type="email" autocomplete="email" required maxlength="160" aria-describedby="correo-error" aria-invalid="false">
               <small id="correo-error" class="field-error" data-error-for="correo" hidden></small>
             </div>
 
             <div class="field">
               <label for="ciudad">Ciudad <span class="required-mark" aria-hidden="true">*</span></label>
-              <input id="ciudad" name="ciudad" type="text" autocomplete="address-level2" required minlength="2" maxlength="100" aria-describedby="ciudad-error" aria-invalid="false" />
+              <input id="ciudad" name="ciudad" type="text" autocomplete="address-level2" required minlength="2" maxlength="100" aria-describedby="ciudad-error" aria-invalid="false">
               <small id="ciudad-error" class="field-error" data-error-for="ciudad" hidden></small>
             </div>
 
             <div class="field">
               <label for="eps">EPS <span class="optional">(opcional)</span></label>
-              <input id="eps" name="eps" type="text" maxlength="120" />
+              <input id="eps" name="eps" type="text" maxlength="120">
             </div>
 
             <div class="field">
@@ -267,12 +268,12 @@
 
             <div class="field honeypot" aria-hidden="true">
               <label for="website">No completar este campo</label>
-              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
             </div>
 
             <div class="field field-full checkbox-field">
               <label class="checkbox-label">
-                <input id="aceptaPrivacidad" name="aceptaPrivacidad" type="checkbox" required aria-describedby="aceptaPrivacidad-error" aria-invalid="false" />
+                <input id="aceptaPrivacidad" name="aceptaPrivacidad" type="checkbox" required aria-describedby="aceptaPrivacidad-error" aria-invalid="false">
                 <span>
                   <span class="required-mark" aria-hidden="true">*</span> Acepto el tratamiento de mis datos para gestionar esta solicitud y he leído el
                   <a href="privacidad.html">aviso de privacidad</a>.
