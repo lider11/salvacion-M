@@ -110,14 +110,27 @@ h1{font-size:3.35rem}
 /* Identidad Abrazo M: símbolo y wordmark se conservan como una sola unidad. */
 .brand{gap:0;font-weight:400;letter-spacing:0}
 .brand img{display:block;width:clamp(210px,24vw,310px);height:auto}
+.brand svg{display:block;width:clamp(210px,24vw,310px);height:auto}
 .brand.inverse img{width:min(100%,360px)}
 @media(max-width:620px){.brand img{width:210px}}
 
 /* Header dinámico: conserva jerarquía al inicio y libera espacio durante la lectura. */
 .topbar{transition:height .26s ease,box-shadow .26s ease,padding .26s ease}
 .topbar .brand img{transition:width .26s ease}
+.topbar .brand svg{transition:width .26s ease}
 .topbar.is-compact{height:64px;box-shadow:0 10px 30px rgba(11,58,83,.12)}
 .topbar.is-compact .brand img{width:230px}
+.topbar.is-compact .brand svg{width:230px}
 @media(max-width:1000px){.topbar.is-compact nav{top:64px}}
 @media(max-width:620px){.topbar.is-compact{height:62px}.topbar.is-compact .brand img{width:188px}.topbar.is-compact nav{top:62px}}
-@media(prefers-reduced-motion:reduce){.topbar,.topbar .brand img{transition:none}}
+@media(max-width:620px){.topbar.is-compact .brand svg{width:188px}.brand svg{width:210px}}
+@media(prefers-reduced-motion:reduce){.topbar,.topbar .brand img,.topbar .brand svg{transition:none}}
+
+.brand-motion.is-replaying .person-left{animation:brand-meet-left .72s cubic-bezier(.2,.75,.25,1) both}
+.brand-motion.is-replaying .person-right{animation:brand-meet-right .72s cubic-bezier(.2,.75,.25,1) both}
+.brand-motion.is-replaying .embrace-line{animation:brand-reveal .34s .52s ease-out both}
+.brand-motion.is-replaying .wordmark{animation:brand-reveal .42s .66s ease-out both}
+@keyframes brand-meet-left{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes brand-meet-right{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes brand-reveal{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.brand-motion.is-replaying .person-left,.brand-motion.is-replaying .person-right,.brand-motion.is-replaying .embrace-line,.brand-motion.is-replaying .wordmark{animation:none}}
