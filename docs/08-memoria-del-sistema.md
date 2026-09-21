@@ -154,3 +154,32 @@ Se mejoró la accesibilidad de la navegación principal y del menú móvil.
 ### Validación
 
 Se mantuvo la estructura semántica `header > nav`, el enlace de salto al contenido y la navegación por teclado.
+
+
+## Actualización — 20 de septiembre de 2026 — refactorización CSS
+
+### Cambio
+
+Se refactorizó `styles.css` conservando la identidad visual existente y fortaleciendo accesibilidad, consistencia y mantenibilidad.
+
+### Mejoras aplicadas
+
+- nuevos tokens para foco, bordes, superficie oscura, pesos tipográficos y espaciado;
+- foco visible de mayor contraste;
+- estados visuales para campos con `aria-invalid="true"`;
+- checkbox con mayor área interactiva y `accent-color`;
+- señales adicionales de interacción mediante subrayado en enlaces;
+- fallback para header translúcido y uso progresivo de `backdrop-filter`;
+- clase `.prose` para controlar longitud de lectura;
+- normalización de pesos tipográficos;
+- sustitución de colores repetidos por tokens;
+- ampliación de soporte para `forced-colors`;
+- simplificación de `prefers-reduced-motion`.
+
+### Archivo afectado
+
+- styles.css
+
+### Criterio
+
+La refactorización es progresiva y evita reconstruir el diseño desde cero.
