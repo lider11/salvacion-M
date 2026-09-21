@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Consulta inicial gratuita y acompañamiento frente a barreras del sistema de salud colombiano.">
+  <meta name="theme-color" content="#0B3A53">
+  <title>Salvación M — Tu salud, nuestros derechos</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>.lead-form{display:grid;gap:14px;margin-top:22px}.lead-form label{display:grid;gap:6px;font-weight:700}.lead-form input,.lead-form textarea{width:100%;box-sizing:border-box;border:1px solid #8faeb8;border-radius:9px;padding:12px;font:inherit}.lead-form textarea{min-height:84px}.lead-form .consent{display:flex;gap:9px;align-items:flex-start;font-weight:400}.lead-form .consent input{width:auto;margin-top:4px}.form-status{padding:12px;border-radius:9px;background:#edf7f4}.form-status.error{background:#fff0ed;color:#842b20}.reference{font-size:1.35rem;color:#0b3a53;font-weight:800}</style>
+</head>
+<body>
+  <a class="skip" href="#main">Ir al contenido</a>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Salvación M, inicio"><span class="mark" aria-hidden="true">M</span><span>SALVACIÓN M<small>Orientación y acompañamiento en salud</small></span></a>
+    <button class="menu" aria-expanded="false" aria-controls="nav">Menú</button>
+    <nav id="nav" aria-label="Principal">
+      <a href="#problemas">Problemas frecuentes</a><a href="#como">Cómo ayudamos</a><a href="#recursos">Recursos</a><a href="#nosotros">Nosotros</a>
+      <a class="nav-cta" href="#orientador">Cuéntanos tu caso</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <p class="eyebrow">Orientación clara para actuar</p>
+        <h1>Tu salud,<br><span>nuestros derechos.</span></h1>
+        <p class="lead">Si una EPS, IPS o farmacia está demorando o negando un servicio, empieza por contar qué está pasando. La consulta inicial es gratuita; después se informa el alcance y el precio de cualquier servicio adicional.</p>
+        <div class="actions"><a class="button primary" href="#orientador">Cuéntanos tu caso</a><a class="button ghost" href="#como">Cómo podemos ayudarte</a></div>
+        <p class="fine">Salvación M es un servicio independiente de orientación. No somos EPS, IPS, clínica, autoridad pública ni servicio de urgencias.</p>
+      </div>
+      <aside class="route-card" aria-label="Ruta de orientación">
+        <p class="step-label">TU RUTA</p>
+        <ol><li><b>Cuéntanos el problema</b><span>En palabras sencillas.</span></li><li><b>Ordenamos la información</b><span>Fechas, respuestas y documentos.</span></li><li><b>Identificamos opciones</b><span>Pasos claros y límites.</span></li></ol>
+      </aside>
+    </section>
+
+    <section class="section" id="problemas">
+      <div class="section-head"><p class="eyebrow">Empieza por tu situación</p><h2>¿Qué problema tienes?</h2><p>No necesitas conocer el nombre del trámite o mecanismo jurídico.</p></div>
+      <div class="problem-grid">
+        <button class="problem" data-problem="medicamento"><span>01</span><b>No me entregan un medicamento</b><small>Hay orden médica, pero la entrega no ocurre.</small></button>
+        <button class="problem" data-problem="procedimiento"><span>02</span><b>No autorizan mi procedimiento</b><small>La autorización está negada o demorada.</small></button>
+        <button class="problem" data-problem="especialista"><span>03</span><b>No consigo cita o especialista</b><small>No hay agenda o la espera se prolonga.</small></button>
+        <button class="problem" data-problem="continuidad"><span>04</span><b>Interrumpieron mi tratamiento</b><small>Un tratamiento en curso dejó de prestarse.</small></button>
+        <button class="problem" data-problem="negacion"><span>05</span><b>Me negaron un servicio</b><small>Recibiste una negativa verbal o escrita.</small></button>
+      </div>
+    </section>
+
+    <section class="orientador-wrap" id="orientador">
+      <div class="orientador-intro"><p class="eyebrow light">Consulta inicial gratuita</p><h2>Cuéntanos tu caso</h2><p>Responde cuatro preguntas y, si deseas solicitar una consulta, completa tus datos y una fecha preferida. Solo guardaremos la información cuando envíes la solicitud.</p><div class="privacy-note">No incluyas diagnósticos ni historia clínica. En esta etapa solo necesitamos información mínima de contacto.</div></div>
+      <form id="caseForm" class="wizard" novalidate>
+        <input type="hidden" name="entity" value="por_confirmar"><input type="hidden" name="order" value="por_confirmar"><input type="hidden" name="action" value="orientacion_inicial">
+        <div class="progress"><span id="progressText">Paso 1 de 4</span><progress id="progress" value="1" max="4">25%</progress></div>
+        <fieldset class="panel active" data-step="1"><legend>¿Cuál es el problema principal?</legend>
+          <div class="choices">
+            <label><input type="radio" name="problem" value="medicamento" required><span>No entregan un medicamento</span></label>
+            <label><input type="radio" name="problem" value="procedimiento"><span>No autorizan un procedimiento</span></label>
+            <label><input type="radio" name="problem" value="especialista"><span>No asignan cita o especialista</span></label>
+            <label><input type="radio" name="problem" value="continuidad"><span>Interrumpieron un tratamiento</span></label>
+            <label><input type="radio" name="problem" value="negacion"><span>Negaron un servicio</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="panel" data-step="2"><legend>¿Existe un riesgo inmediato?</legend><p class="help">Por ejemplo: dificultad grave para respirar, pérdida de conciencia o riesgo evidente para la vida.</p>
+          <div class="choices"><label><input type="radio" name="urgent" value="yes" required><span>Sí, puede ser una emergencia</span></label><label><input type="radio" name="urgent" value="no"><span>No identifico un riesgo inmediato</span></label><label><input type="radio" name="urgent" value="unknown"><span>No estoy seguro</span></label></div>
+        </fieldset>
+        <fieldset class="panel" data-step="3"><legend>¿Qué soporte tienes?</legend><div class="choices"><label><input type="radio" name="support" value="written" required><span>Respuesta o negación escrita</span></label><label><input type="radio" name="support" value="order"><span>Orden o fórmula médica</span></label><label><input type="radio" name="support" value="verbal"><span>Respuesta verbal</span></label><label><input type="radio" name="support" value="none"><span>Aún no tengo soporte</span></label></div></fieldset>
+        <fieldset class="panel" data-step="4"><legend>¿Hace cuánto ocurre?</legend><div class="choices"><label><input type="radio" name="time" value="today" required><span>Hoy o ayer</span></label><label><input type="radio" name="time" value="week"><span>Entre 3 y 7 días</span></label><label><input type="radio" name="time" value="month"><span>Más de una semana</span></label><label><input type="radio" name="time" value="unknown"><span>No lo sé</span></label></div></fieldset>
+        <p id="formError" class="error" role="alert"></p>
+        <div class="wizard-actions"><button type="button" id="prev" class="button ghost" hidden>Anterior</button><button type="button" id="next" class="button primary">Continuar</button><button type="submit" id="finish" class="button primary" hidden>Ver orientación</button></div>
+      </form>
+      <div id="result" class="result" hidden tabindex="-1"></div>
+    </section>
+
+    <section class="section split" id="como"><div><p class="eyebrow">Un servicio delimitado</p><h2>Te ayudamos a entender, ordenar y actuar</h2></div><div class="service-list"><article><b>Orientación inicial</b><p>Identificamos información faltante, entidad involucrada y ruta posible.</p></article><article><b>Revisión del caso</b><p>Analizamos documentos y respuestas dentro del alcance contratado.</p></article><article><b>Acompañamiento</b><p>Preparamos contigo el siguiente paso, sin garantizar decisiones de terceros.</p></article></div></section>
+
+    <section class="section resources" id="recursos"><div class="section-head"><p class="eyebrow">Para tomar decisiones informadas</p><h2>Recursos esenciales</h2></div><div class="resource-grid"><article><span>Guía</span><h3>Cómo organizar un caso</h3><p>Una cronología simple puede mostrar qué ocurrió, cuándo y quién respondió.</p></article><article><span>Lista</span><h3>Documentos útiles</h3><p>Orden médica, autorización, respuesta, radicado y evidencia de seguimiento.</p></article><article><span>Directorio</span><h3>Canales institucionales</h3><p>Identifica el canal oficial antes de compartir información sensible.</p></article></div></section>
+
+    <section class="section about" id="nosotros"><div><p class="eyebrow light">Salvación M</p><h2>Humanidad para escuchar.<br>Rigor para orientar.</h2></div><p>Responsable: Daniel Enrique Vergel González Rubio, abogado, C.C. 72.255.284. La consulta inicial es gratuita. Si el caso requiere un servicio adicional, su alcance y precio se informan antes de contratar. No ofrecemos pagos en línea.</p></section>
+
+    <section class="section" id="privacidad"><div class="section-head"><p class="eyebrow">Transparencia</p><h2>Política de privacidad</h2></div><div><p><b>Responsable:</b> Daniel Enrique Vergel González Rubio, C.C. 72.255.284. Contacto: <a href="mailto:devergel@yahoo.com">devergel@yahoo.com</a> y WhatsApp <a href="https://wa.me/573012370047">301 237 0047</a>.</p><p>Los datos suministrados voluntariamente se tratarán para responder consultas, evaluar casos, gestionar citas, prestar servicios contratados, comunicarnos, conservar constancias y cumplir obligaciones legales. Los datos de salud son sensibles: no deben enviarse mediante este formulario; si posteriormente fueran indispensables, se solicitará autorización explícita.</p><p>El titular puede conocer, actualizar, rectificar y solicitar supresión; pedir prueba de autorización; conocer el uso; presentar quejas ante la autoridad competente; y revocar la autorización cuando legalmente proceda.</p><p>Aplicamos minimización, acceso restringido, confidencialidad y conservación limitada. No vendemos datos. Las respuestas solo se almacenan cuando el titular envía voluntariamente la solicitud; el consentimiento queda asociado a su referencia.</p><p><b>Vigencia:</b> 21 de septiembre de 2026. Política elaborada bajo la Ley 1581 de 2012 y sus normas reglamentarias aplicables.</p></div></section>
+
+    <section class="section split" id="terminos"><div><p class="eyebrow">Condiciones del servicio</p><h2>Términos de consulta y contratación</h2></div><div><p>La consulta inicial es gratuita y no crea por sí sola mandato, representación judicial ni obligación de aceptar el caso.</p><p>Si se propone un servicio adicional, antes de contratar se informarán por escrito objeto, alcance, exclusiones, honorarios, forma de pago, duración estimada y terminación. No existe pasarela de pago en este sitio.</p><p>Salvación M no presta atención médica, no sustituye urgencias ni garantiza decisiones administrativas o judiciales. La contratación se perfecciona mediante aceptación expresa de la propuesta correspondiente.</p></div></section>
+
+    <section class="cta"><p class="eyebrow">Tu siguiente paso puede ser más claro</p><h2>Empieza por contarnos qué está pasando.</h2><a class="button primary" href="#orientador">Iniciar orientación</a></section>
+  </main>
+
+  <footer><div class="brand inverse"><span class="mark">M</span><span>SALVACIÓN M<small>Tu salud, nuestros derechos.</small></span></div><div><b>Información</b><a href="#como">Alcance</a><a href="#privacidad">Privacidad</a><a href="#terminos">Términos</a><a href="mailto:devergel@yahoo.com">devergel@yahoo.com</a><a href="https://wa.me/573012370047">WhatsApp 301 237 0047</a></div><div><b>Importante</b><p>No prestamos atención médica ni sustituimos servicios de urgencias. Ante una emergencia, acude a los canales oficiales de atención.</p></div><p class="copyright">© 2026 Salvación M · Daniel Enrique Vergel González Rubio, abogado · C.C. 72.255.284</p></footer>
+  <script src="app.js"></script>
+</body></html>

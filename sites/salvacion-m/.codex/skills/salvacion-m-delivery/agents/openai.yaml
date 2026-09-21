@@ -1,0 +1,4 @@
+interface:
+  display_name: "Entrega Salvación M"
+  short_description: "Implementa y audita los sprints de Salvación M"
+  default_prompt: "Revisa el contexto y completa la siguiente actividad de Salvación M con evidencia verificable."
