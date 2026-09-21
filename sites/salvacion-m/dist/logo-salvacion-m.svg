@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 96" role="img" aria-labelledby="title desc">
+  <title id="title">Salvación M</title>
+  <desc id="desc">Dos figuras humanas curvas forman una M de acompañamiento y protección.</desc>
+  <defs><linearGradient id="embrace" x1="20" y1="18" x2="116" y2="84" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0B3A53"/><stop offset=".52" stop-color="#008C8C"/><stop offset="1" stop-color="#1F8A5B"/></linearGradient></defs>
+  <g aria-hidden="true"><circle cx="29" cy="17" r="10" fill="#0B3A53"/><circle cx="99" cy="17" r="10" fill="#008C8C"/><path d="M14 82V36c0-10 10-16 18-9l32 30 32-30c8-7 18-1 18 9v46c-10-6-16-16-16-29V46L69 73c-3 3-7 3-10 0L30 46v7c0 13-6 23-16 29Z" fill="url(#embrace)"/><path d="M26 36c9 3 17 10 24 17 5 5 10 9 14 9s9-4 14-9c7-7 15-14 24-17" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/></g>
+  <text x="134" y="50" fill="#0B3A53" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" letter-spacing="2">SALVACIÓN <tspan fill="#1F8A5B">M</tspan></text>
+  <text x="135" y="72" fill="#53666F" font-family="Arial, Helvetica, sans-serif" font-size="11.5" font-weight="600" letter-spacing=".35">ORIENTACIÓN Y ACOMPAÑAMIENTO EN SALUD</text>
+</svg>
