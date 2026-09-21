@@ -299,3 +299,32 @@ Se eliminó `start-server-and-test` del flujo. Pa11y queda desacoplado del gesto
 ### Estado
 
 Las pruebas automáticas WCAG actuales pasan en las tres páginas auditadas; permanece pendiente la validación manual con tecnologías de asistencia.
+
+
+## Actualización — 21 de septiembre de 2026 — auditoría manual WCAG superada
+
+### Resultado
+
+El responsable del proyecto informó que la auditoría manual de accesibilidad del frontend fue superada.
+
+### Evidencia acumulada
+
+- HTML, CSS y JavaScript pasan validación automatizada.
+- Axe + Playwright: 3 de 3 páginas aprobadas.
+- Pa11y: 3 de 3 URLs con 0 errores.
+- Auditoría manual del frontend reportada como superada.
+
+### Estado
+
+La fase de accesibilidad del frontend estático se considera aprobada en su estado actual.
+
+### Alcance de la aprobación
+
+La aprobación no cubre todavía:
+
+- comportamiento final con backend;
+- integración con CRM;
+- componentes dinámicos futuros;
+- regresiones posteriores.
+
+Debe repetirse la validación de accesibilidad cuando se incorporen cambios sustanciales.
