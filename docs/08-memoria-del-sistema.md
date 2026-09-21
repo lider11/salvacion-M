@@ -279,3 +279,23 @@ También se observó un error secundario de `wmic.exe ENOENT` provocado por el i
 ### Resultado esperado
 
 Las pruebas deben poder ejecutarse tanto en Windows como en GitHub Actions sin requerir Python ni WMIC.
+
+
+## Actualización — 20 de septiembre de 2026 — resultado local de accesibilidad
+
+### Resultado observado
+
+- Axe + Playwright: 3 de 3 páginas superaron la auditoría automática.
+- Pa11y: 3 de 3 URLs reportaron 0 errores.
+
+### Incidencia residual
+
+En Windows, `start-server-and-test` intentó invocar `wmic.exe` al cerrar o inspeccionar el proceso del servidor. Windows modernos pueden no incluir WMIC, generando `ENOENT` incluso después de que Pa11y haya completado correctamente.
+
+### Corrección
+
+Se eliminó `start-server-and-test` del flujo. Pa11y queda desacoplado del gestor de procesos problemático para Windows. El servidor se puede ejecutar con `npm run serve` en una terminal y la auditoría con `npm run test:a11y:pa11y` en otra.
+
+### Estado
+
+Las pruebas automáticas WCAG actuales pasan en las tres páginas auditadas; permanece pendiente la validación manual con tecnologías de asistencia.
