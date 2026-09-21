@@ -1,0 +1,19 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "attr-quotes": "error",
+    "close-order": "error",
+    "doctype-html": "error",
+    "element-permitted-content": "error",
+    "element-required-attributes": "error",
+    "input-missing-label": "error",
+    "no-dup-id": "error",
+    "no-implicit-button-type": "error",
+    "wcag/h30": "error",
+    "wcag/h32": "error",
+    "wcag/h37": "error",
+    "wcag/h63": "error",
+    "wcag/h67": "error",
+    "wcag/h71": "error"
+  }
+}
