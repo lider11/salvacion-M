@@ -79,3 +79,48 @@ El agente queda encargado de revisar requisitos, detectar incumplimientos, prior
 ### Regla
 
 Ningún sprint debe declararse terminado sin evidencia verificable, pruebas aplicables, documentación actualizada y memoria al día.
+
+
+## Actualización — 20 de septiembre de 2026 — primera versión web vanilla
+
+### Cambio
+
+Se implementó la primera versión funcional del sitio público usando exclusivamente HTML, CSS y JavaScript vanilla.
+
+### Archivos creados
+
+- index.html
+- styles.css
+- script.js
+- privacidad.html
+- terminos.html
+- .nojekyll
+
+### Funcionalidades
+
+- navegación responsive;
+- hero y propuesta de valor;
+- servicios;
+- flujo de atención;
+- bloque de transparencia;
+- formulario con validación cliente;
+- protección honeypot básica;
+- contador de caracteres;
+- estados accesibles de error;
+- contacto por correo y WhatsApp;
+- páginas legales iniciales;
+- diseño responsive;
+- preparación para GitHub Pages.
+
+### Integración CRM
+
+El formulario está preparado para enviar datos a `POST /api/leads`, pero deliberadamente no muestra éxito mientras no exista backend conectado. Esto cumple la regla de no confirmar persistencia inexistente.
+
+### Pendiente
+
+- implementar backend/API;
+- persistencia;
+- CRM;
+- validación servidor;
+- publicación/configuración definitiva de GitHub Pages;
+- completar responsable de tratamiento y textos legales definitivos.
