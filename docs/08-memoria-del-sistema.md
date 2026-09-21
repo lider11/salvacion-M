@@ -219,3 +219,37 @@ Se mantuvieron las asociaciones `label`, `aria-describedby`, `aria-invalid`, est
 - cabeceras HTTP de seguridad en el entorno de hosting;
 - validación, rate limiting y controles antiabuso en backend;
 - cierre del aviso de privacidad definitivo antes de producción.
+
+
+## Actualización — 20 de septiembre de 2026 — auditoría automática WCAG
+
+### Cambio
+
+Se incorporó una capa formal de auditoría de accesibilidad y pruebas automatizadas de WCAG.
+
+### Herramientas
+
+- Pa11y CI.
+- Playwright.
+- Axe Core para navegador.
+
+### Cobertura
+
+Se auditan automáticamente las páginas públicas principales y se integran las pruebas al workflow de GitHub Actions.
+
+### Archivos
+
+- .pa11yci.json
+- playwright.config.js
+- tests/accessibility.spec.js
+- docs/16-auditoria-accesibilidad.md
+- package.json
+- .github/workflows/frontend-validation.yml
+
+### Regla de calidad
+
+El pipeline debe fallar cuando se detecten violaciones automáticas de accesibilidad A/AA en las páginas auditadas.
+
+### Limitación
+
+La automatización no sustituye pruebas manuales con teclado, zoom, reflow ni tecnologías de asistencia reales.
