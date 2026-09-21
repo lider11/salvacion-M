@@ -58,3 +58,24 @@ Quedaron definidos el contenido público, la arquitectura del frontend, el contr
 ### Pendiente inmediato
 
 Inicializar el código del frontend y conectar progresivamente la interfaz con el backend y el CRM.
+
+
+## Actualización — 20 de septiembre de 2026 — agente operativo
+
+### Cambio
+
+Se creó el agente permanente de cumplimiento y continuidad del proyecto.
+
+### Archivos
+
+- .github/agents/salvacion-m-agent.md
+- AGENTS.md
+- docs/15-agent-operativo.md
+
+### Función
+
+El agente queda encargado de revisar requisitos, detectar incumplimientos, priorizar riesgos, corregir desviaciones dentro del alcance, validar cambios, verificar criterios de aceptación y mantener actualizada la memoria del sistema.
+
+### Regla
+
+Ningún sprint debe declararse terminado sin evidencia verificable, pruebas aplicables, documentación actualizada y memoria al día.
