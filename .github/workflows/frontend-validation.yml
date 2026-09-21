@@ -56,4 +56,4 @@ jobs:
         run: npm run validate
 
       - name: Run axe WCAG 2.2 audit
-        run: npx playwright test
+        run: npm run test:a11y:axe
