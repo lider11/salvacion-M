@@ -352,3 +352,18 @@ Debe repetirse la validación de accesibilidad cuando se incorporen cambios sust
 - La animación de entrada se ejecuta una sola vez por carga.
 - Se incorporó compatibilidad con `prefers-reduced-motion`.
 - Evidencia: 6 pruebas aprobadas, validación del Worker y manifiesto D1 aprobada, versión 7 publicada en Sites.
+
+### Corrección de reproducción por interacción
+
+- Se detectó que la animación interna del SVG externo solo se ejecutaba durante la carga inicial.
+- El logo del header se integró como SVG en línea para controlar sus elementos de forma fiable.
+- La animación ahora se reproduce al cargar y con cada clic o toque sobre la marca, sin impedir el enlace al inicio.
+- Se mantiene la exclusión automática del movimiento cuando el sistema solicita animaciones reducidas.
+- Evidencia: 7 pruebas aprobadas y versión 8 publicada en Sites.
+
+### Corrección de caché de recursos
+
+- Se comprobó que el navegador podía conservar durante una hora versiones anteriores de `app.js` y `styles.css`.
+- Se versionaron las referencias de ambos recursos y se cambió su política a `no-cache`.
+- La versión 9 fuerza la descarga inmediata del comportamiento y los estilos actuales del header.
+- Evidencia: 8 pruebas aprobadas y despliegue productivo finalizado correctamente.
