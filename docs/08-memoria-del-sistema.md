@@ -183,3 +183,39 @@ Se refactorizó `styles.css` conservando la identidad visual existente y fortale
 ### Criterio
 
 La refactorización es progresiva y evita reconstruir el diseño desde cero.
+
+
+## Actualización — 20 de septiembre de 2026 — endurecimiento frontend fase 1
+
+### Cambio
+
+Se inició la fase de endurecimiento del frontend tras la auditoría integral.
+
+### Mejoras aplicadas
+
+- corrección del registro duplicado del listener del contador de caracteres;
+- separación entre inicialización y actualización del contador;
+- identificación visual de campos obligatorios sin duplicar información para lectores de pantalla;
+- semántica reforzada mediante `aria-labelledby` en transparencia y contacto;
+- aviso accesible en enlaces de WhatsApp que abren nueva pestaña;
+- `scroll-margin-top` para evitar que el header sticky oculte destinos de navegación;
+- refuerzo de objetivos táctiles y `touch-action`;
+- soporte adicional para usuarios con preferencia de mayor contraste.
+
+### Archivos afectados
+
+- index.html
+- styles.css
+- script.js
+
+### Validación
+
+Se mantuvieron las asociaciones `label`, `aria-describedby`, `aria-invalid`, estados vivos del formulario, navegación por teclado y reducción de movimiento.
+
+### Pendientes de endurecimiento
+
+- pruebas automatizadas y manuales WCAG 2.2 AA en navegador;
+- Lighthouse/Core Web Vitals sobre despliegue real;
+- cabeceras HTTP de seguridad en el entorno de hosting;
+- validación, rate limiting y controles antiabuso en backend;
+- cierre del aviso de privacidad definitivo antes de producción.
