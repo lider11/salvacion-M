@@ -343,3 +343,12 @@ Debe repetirse la validación de accesibilidad cuando se incorporen cambios sust
 - Se creó una versión principal y una versión inversa para el pie de página.
 - Se conservó el favicon reducido para usos de baja resolución.
 - Evidencia: 5 pruebas aprobadas, validación del Worker y manifiesto D1 aprobada, versión 6 publicada en Sites.
+
+## Animación del header — 21 de septiembre de 2026
+
+- Se implementó la recomendación combinada aprobada.
+- Al cargar, las dos figuras del símbolo se acercan desde lados opuestos y forman la M; después aparece el wordmark.
+- Durante el desplazamiento, el header reduce su altura y conserva disponibles la marca, la navegación y el menú móvil.
+- La animación de entrada se ejecuta una sola vez por carga.
+- Se incorporó compatibilidad con `prefers-reduced-motion`.
+- Evidencia: 6 pruebas aprobadas, validación del Worker y manifiesto D1 aprobada, versión 7 publicada en Sites.
