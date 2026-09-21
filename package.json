@@ -1,0 +1,18 @@
+{
+  "name": "salvacion-m-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Validación automatizada del frontend estático de Salvación M",
+  "scripts": {
+    "validate": "npm run validate:html && npm run validate:css && npm run validate:js",
+    "validate:html": "html-validate index.html privacidad.html terminos.html",
+    "validate:css": "stylelint \"**/*.css\"",
+    "validate:js": "eslint script.js"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "html-validate": "^9.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}
