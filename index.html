@@ -51,7 +51,7 @@
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#consulta">Solicitar consulta gratuita</a>
-            <a class="btn btn-secondary" href="https://wa.me/573012370047" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-secondary" href="https://wa.me/573012370047" target="_blank" rel="noopener noreferrer" aria-label="Hablar por WhatsApp, abre en una nueva pestaña">
               Hablar por WhatsApp
             </a>
           </div>
@@ -166,11 +166,11 @@
       </div>
     </section>
 
-    <section class="section section-accent">
+    <section class="section section-accent" aria-labelledby="transparencia-title">
       <div class="container split-grid">
         <div>
           <span class="eyebrow eyebrow-light">Transparencia</span>
-          <h2>Lo que debes saber antes de enviar tu solicitud</h2>
+          <h2 id="transparencia-title">Lo que debes saber antes de enviar tu solicitud</h2>
         </div>
         <div class="transparency-list">
           <p>No sustituimos servicios médicos ni emitimos diagnósticos clínicos.</p>
@@ -196,33 +196,33 @@
           </div>
           <div class="contact-mini">
             <span>WhatsApp</span>
-            <a href="https://wa.me/573012370047" target="_blank" rel="noopener noreferrer">301 237 0047</a>
+            <a href="https://wa.me/573012370047" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp 301 237 0047, abre en una nueva pestaña">301 237 0047</a>
           </div>
         </div>
 
         <form id="lead-form" class="lead-form" novalidate aria-labelledby="consulta-title" aria-describedby="form-help" aria-busy="false">
-          <p id="form-help" class="sr-only">Los campos marcados como obligatorios deben completarse antes de enviar la solicitud.</p>
+          <p id="form-help" class="form-help">Los campos con <span class="required-mark" aria-hidden="true">*</span> son obligatorios.</p>
           <div class="form-grid">
             <div class="field">
-              <label for="nombre">Nombre completo</label>
+              <label for="nombre">Nombre completo <span class="required-mark" aria-hidden="true">*</span></label>
               <input id="nombre" name="nombre" type="text" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="nombre-error" aria-invalid="false" />
               <small id="nombre-error" class="field-error" data-error-for="nombre" hidden></small>
             </div>
 
             <div class="field">
-              <label for="telefono">Teléfono</label>
+              <label for="telefono">Teléfono <span class="required-mark" aria-hidden="true">*</span></label>
               <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required maxlength="25" aria-describedby="telefono-error" aria-invalid="false" />
               <small id="telefono-error" class="field-error" data-error-for="telefono" hidden></small>
             </div>
 
             <div class="field">
-              <label for="correo">Correo electrónico</label>
+              <label for="correo">Correo electrónico <span class="required-mark" aria-hidden="true">*</span></label>
               <input id="correo" name="correo" type="email" autocomplete="email" required maxlength="160" aria-describedby="correo-error" aria-invalid="false" />
               <small id="correo-error" class="field-error" data-error-for="correo" hidden></small>
             </div>
 
             <div class="field">
-              <label for="ciudad">Ciudad</label>
+              <label for="ciudad">Ciudad <span class="required-mark" aria-hidden="true">*</span></label>
               <input id="ciudad" name="ciudad" type="text" autocomplete="address-level2" required minlength="2" maxlength="100" aria-describedby="ciudad-error" aria-invalid="false" />
               <small id="ciudad-error" class="field-error" data-error-for="ciudad" hidden></small>
             </div>
@@ -233,7 +233,7 @@
             </div>
 
             <div class="field">
-              <label for="tipoSolicitud">Tipo de solicitud</label>
+              <label for="tipoSolicitud">Tipo de solicitud <span class="required-mark" aria-hidden="true">*</span></label>
               <select id="tipoSolicitud" name="tipoSolicitud" required aria-describedby="tipoSolicitud-error" aria-invalid="false">
                 <option value="">Selecciona una opción</option>
                 <option value="negacion-servicio">Negación de servicio</option>
@@ -247,7 +247,7 @@
             </div>
 
             <div class="field field-full">
-              <label for="descripcion">Describe tu situación</label>
+              <label for="descripcion">Describe tu situación <span class="required-mark" aria-hidden="true">*</span></label>
               <textarea id="descripcion" name="descripcion" rows="6" required minlength="20" maxlength="3000" aria-describedby="descripcion-error char-count" aria-invalid="false"></textarea>
               <div class="field-meta">
                 <small id="descripcion-error" class="field-error" data-error-for="descripcion" hidden></small>
@@ -274,7 +274,7 @@
               <label class="checkbox-label">
                 <input id="aceptaPrivacidad" name="aceptaPrivacidad" type="checkbox" required aria-describedby="aceptaPrivacidad-error" aria-invalid="false" />
                 <span>
-                  Acepto el tratamiento de mis datos para gestionar esta solicitud y he leído el
+                  <span class="required-mark" aria-hidden="true">*</span> Acepto el tratamiento de mis datos para gestionar esta solicitud y he leído el
                   <a href="privacidad.html">aviso de privacidad</a>.
                 </span>
               </label>
@@ -291,11 +291,11 @@
       </div>
     </section>
 
-    <section id="contacto" class="section">
+    <section id="contacto" class="section" aria-labelledby="contacto-title">
       <div class="container contact-panel">
         <div>
           <span class="eyebrow">Contacto directo</span>
-          <h2>También puedes comunicarte directamente.</h2>
+          <h2 id="contacto-title">También puedes comunicarte directamente.</h2>
         </div>
         <div class="contact-actions">
           <a class="contact-card" href="mailto:devergel@yahoo.com">
