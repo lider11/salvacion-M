@@ -328,3 +328,10 @@ La aprobación no cubre todavía:
 - regresiones posteriores.
 
 Debe repetirse la validación de accesibilidad cuando se incorporen cambios sustanciales.
+# Sincronización con ChatGPT Sites — 21 de septiembre de 2026
+
+- Se identificó el proyecto público `salvacion-m` y su versión publicada vigente.
+- Se incorporó una copia completa y trazable de su código en `sites/salvacion-m/`.
+- Se conservaron sin sustitución el frontend histórico, la documentación, el agente operativo y las validaciones existentes del repositorio.
+- Se ejecutaron las pruebas del proyecto Sites: 4 pruebas aprobadas, 0 fallidas.
+- Próxima regla operativa: los cambios de la versión Sites deben realizarse en `sites/salvacion-m/`, validarse allí y luego publicarse en el proyecto Sites correspondiente.

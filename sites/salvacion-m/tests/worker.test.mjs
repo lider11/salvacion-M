@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+const source=await readFile(new URL('../dist/server/index.js',import.meta.url),'utf8');const worker=(await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`)).default;
+test('health and unknown API are explicit',async()=>{let r=await worker.fetch(new Request('https://x/api/health'),{});assert.equal(r.status,200);assert.equal((await r.json()).ok,true);r=await worker.fetch(new Request('https://x/api/missing'),{});assert.equal(r.status,404)});
+test('public form rejects incomplete and missing consent',async()=>{const req=new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const r=await worker.fetch(req,{DB:{}});assert.equal(r.status,422);const p=await r.json();assert.match(p.error,/campos/)});
+test('admin endpoint denies missing token',async()=>{const r=await worker.fetch(new Request('https://x/api/admin/dashboard'),{ADMIN_API_TOKEN:'secret'});assert.equal(r.status,401)});
+test('static response includes security headers',async()=>{const r=await worker.fetch(new Request('https://x/'),{});assert.equal(r.status,200);assert.equal(r.headers.get('x-content-type-options'),'nosniff');assert.match(await r.text(),/Salvación M/)});

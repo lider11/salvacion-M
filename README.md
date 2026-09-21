@@ -63,3 +63,19 @@ El sistema se divide conceptualmente en dos superficies:
 Repositorio inicializado para consolidar la documentación, arquitectura y posterior implementación del producto.
 
 Consulta la carpeta `docs/` para la documentación funcional y técnica.
+
+## Código vigente en Sites
+
+La versión actualmente publicada en ChatGPT Sites se conserva en
+`sites/salvacion-m/`. Esta carpeta contiene el Worker, la interfaz compilada,
+las migraciones, las pruebas y la configuración de despliegue asociada al sitio
+`salvacion-m`.
+
+Para validar esa versión:
+
+```bash
+cd sites/salvacion-m
+npm install
+npm test
+npm run validate
+```
