@@ -8,7 +8,9 @@
     "validate:html": "html-validate index.html privacidad.html terminos.html",
     "validate:css": "stylelint \"**/*.css\"",
     "validate:js": "eslint script.js",
-    "test:a11y": "start-server-and-test \"python -m http.server 4173\" http://127.0.0.1:4173 \"pa11y-ci --config .pa11yci.json\""
+    "test:a11y": "start-server-and-test \"npm run serve\" http://127.0.0.1:4173 \"pa11y-ci --config .pa11yci.json\"",
+    "serve": "http-server . -p 4173 -a 127.0.0.1 -c-1",
+    "test:a11y:axe": "playwright test"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
@@ -17,8 +19,9 @@
     "stylelint-config-standard": "^36.0.0",
     "@axe-core/playwright": "^4.10.2",
     "pa11y-ci": "^3.1.0",
-    "playwright": "^1.55.0",
-    "start-server-and-test": "^2.0.10"
+    "start-server-and-test": "^2.0.10",
+    "@playwright/test": "^1.55.0",
+    "http-server": "^14.1.1"
   },
   "type": "module"
 }
