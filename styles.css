@@ -926,3 +926,52 @@ textarea[aria-invalid="true"]:focus-visible {
     outline: 2px solid Highlight;
   }
 }
+
+
+/* Frontend hardening — WCAG 2.2-oriented refinements */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+.form-help {
+  margin: 0 0 1rem;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+
+.required-mark {
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+button,
+.btn,
+.contact-card,
+.main-nav a,
+.footer-nav a {
+  touch-action: manipulation;
+}
+
+@media (max-width: 760px) {
+  .main-nav a,
+  .footer-nav a {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-muted: #435352;
+    --color-border: #829895;
+    --color-border-input: #718986;
+  }
+
+  .btn,
+  input,
+  select,
+  textarea,
+  .service-card,
+  .contact-card {
+    border-width: 2px;
+  }
+}
