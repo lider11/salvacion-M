@@ -13,7 +13,8 @@ export default [
         HTMLInputElement: "readonly",
         HTMLTextAreaElement: "readonly",
         HTMLSelectElement: "readonly",
-        CSS: "readonly"
+        CSS: "readonly",
+        fetch: "readonly"
       }
     },
     rules: {
