@@ -335,3 +335,11 @@ Debe repetirse la validación de accesibilidad cuando se incorporen cambios sust
 - Se conservaron sin sustitución el frontend histórico, la documentación, el agente operativo y las validaciones existentes del repositorio.
 - Se ejecutaron las pruebas del proyecto Sites: 4 pruebas aprobadas, 0 fallidas.
 - Próxima regla operativa: los cambios de la versión Sites deben realizarse en `sites/salvacion-m/`, validarse allí y luego publicarse en el proyecto Sites correspondiente.
+
+## Corrección de identidad visual «Abrazo M» — 21 de septiembre de 2026
+
+- Se revisaron en SharePoint el manual de identidad, el brief de bocetación y la lámina exploratoria del logo.
+- Se sustituyó el marcador tipográfico aislado por el sistema completo: dos figuras humanas curvas que forman una M envolvente, wordmark «SALVACIÓN M» y descriptor.
+- Se creó una versión principal y una versión inversa para el pie de página.
+- Se conservó el favicon reducido para usos de baja resolución.
+- Evidencia: 5 pruebas aprobadas, validación del Worker y manifiesto D1 aprobada, versión 6 publicada en Sites.
