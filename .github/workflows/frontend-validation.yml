@@ -10,7 +10,8 @@ on:
       - "package.json"
       - ".pa11yci.json"
       - "playwright.config.js"
-      - "tests/**"\n      - "sites/salvacion-m/**"\n      - "sites/salvacion-m/**"
+      - "tests/**"
+      - "sites/salvacion-m/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -24,6 +25,7 @@ on:
       - ".pa11yci.json"
       - "playwright.config.js"
       - "tests/**"
+      - "sites/salvacion-m/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -57,3 +59,6 @@ jobs:
 
       - name: Run axe WCAG 2.2 audit
         run: npm run test:a11y:axe
+
+      - name: Run Salvacion M worker tests including D1 idempotency
+        run: cd sites/salvacion-m && npm test
