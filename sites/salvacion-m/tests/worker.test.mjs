@@ -44,3 +44,19 @@ test('D1: identical request retry returns same reference and creates no duplicat
   assert.equal(state.batches,1);
   assert.equal(state.consultations.filter(x=>x.request_id===payload.request_id).length,1);
 });
+
+
+test('G2 NO_STORE: sensitive admin responses are not cacheable', async()=>{
+  const DB={batch:async()=>[{results:[{total:0,nuevos:0,cerrados:0}]},{results:[]},{results:[]} ]};
+  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer secret','x-admin-role':'admin'}}),{ADMIN_API_TOKEN:'secret',DB});
+  assert.equal(r.status,200);
+  assert.equal(r.headers.get('cache-control'),'no-store');
+});
+
+test('G2 ROLES: viewer cannot mutate, operador can schedule only, abogado cannot delete', async()=>{
+  const DB={prepare(){return {bind(){return this},async first(){return {consultation_id:'c1',status:'requested'}}}},async batch(){return [{results:[]},{results:[]}]}};
+  const call=(role,type,status)=>worker.fetch(new Request('https://x/api/admin/records/a1',{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':role,'content-type':'application/json'},body:JSON.stringify({type,status})}),{ADMIN_API_TOKEN:'secret',DB});
+  assert.equal((await call('viewer','appointment','confirmed')).status,403);
+  assert.equal((await call('operador','appointment','confirmed')).status,200);
+  assert.equal((await call('operador','consultation','progress')).status,403);
+});
