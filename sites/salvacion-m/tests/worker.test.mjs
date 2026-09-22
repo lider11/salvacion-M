@@ -47,7 +47,17 @@ test('D1: identical request retry returns same reference and creates no duplicat
 
 
 test('G2 NO_STORE: sensitive admin responses are not cacheable', async()=>{
-  const DB={batch:async()=>[{results:[{total:0,nuevos:0,cerrados:0}]},{results:[]},{results:[]} ]};
+  const DB={
+    prepare(sql){return {sql}},
+    async batch(stmts){
+      assert.equal(stmts.length,3);
+      return [
+        {results:[{total:0,nuevos:0,cerrados:0}]},
+        {results:[]},
+        {results:[]}
+      ];
+    }
+  };
   const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer secret','x-admin-role':'admin'}}),{ADMIN_API_TOKEN:'secret',DB});
   assert.equal(r.status,200);
   assert.equal(r.headers.get('cache-control'),'no-store');
