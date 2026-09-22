@@ -25,8 +25,9 @@ body{margin:0;color:var(--ink);font-family:Arial,"Helvetica Neue",sans-serif;fon
 .eyebrow.light{color:var(--mint)}
 h1,h2,h3,p{margin-top:0}
 h1{font-size:clamp(3rem,7.4vw,7.8rem);line-height:.88;letter-spacing:-.065em;color:var(--navy);margin-bottom:30px}
+
 /* Todos los tonos del lema superan 3:1 sobre el fondo claro del hero. */
-h1>span{display:inline-block;color:var(--teal);background:linear-gradient(100deg,#0b3a53 0%,#005e70 26%,#0b6b52 52%,#5849b5 76%,#0b3a53 100%);background-size:300% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:lema-cromatico 5.6s ease-in-out infinite}
+h1>span{display:inline-block;color:var(--teal);background:linear-gradient(100deg,#0b3a53 0%,#005e70 26%,#0b6b52 52%,#5849b5 76%,#0b3a53 100%);background-size:300% 100%;background-position:0% 50%;background-clip:text;-webkit-text-fill-color:transparent;animation:lema-cromatico 5.6s ease-in-out infinite}
 .hero-title-line{display:inline-block}
 .hero-letter{display:inline-block;opacity:0;transform:translateY(.28em);animation:hero-letter-in .42s cubic-bezier(.2,.75,.25,1) both;animation-delay:calc(.38s + var(--letter-index) * .035s)}
 html.hero-intro-pending body:before{content:"";position:fixed;inset:0;z-index:9999;background:#fff;pointer-events:none;animation:hero-white-intro .75s ease forwards}
