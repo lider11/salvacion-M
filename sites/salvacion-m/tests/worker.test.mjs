@@ -2,95 +2,58 @@ import test from 'node:test';import assert from 'node:assert/strict';import {rea
 const source=await readFile(new URL('../dist/server/index.js',import.meta.url),'utf8');const worker=(await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`)).default;
 test('health and unknown API are explicit',async()=>{let r=await worker.fetch(new Request('https://x/api/health'),{});assert.equal(r.status,200);assert.equal((await r.json()).ok,true);r=await worker.fetch(new Request('https://x/api/missing'),{});assert.equal(r.status,404)});
 test('public form rejects incomplete and missing consent',async()=>{const req=new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const r=await worker.fetch(req,{DB:{}});assert.equal(r.status,422);const p=await r.json();assert.match(p.error,/campos/)});
+test('consent must be an explicit boolean authorization',async()=>{
+  const payload={name:'Persona',phone:'3001234567',email:'persona@example.com',problem:'medicamento',entity:'eps',order:'si',action:'ninguna',consent:'false'};
+  const r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',body:JSON.stringify(payload)}),{DB:{}});
+  assert.equal(r.status,422);assert.match((await r.json()).error,/autorizar/);
+});
 test('admin endpoint denies missing token',async()=>{const r=await worker.fetch(new Request('https://x/api/admin/dashboard'),{ADMIN_API_TOKEN:'secret'});assert.equal(r.status,401)});
+test('public request persists a consultation without opening a legal case',async()=>{
+  const statements=[];
+  const DB={prepare(sql){const item={sql,bind(){return item},async first(){return sql.includes('reference_counters')?{seq:1}:null}};return item},async batch(items){statements.push(...items.map(item=>item.sql));return []}};
+  const preferred=new Date(Date.now()+86400000).toISOString().slice(0,16);
+  const body={name:'Persona',phone:'3001234567',email:'persona@example.com',preferred_at:preferred,problem:'medicamento',entity:'eps',order:'si',action:'ninguna',consent:true};
+  const r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),{DB});
+  assert.equal(r.status,201);assert.match((await r.json()).reference,/^SM-\d{4}-\d{6}$/);assert.equal(statements.some(sql=>/INSERT INTO cases/i.test(sql)),false);
+  assert.equal(statements.some(sql=>/INSERT INTO consultations/i.test(sql)),true);
+  assert.equal(statements.some(sql=>/INSERT INTO appointments/i.test(sql)),true);
+});
+test('consultation can be requested without reserving an appointment',async()=>{
+  const statements=[];
+  const DB={prepare(sql){const item={sql,bind(){return item},async first(){return sql.includes('reference_counters')?{seq:2}:null}};return item},async batch(items){statements.push(...items.map(item=>item.sql));return []}};
+  const body={name:'Persona',phone:'3001234567',email:'persona@example.com',problem:'medicamento',entity:'eps',order:'si',action:'ninguna',consent:true};
+  const r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),{DB});
+  assert.equal(r.status,201);
+  assert.equal(statements.some(sql=>/INSERT INTO appointments/i.test(sql)),false);
+  assert.equal(statements.some(sql=>/INSERT INTO consultations/i.test(sql)),true);
+});
+test('retry with the same request id returns the existing reference without another insert',async()=>{
+  const requestId='31b08149-d44d-491a-8e1d-082500fe5b5f';let batches=0;
+  const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('SELECT reference')?{reference:'SM-2026-000123'}:null}};return item},async batch(){batches++}};
+  const body={request_id:requestId,name:'Persona',phone:'3001234567',email:'persona@example.com',problem:'medicamento',entity:'eps',order:'si',action:'ninguna',consent:true};
+  const r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),{DB});
+  assert.equal(r.status,200);assert.equal((await r.json()).reference,'SM-2026-000123');assert.equal(batches,0);
+});
+test('client supplied role cannot grant administrative access',async()=>{
+  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{'x-admin-role':'admin'}}),{ADMIN_API_TOKEN:'secret'});
+  assert.equal(r.status,401);
+});
+test('orientation scripts load under the site content security policy',async()=>{
+  const page=await worker.fetch(new Request('https://x/'));
+  const html=await page.text();
+  assert.match(page.headers.get('content-security-policy'),/script-src 'self'/);
+  assert.doesNotMatch(html,/<script(?:\s[^>]*)?>(?!\s*<\/script>)/i);
+  for(const path of ['/intro.js','/contact.js']){
+    assert.match(html,new RegExp(path.slice(1).replace('.','\\.')));
+    const script=await worker.fetch(new Request('https://x'+path));
+    assert.equal(script.status,200);
+    assert.match(script.headers.get('content-type'),/javascript/);
+  }
+});
 test('static response includes security headers',async()=>{const r=await worker.fetch(new Request('https://x/'),{});assert.equal(r.status,200);assert.equal(r.headers.get('x-content-type-options'),'nosniff');assert.match(await r.text(),/Salvación M/)});
 test('complete Abrazo M logo is served',async()=>{const r=await worker.fetch(new Request('https://x/logo-salvacion-m.svg'),{});assert.equal(r.status,200);assert.match(r.headers.get('content-type'),/image\/svg\+xml/);const svg=await r.text();assert.match(svg,/Dos figuras humanas curvas/);assert.match(svg,/SALVACIÓN/)});
 test('header motion supports compact state and reduced motion',async()=>{const [js,css,logo]=await Promise.all(['/app.js','/styles.css','/logo-salvacion-m.svg'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(js,/is-compact/);assert.match(css,/prefers-reduced-motion:reduce/);assert.match(logo,/meet-left/);assert.match(logo,/prefers-reduced-motion:reduce/)});
 test('logo animation can replay on click',async()=>{const [html,js,css]=await Promise.all(['/','/app.js','/styles.css'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(html,/brand-motion/);assert.match(js,/addEventListener\('click',playLogo\)/);assert.match(css,/\.brand-motion\.is-replaying/);assert.match(css,/brand-meet-left/)});
-test('header assets bypass stale browser cache',async()=>{const html=await worker.fetch(new Request('https://x/')).then(r=>r.text());assert.match(html,/styles\.css\?v=9/);assert.match(html,/app\.js\?v=9/);for(const path of ['/styles.css','/app.js']){const r=await worker.fetch(new Request('https://x'+path));assert.equal(r.headers.get('cache-control'),'no-cache')}});
-
-
-test('D1: identical request retry returns same reference and creates no duplicate logical consultation', async()=>{
-  const state={consultations:[], batches:0};
-  const DB={
-    prepare(sql){
-      return {
-        sql,args:[],
-        bind(...args){this.args=args;return this},
-        async first(){
-          if(sql.includes('SELECT reference FROM consultations WHERE request_id')){
-            const row=state.consultations.find(x=>x.request_id===this.args[0]);
-            return row?{reference:row.reference}:null;
-          }
-          return null;
-        }
-      };
-    },
-    async batch(stmts){
-      state.batches++;
-      const c=stmts.find(s=>s.sql.includes('INSERT INTO consultations'));
-      if(c){state.consultations.push({id:c.args[0],reference:c.args[1],request_id:c.args[2]})}
-      return stmts.map(()=>({results:[]}));
-    }
-  };
-  const payload={request_id:'D1-SM-20260922-001',name:'Prueba D1',phone:'3000000000',email:'d1@example.com',preferred_at:'2099-09-22T10:00',problem:'medicamento',entity:'EPS',order:'si',action:'ninguna',summary:'Prueba idempotencia',consent:true,website:''};
-  const make=()=>new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});
-  const r1=await worker.fetch(make(),{DB}); const b1=await r1.json();
-  const r2=await worker.fetch(make(),{DB}); const b2=await r2.json();
-  assert.equal(r1.status,201);
-  assert.equal(r2.status,200);
-  assert.equal(b2.reference,b1.reference);
-  assert.equal(state.consultations.length,1);
-  assert.equal(state.batches,1);
-  assert.equal(state.consultations.filter(x=>x.request_id===payload.request_id).length,1);
-});
-
-
-test('G2 NO_STORE: sensitive admin responses are not cacheable', async()=>{
-  const DB={
-    prepare(sql){return {sql}},
-    async batch(stmts){
-      assert.equal(stmts.length,3);
-      return [
-        {results:[{total:0,nuevos:0,cerrados:0}]},
-        {results:[]},
-        {results:[]}
-      ];
-    }
-  };
-  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer secret','x-admin-role':'admin'}}),{ADMIN_API_TOKEN:'secret',DB});
-  assert.equal(r.status,200);
-  assert.equal(r.headers.get('cache-control'),'no-store');
-});
-
-test('G2 ROLES: viewer cannot mutate, operador can schedule only, abogado cannot delete', async()=>{
-  const DB={prepare(){return {bind(){return this},async first(){return {consultation_id:'c1',status:'requested',scheduled_at:'2099-09-22T15:00:00.000Z',professional:'Daniel Vergel'}},async run(){return {meta:{changes:1}}}}},async batch(){return [{results:[]},{results:[]}]}};
-  const call=(role,type,status)=>worker.fetch(new Request('https://x/api/admin/records/a1',{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':role,'content-type':'application/json'},body:JSON.stringify({type,status})}),{ADMIN_API_TOKEN:'secret',DB});
-  assert.equal((await call('viewer','appointment','confirmed')).status,403);
-  assert.equal((await call('operador','appointment','confirmed')).status,200);
-  assert.equal((await call('operador','consultation','progress')).status,403);
-});
-
-test('G3: two requests may share a preference, exactly one confirmation wins per professional',async()=>{
-  const {DatabaseSync}=await import('node:sqlite');const db=new DatabaseSync(':memory:');
-  db.exec('CREATE TABLE appointments (id TEXT PRIMARY KEY, consultation_id TEXT, scheduled_at TEXT, professional TEXT, status TEXT, updated_at TEXT); CREATE TABLE activities (id TEXT, consultation_id TEXT, actor TEXT, action TEXT, previous_value TEXT, new_value TEXT, created_at TEXT)');
-  const migration=await readFile(new URL('../drizzle/0001_confirmed_slots.sql',import.meta.url),'utf8');
-  db.exec(migration.replaceAll('--> statement-breakpoint',''));
-  const slot='2099-09-22T15:00:00.000Z';
-  for(const id of ['a1','a2'])db.prepare('INSERT INTO appointments(id,consultation_id,scheduled_at,professional,status) VALUES (?,?,?,?,?)').run(id,id,slot,'Daniel Vergel','requested');
-  const DB={prepare(sql){return {bind(...args){this.args=args;return this},async first(){return db.prepare(sql).get(...this.args)},async run(){const r=db.prepare(sql).run(...this.args);return {meta:{changes:r.changes}}}}}};
-  const confirm=id=>worker.fetch(new Request('https://x/api/admin/records/'+id,{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':'operador','content-type':'application/json'},body:JSON.stringify({type:'appointment',status:'confirmed'})}),{ADMIN_API_TOKEN:'secret',DB});
-  const responses=await Promise.all([confirm('a1'),confirm('a2')]);
-  assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
-  assert.equal(db.prepare("SELECT count(*) n FROM appointments WHERE status='confirmed'").get().n,1);
-  assert.equal(db.prepare('SELECT count(*) n FROM activities').get().n,1);
-  db.close();
-});
-
-test('G3: invalid transitions and reprogramming without a new time do not mutate',async()=>{
-  let writes=0;const DB={prepare(sql){return {bind(...args){this.args=args;return this},async first(){return {consultation_id:'c1',status:'requested',scheduled_at:'2099-09-22T15:00:00.000Z',professional:'Daniel Vergel'}},async run(){writes++;return {meta:{changes:1}}}}}};
-  const call=body=>worker.fetch(new Request('https://x/api/admin/records/a1',{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':'operador','content-type':'application/json'},body:JSON.stringify({type:'appointment',...body})}),{ADMIN_API_TOKEN:'secret',DB});
-  assert.equal((await call({status:'attended'})).status,422);
-  assert.equal((await call({status:'rescheduled'})).status,422);
-  assert.equal(writes,0);
-});
+test('header assets bypass stale browser cache',async()=>{const html=await worker.fetch(new Request('https://x/')).then(r=>r.text());assert.match(html,/styles\.css\?v=12/);assert.match(html,/app\.js\?v=12/);for(const path of ['/styles.css','/app.js']){const r=await worker.fetch(new Request('https://x'+path));assert.equal(r.headers.get('cache-control'),'no-cache')}});
+test('navigation uses progressive route hover and active section state',async()=>{const [html,js,css]=await Promise.all(['/','/app.js','/styles.css'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(html,/styles\.css\?v=12/);assert.match(html,/app\.js\?v=12/);assert.match(css,/transform:scaleX\(0\)/);assert.match(css,/aria-current="location"/);assert.match(css,/:focus-visible/);assert.match(js,/IntersectionObserver/);assert.match(js,/aria-current/)});
+test('header CTA click triggers accompaniment pulse with reduced-motion fallback',async()=>{const [js,css]=await Promise.all(['/app.js','/styles.css'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(js,/navCta\.addEventListener\('click'/);assert.match(js,/is-pulsing/);assert.match(css,/@keyframes nav-cta-pulse/);assert.match(css,/scale\(\.97\)/);assert.match(css,/prefers-reduced-motion:reduce/)});

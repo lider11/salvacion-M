@@ -7,7 +7,8 @@
   <meta name="theme-color" content="#0B3A53">
   <title>Salvación M — Tu salud, nuestros derechos</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <script src="intro.js?v=1"></script>
+  <link rel="stylesheet" href="styles.css?v=12">
   <style>.lead-form{display:grid;gap:14px;margin-top:22px}.lead-form label{display:grid;gap:6px;font-weight:700}.lead-form input,.lead-form textarea{width:100%;box-sizing:border-box;border:1px solid #8faeb8;border-radius:9px;padding:12px;font:inherit}.lead-form textarea{min-height:84px}.lead-form .consent{display:flex;gap:9px;align-items:flex-start;font-weight:400}.lead-form .consent input{width:auto;margin-top:4px}.form-status{padding:12px;border-radius:9px;background:#edf7f4}.form-status.error{background:#fff0ed;color:#842b20}.reference{font-size:1.35rem;color:#0b3a53;font-weight:800}</style>
 </head>
 <body>
@@ -36,7 +37,7 @@
     <section class="hero" id="inicio">
       <div class="hero-copy">
         <p class="eyebrow">Orientación clara para actuar</p>
-        <h1>Tu salud,<br><span>nuestros derechos.</span></h1>
+        <h1 data-hero-title>Tu salud,<br><span>nuestros derechos.</span></h1>
         <p class="lead">Si una EPS, IPS o farmacia está demorando o negando un servicio, empieza por contar qué está pasando. La consulta inicial es gratuita; después se informa el alcance y el precio de cualquier servicio adicional.</p>
         <div class="actions"><a class="button primary" href="#orientador">Cuéntanos tu caso</a><a class="button ghost" href="#como">Cómo podemos ayudarte</a></div>
         <p class="fine">Salvación M es un servicio independiente de orientación. No somos EPS, IPS, clínica, autoridad pública ni servicio de urgencias.</p>
@@ -48,21 +49,27 @@
     </section>
 
     <section class="section" id="problemas">
-      <div class="section-head"><p class="eyebrow">Empieza por tu situación</p><h2>¿Qué problema tienes?</h2><p>No necesitas conocer el nombre del trámite o mecanismo jurídico.</p></div>
+      <div class="section-head"><p class="eyebrow">Empieza por tu situación</p><h2>¿Qué problema tienes?</h2><p>Elige la opción que más se parece a lo que ocurre. No necesitas conocer el nombre del trámite.</p></div>
+      <aside class="urgent-check" aria-labelledby="urgent-title">
+        <div class="urgent-check-icon" aria-hidden="true">!</div>
+        <div class="urgent-check-copy"><p class="eyebrow">Primero, lo importante</p><h3 id="urgent-title">¿Tu situación requiere atención inmediata?</h3><p>Si hay riesgo para la vida o la integridad, busca atención de urgencias. No esperes una orientación digital.</p></div>
+        <div class="urgent-check-actions"><a class="button urgent-action" href="#orientador" data-urgent-choice="yes">Sí, es urgente</a><a class="button urgent-secondary" href="#orientador" data-urgent-choice="unknown">No estoy seguro</a></div>
+      </aside>
+      <p class="problem-prompt">Si no es una urgencia, selecciona la situación principal:</p>
       <div class="problem-grid">
-        <button class="problem" data-problem="medicamento"><span>01</span><b>No me entregan un medicamento</b><small>Hay orden médica, pero la entrega no ocurre.</small></button>
-        <button class="problem" data-problem="procedimiento"><span>02</span><b>No autorizan mi procedimiento</b><small>La autorización está negada o demorada.</small></button>
-        <button class="problem" data-problem="especialista"><span>03</span><b>No consigo cita o especialista</b><small>No hay agenda o la espera se prolonga.</small></button>
-        <button class="problem" data-problem="continuidad"><span>04</span><b>Interrumpieron mi tratamiento</b><small>Un tratamiento en curso dejó de prestarse.</small></button>
-        <button class="problem" data-problem="negacion"><span>05</span><b>Me negaron un servicio</b><small>Recibiste una negativa verbal o escrita.</small></button>
+        <button class="problem" data-problem="medicamento"><span class="problem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008c8c" stroke-width="1.9"><path d="M8.2 5.2a4.2 4.2 0 0 1 5.9 0l4.7 4.7a4.2 4.2 0 0 1-5.9 5.9l-4.7-4.7a4.2 4.2 0 0 1 0-5.9Z"/><path d="m10.3 7.3 6.4 6.4M6.5 17.5h5M9 15v5"/></svg></span><b>No me entregan un medicamento</b><small>Hay orden médica, pero la entrega no ocurre.</small><i aria-hidden="true">Elegir</i></button>
+        <button class="problem" data-problem="procedimiento"><span class="problem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008c8c" stroke-width="1.9"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="m8.5 12 2.3 2.3 4.7-4.7"/></svg></span><b>No autorizan mi procedimiento</b><small>La autorización está negada o demorada.</small><i aria-hidden="true">Elegir</i></button>
+        <button class="problem" data-problem="especialista"><span class="problem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008c8c" stroke-width="1.9"><circle cx="12" cy="8" r="3"/><path d="M5.5 20c.5-3.2 2.7-5 6.5-5s6 1.8 6.5 5M18.5 5.5h3M20 4v3"/></svg></span><b>No consigo cita o especialista</b><small>No hay agenda o la espera se prolonga.</small><i aria-hidden="true">Elegir</i></button>
+        <button class="problem" data-problem="continuidad"><span class="problem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008c8c" stroke-width="1.9"><path d="M7 7h8.5M15.5 7 18 9.5 15.5 12M17 17H8.5M8.5 17 6 14.5 8.5 12"/><path d="M18 9.5a7 7 0 0 1-1 7.5M6 14.5a7 7 0 0 1 1-7.5"/></svg></span><b>Interrumpieron mi tratamiento</b><small>Un tratamiento en curso dejó de prestarse.</small><i aria-hidden="true">Elegir</i></button>
+        <button class="problem" data-problem="negacion"><span class="problem-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008c8c" stroke-width="1.9"><circle cx="12" cy="12" r="8"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg></span><b>Me negaron un servicio</b><small>Recibiste una negativa verbal o escrita.</small><i aria-hidden="true">Elegir</i></button>
       </div>
     </section>
 
     <section class="orientador-wrap" id="orientador">
-      <div class="orientador-intro"><p class="eyebrow light">Consulta inicial gratuita</p><h2>Cuéntanos tu caso</h2><p>Responde cuatro preguntas y, si deseas solicitar una consulta, completa tus datos y una fecha preferida. Solo guardaremos la información cuando envíes la solicitud.</p><div class="privacy-note">No incluyas diagnósticos ni historia clínica. En esta etapa solo necesitamos información mínima de contacto.</div></div>
+      <div class="orientador-intro"><p class="eyebrow light">Consulta inicial gratuita</p><h2>Cuéntanos tu caso</h2><p>Responde cinco preguntas y recibe una ruta inicial. Si decides solicitar revisión, completa tus datos y, si deseas, indica una fecha preferida.</p><div class="privacy-note">No incluyas diagnósticos ni historia clínica. Solo guardaremos los datos cuando autorices y envíes la solicitud.</div></div>
       <form id="caseForm" class="wizard" novalidate>
         <input type="hidden" name="entity" value="por_confirmar"><input type="hidden" name="order" value="por_confirmar"><input type="hidden" name="action" value="orientacion_inicial">
-        <div class="progress"><span id="progressText">Paso 1 de 4</span><progress id="progress" value="1" max="4">25%</progress></div>
+        <div class="progress"><span id="progressText">Paso 1 de 5</span><progress id="progress" value="1" max="5">20%</progress></div>
         <fieldset class="panel active" data-step="1"><legend>¿Cuál es el problema principal?</legend>
           <div class="choices">
             <label><input type="radio" name="problem" value="medicamento" required><span>No entregan un medicamento</span></label>
@@ -75,8 +82,9 @@
         <fieldset class="panel" data-step="2"><legend>¿Existe un riesgo inmediato?</legend><p class="help">Por ejemplo: dificultad grave para respirar, pérdida de conciencia o riesgo evidente para la vida.</p>
           <div class="choices"><label><input type="radio" name="urgent" value="yes" required><span>Sí, puede ser una emergencia</span></label><label><input type="radio" name="urgent" value="no"><span>No identifico un riesgo inmediato</span></label><label><input type="radio" name="urgent" value="unknown"><span>No estoy seguro</span></label></div>
         </fieldset>
-        <fieldset class="panel" data-step="3"><legend>¿Qué soporte tienes?</legend><div class="choices"><label><input type="radio" name="support" value="written" required><span>Respuesta o negación escrita</span></label><label><input type="radio" name="support" value="order"><span>Orden o fórmula médica</span></label><label><input type="radio" name="support" value="verbal"><span>Respuesta verbal</span></label><label><input type="radio" name="support" value="none"><span>Aún no tengo soporte</span></label></div></fieldset>
-        <fieldset class="panel" data-step="4"><legend>¿Hace cuánto ocurre?</legend><div class="choices"><label><input type="radio" name="time" value="today" required><span>Hoy o ayer</span></label><label><input type="radio" name="time" value="week"><span>Entre 3 y 7 días</span></label><label><input type="radio" name="time" value="month"><span>Más de una semana</span></label><label><input type="radio" name="time" value="unknown"><span>No lo sé</span></label></div></fieldset>
+        <fieldset class="panel" data-step="3"><legend>¿Quién está poniendo la barrera?</legend><p class="help">Elige la entidad que te dio la respuesta o donde ocurrió la dificultad.</p><div class="choices"><label><input type="radio" name="entity_choice" value="eps" required><span>Mi EPS</span></label><label><input type="radio" name="entity_choice" value="ips"><span>Una IPS, clínica u hospital</span></label><label><input type="radio" name="entity_choice" value="pharmacy"><span>Una farmacia o proveedor</span></label><label><input type="radio" name="entity_choice" value="unknown"><span>No estoy seguro</span></label></div></fieldset>
+        <fieldset class="panel" data-step="4"><legend>¿Qué soporte tienes?</legend><div class="choices"><label><input type="radio" name="support" value="written" required><span>Respuesta o negación escrita</span></label><label><input type="radio" name="support" value="order"><span>Orden o fórmula médica</span></label><label><input type="radio" name="support" value="verbal"><span>Respuesta verbal</span></label><label><input type="radio" name="support" value="none"><span>Aún no tengo soporte</span></label></div></fieldset>
+        <fieldset class="panel" data-step="5"><legend>¿Hace cuánto ocurre?</legend><div class="choices"><label><input type="radio" name="time" value="today" required><span>Hoy o ayer</span></label><label><input type="radio" name="time" value="week"><span>Entre 3 y 7 días</span></label><label><input type="radio" name="time" value="month"><span>Más de una semana</span></label><label><input type="radio" name="time" value="unknown"><span>No lo sé</span></label></div></fieldset>
         <p id="formError" class="error" role="alert"></p>
         <div class="wizard-actions"><button type="button" id="prev" class="button ghost" hidden>Anterior</button><button type="button" id="next" class="button primary">Continuar</button><button type="submit" id="finish" class="button primary" hidden>Ver orientación</button></div>
       </form>
@@ -97,5 +105,6 @@
   </main>
 
   <footer><div class="brand inverse"><img src="logo-salvacion-m-inverse.svg" alt="Salvación M — Tu salud, nuestros derechos" width="430" height="96"></div><div><b>Información</b><a href="#como">Alcance</a><a href="#privacidad">Privacidad</a><a href="#terminos">Términos</a><a href="mailto:devergel@yahoo.com">devergel@yahoo.com</a><a href="https://wa.me/573012370047">WhatsApp 301 237 0047</a></div><div><b>Importante</b><p>No prestamos atención médica ni sustituimos servicios de urgencias. Ante una emergencia, acude a los canales oficiales de atención.</p></div><p class="copyright">© 2026 Salvación M · Daniel Enrique Vergel González Rubio, abogado · C.C. 72.255.284</p></footer>
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=12"></script>
+  <script src="contact.js?v=1"></script>
 </body></html>
