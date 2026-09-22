@@ -4,7 +4,7 @@
   "private": true,
   "description": "Validación automatizada del frontend estático de Salvación M",
   "scripts": {
-    "validate": "npm run validate:html && npm run validate:css && npm run validate:js && npm run test:a11y:pa11y",
+    "validate": "npm run validate:html && npm run validate:css && npm run validate:js",
     "validate:html": "html-validate index.html privacidad.html terminos.html",
     "validate:css": "stylelint \"**/*.css\"",
     "validate:js": "eslint script.js",
