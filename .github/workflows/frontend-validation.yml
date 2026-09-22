@@ -76,5 +76,8 @@ jobs:
       - name: Run axe WCAG 2.2 audit
         run: npm run test:a11y:axe
 
-      - name: Run Salvacion M worker tests including D1 idempotency
+      - name: Build Salvacion M worker
+        run: cd sites/salvacion-m && npm run build
+
+      - name: Run Salvacion M worker tests including D1 and G2
         run: cd sites/salvacion-m && npm test
