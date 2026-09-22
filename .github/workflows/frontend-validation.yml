@@ -10,7 +10,7 @@ on:
       - "package.json"
       - ".pa11yci.json"
       - "playwright.config.js"
-      - "tests/**"
+      - "tests/**"\n      - "sites/salvacion-m/**"\n      - "sites/salvacion-m/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
