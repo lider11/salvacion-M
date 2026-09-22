@@ -1,5 +1,5 @@
 const securityHeaders={'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",'referrer-policy':'strict-origin-when-cross-origin','x-content-type-options':'nosniff','x-frame-options':'DENY','permissions-policy':'camera=(), microphone=(), geolocation=()','strict-transport-security':'max-age=31536000; includeSubDomains'};
-const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8',...securityHeaders,...extra}});
+const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store',...securityHeaders,...extra}});
 const clean=(v,n=700)=>String(v??'').trim().slice(0,n);const allowed=(v,list)=>list.includes(v);const iso=()=>new Date().toISOString();
 function admin(request,env){const h=request.headers.get('authorization')||'';return env.ADMIN_API_TOKEN&&h===`Bearer ${env.ADMIN_API_TOKEN}`}
 function role(request){return request.headers.get('x-admin-role')||'viewer'}function can(request,action){const r=role(request);return r==='admin'||(r==='abogado'&&action!=='delete')||(r==='operador'&&['read','schedule'].includes(action))}
