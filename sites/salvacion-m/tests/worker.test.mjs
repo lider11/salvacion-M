@@ -64,9 +64,33 @@ test('G2 NO_STORE: sensitive admin responses are not cacheable', async()=>{
 });
 
 test('G2 ROLES: viewer cannot mutate, operador can schedule only, abogado cannot delete', async()=>{
-  const DB={prepare(){return {bind(){return this},async first(){return {consultation_id:'c1',status:'requested'}}}},async batch(){return [{results:[]},{results:[]}]}};
+  const DB={prepare(){return {bind(){return this},async first(){return {consultation_id:'c1',status:'requested',scheduled_at:'2099-09-22T15:00:00.000Z',professional:'Daniel Vergel'}},async run(){return {meta:{changes:1}}}}},async batch(){return [{results:[]},{results:[]}]}};
   const call=(role,type,status)=>worker.fetch(new Request('https://x/api/admin/records/a1',{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':role,'content-type':'application/json'},body:JSON.stringify({type,status})}),{ADMIN_API_TOKEN:'secret',DB});
   assert.equal((await call('viewer','appointment','confirmed')).status,403);
   assert.equal((await call('operador','appointment','confirmed')).status,200);
   assert.equal((await call('operador','consultation','progress')).status,403);
+});
+
+test('G3: two requests may share a preference, exactly one confirmation wins per professional',async()=>{
+  const {DatabaseSync}=await import('node:sqlite');const db=new DatabaseSync(':memory:');
+  db.exec('CREATE TABLE appointments (id TEXT PRIMARY KEY, consultation_id TEXT, scheduled_at TEXT, professional TEXT, status TEXT, updated_at TEXT); CREATE TABLE activities (id TEXT, consultation_id TEXT, actor TEXT, action TEXT, previous_value TEXT, new_value TEXT, created_at TEXT)');
+  const migration=await readFile(new URL('../drizzle/0001_confirmed_slots.sql',import.meta.url),'utf8');
+  db.exec(migration.replaceAll('--> statement-breakpoint',''));
+  const slot='2099-09-22T15:00:00.000Z';
+  for(const id of ['a1','a2'])db.prepare('INSERT INTO appointments(id,consultation_id,scheduled_at,professional,status) VALUES (?,?,?,?,?)').run(id,id,slot,'Daniel Vergel','requested');
+  const DB={prepare(sql){return {bind(...args){this.args=args;return this},async first(){return db.prepare(sql).get(...this.args)},async run(){const r=db.prepare(sql).run(...this.args);return {meta:{changes:r.changes}}}}}};
+  const confirm=id=>worker.fetch(new Request('https://x/api/admin/records/'+id,{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':'operador','content-type':'application/json'},body:JSON.stringify({type:'appointment',status:'confirmed'})}),{ADMIN_API_TOKEN:'secret',DB});
+  const responses=await Promise.all([confirm('a1'),confirm('a2')]);
+  assert.deepEqual(responses.map(r=>r.status).sort(),[200,409]);
+  assert.equal(db.prepare("SELECT count(*) n FROM appointments WHERE status='confirmed'").get().n,1);
+  assert.equal(db.prepare('SELECT count(*) n FROM activities').get().n,1);
+  db.close();
+});
+
+test('G3: invalid transitions and reprogramming without a new time do not mutate',async()=>{
+  let writes=0;const DB={prepare(sql){return {bind(...args){this.args=args;return this},async first(){return {consultation_id:'c1',status:'requested',scheduled_at:'2099-09-22T15:00:00.000Z',professional:'Daniel Vergel'}},async run(){writes++;return {meta:{changes:1}}}}}};
+  const call=body=>worker.fetch(new Request('https://x/api/admin/records/a1',{method:'PATCH',headers:{authorization:'Bearer secret','x-admin-role':'operador','content-type':'application/json'},body:JSON.stringify({type:'appointment',...body})}),{ADMIN_API_TOKEN:'secret',DB});
+  assert.equal((await call({status:'attended'})).status,422);
+  assert.equal((await call({status:'rescheduled'})).status,422);
+  assert.equal(writes,0);
 });
