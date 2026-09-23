@@ -367,3 +367,32 @@ Debe repetirse la validación de accesibilidad cuando se incorporen cambios sust
 - Se versionaron las referencias de ambos recursos y se cambió su política a `no-cache`.
 - La versión 9 fuerza la descarga inmediata del comportamiento y los estilos actuales del header.
 - Evidencia: 8 pruebas aprobadas y despliegue productivo finalizado correctamente.
+
+## Actualización — 23 de septiembre de 2026 — validación de proveedores de recordatorios G3
+
+### Actuación
+
+Se validó la integración real de correo con Brevo y se inspeccionó el estado operativo del número de WhatsApp en Meta WhatsApp Manager.
+
+### Resultado
+
+- Correo: entrega real `PASS`; Brevo respondió HTTP 201 y registró el mensaje como `Entregado`.
+- WhatsApp: `FAIL` para entrega API reproducible; el número `+57 301 237 0047` está asignado a la cuenta `Daniel Abogado`, pero Meta informa `Sin conexión`.
+- No se creó una aplicación de Meta, token persistente ni comunicación externa sin confirmación puntual.
+- G3 conserva el estado `READY_FOR_VERIFICATION`.
+
+### Archivos
+
+- `docs/evidencia-g3-canales-2026-09-23.md`
+- `docs/08-memoria-del-sistema.md`
+
+### Evidencia técnica
+
+- Despliegue QA: `appgdep_6ab42fd39ee48191826e35ec53122a4f`.
+- Versión QA: `appgprj_6ab1f0bab8e88191a82ba8acd54d9a40~appgver_b0af6e377afc819185fee5d20323322f`.
+- Código Sites: `c9615c158d699e71095c7e41b68759e73e849af3`.
+- Suite Sites observada: 23/23 pruebas aprobadas.
+
+### Pendiente
+
+Vincular una aplicación de Meta con WhatsApp Cloud API, generar una credencial de alcance mínimo, conectar el número y ejecutar un mensaje de prueba autorizado. Además siguen pendientes las demás verificaciones aisladas de G3 registradas por la fuente canónica.
