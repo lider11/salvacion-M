@@ -38,6 +38,12 @@ test('client supplied role cannot grant administrative access',async()=>{
   const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{'x-admin-role':'admin'}}),{ADMIN_API_TOKEN:'secret'});
   assert.equal(r.status,401);
 });
+test('client supplied actor cannot replace a verified identity',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return null},async all(){return {results:[]}}};return item},async batch(){return [{results:[{}]},{results:[]},{results:[]}]}};
+  const identities=JSON.stringify([{token:'verified-token',actor_id:'verified-user',roles:['reader']}]);
+  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer verified-token','x-crm-actor-id':'forged-user'}}),{DB,CRM_IDENTITIES:identities});
+  assert.equal(r.status,200);assert.equal(r.headers.get('x-auth-actor'),'verified-user');assert.equal(r.headers.get('x-auth-mode'),'individual');
+});
 test('orientation scripts load under the site content security policy',async()=>{
   const page=await worker.fetch(new Request('https://x/'));
   const html=await page.text();

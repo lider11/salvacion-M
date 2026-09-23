@@ -13,7 +13,7 @@ const crmWorker=(await import(`data:text/javascript;base64,${Buffer.from(crmSour
 
 function createD1(){
   const sql=new DatabaseSync(':memory:');
-  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql']){
+  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql']){
     sql.exec((awaitText(file)).replaceAll('--> statement-breakpoint',''));
   }
   function awaitText(file){return files.get(file)}
@@ -23,7 +23,7 @@ function createD1(){
   }
   return {prepare:statement,async batch(statements){sql.exec('BEGIN');try{const result=statements.map(s=>(/^\s*SELECT\b/i.test(s.sql)?{results:s.all()}:{results:[],meta:{changes:s.run().changes}}));sql.exec('COMMIT');return result}catch(e){sql.exec('ROLLBACK');throw e}},count(table){return sql.prepare(`SELECT count(*) n FROM ${table}`).get().n},close(){sql.close()}};
 }
-const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
+const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
 
 test('consultation persists and appears through the separate CRM proxy with the same reference',async()=>{
   const DB=createD1(),token='synthetic-test-token';
@@ -82,4 +82,35 @@ test('G3 availability guards transitions and reprogramming retains audit trail',
   assert.equal((await patch({status:'confirmed'})).status,422);
   assert.equal((await DB.prepare('SELECT count(*) n FROM activities').first()).n,4);assert.equal((await DB.prepare('SELECT count(*) n FROM availability_events').first()).n,1);
  }finally{DB.close()}
+});
+
+test('G3 individual identities enforce server roles and own the audit trail',async()=>{
+ const DB=createD1(),identities=JSON.stringify([{token:'reader-token',actor_id:'reader-01',roles:['reader']},{token:'lawyer-token',actor_id:'lawyer-07',roles:['lawyer']}]);
+ try{
+  const at='2099-09-22T15:00:00.000Z';
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('ci','Test','3000000000','identity@example.invalid',at).run();
+  await DB.prepare("INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind('qi','SM-2099-000002','ri','ci','medicamento','eps','si','ninguna','no','','new','medium',at,at).run();
+  const patch=(token,actor)=>publicWorker.fetch(new Request('https://public.test/api/admin/records/qi',{method:'PATCH',headers:{authorization:`Bearer ${token}`,'x-crm-actor-id':actor},body:JSON.stringify({type:'consultation',status:'progress'})}),{DB,CRM_IDENTITIES:identities});
+  assert.equal((await patch('reader-token','forged-admin')).status,403);
+  assert.equal((await patch('lawyer-token','forged-admin')).status,200);
+  const audit=await DB.prepare("SELECT actor FROM activities WHERE action='consultation_status_changed'").first();
+  assert.equal(audit.actor,'lawyer-07');
+  const dashboard=await publicWorker.fetch(new Request('https://public.test/api/admin/dashboard',{headers:{authorization:'Bearer reader-token'}}),{DB,CRM_IDENTITIES:identities});
+  assert.equal(dashboard.status,200);assert.equal(dashboard.headers.get('x-auth-actor'),'reader-01');assert.equal(dashboard.headers.get('x-auth-mode'),'individual');
+ }finally{DB.close()}
+});
+
+test('G3 reminders send once for a confirmed appointment due in 24 hours',async()=>{
+ const DB=createD1(),originalFetch=globalThis.fetch,now=new Date('2099-09-21T15:00:00.000Z');let deliveries=0;
+ globalThis.fetch=async (_url,init)=>{deliveries++;const body=JSON.parse(init.body);assert.equal(body.event,'appointment.reminder.24h');assert.equal(body.reference,'SM-2099-000003');return new Response(null,{status:204})};
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cr','Test','3000000000','reminder@example.invalid',now.toISOString()).run();
+  await DB.prepare("INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind('qr','SM-2099-000003','rr','cr','medicamento','eps','si','ninguna','no','','new','medium',now.toISOString(),now.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('ar','qr','2099-09-22T15:00:00.000Z','America/Bogota','confirmed','Daniel Vergel',now.toISOString(),now.toISOString()).run();
+  const env={DB,REMINDER_WEBHOOK_URL:'https://reminders.test/events',REMINDER_WEBHOOK_TOKEN:'synthetic'};
+  await publicWorker.scheduled({scheduledTime:now.getTime()},env);
+  await publicWorker.scheduled({scheduledTime:now.getTime()},env);
+  assert.equal(deliveries,1);assert.equal(DB.count('appointment_reminders'),1);
+  assert.equal((await DB.prepare('SELECT status FROM appointment_reminders').first()).status,'sent');
+ }finally{globalThis.fetch=originalFetch;DB.close()}
 });
