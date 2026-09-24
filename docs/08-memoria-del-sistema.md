@@ -428,3 +428,13 @@ Vincular una aplicación de Meta con WhatsApp Cloud API, generar una credencial 
 ### Estado
 
 G4 queda `READY_FOR_VERIFICATION` a la espera de CI y de las comprobaciones manuales no automatizables. La actualización del canal WhatsApp no altera por sí sola los restantes estados de G3.
+
+## Actualización — 24 de septiembre de 2026 — identidad individual G3 en QA
+
+- Se corrigió la atribución del actor entre el CRM privado y el backend QA.
+- El backend reconoce el identificador autenticado por Sites y aplica el rol validado por el proxy CRM.
+- Suite posterior al build: `24/24 PASS`.
+- Despliegue QA `appgdep_6ab53828385481919ce0d6048741fdf1`: `SUCCEEDED`.
+- Commit Sites: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9`.
+- `INDIVIDUAL_ACTOR_IDENTITY` queda listo para reconciliación canónica con evidencia de implementación y despliegue.
+- Riesgo residual: el modo `legacy-service-admin` continúa disponible para compatibilidad y debe eliminarse antes del endurecimiento productivo.

@@ -44,6 +44,11 @@ test('client supplied actor cannot replace a verified identity',async()=>{
   const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer verified-token','x-crm-actor-id':'forged-user'}}),{DB,CRM_IDENTITIES:identities});
   assert.equal(r.status,200);assert.equal(r.headers.get('x-auth-actor'),'verified-user');assert.equal(r.headers.get('x-auth-mode'),'individual');
 });
+test('trusted CRM proxy attributes the verified Sites actor and role',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return null},async all(){return {results:[]}}};return item},async batch(){return [{results:[{}]},{results:[]},{results:[]}]}};
+  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{headers:{authorization:'Bearer service-token','x-crm-actor-id':'site-user-77','x-admin-role':'asesor'}}),{DB,ADMIN_API_TOKEN:'service-token'});
+  assert.equal(r.status,200);assert.equal(r.headers.get('x-auth-actor'),'site-user-77');assert.equal(r.headers.get('x-auth-mode'),'individual');
+});
 test('orientation scripts load under the site content security policy',async()=>{
   const page=await worker.fetch(new Request('https://x/'));
   const html=await page.text();
