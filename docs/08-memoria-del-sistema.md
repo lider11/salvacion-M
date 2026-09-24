@@ -396,3 +396,35 @@ Se validó la integración real de correo con Brevo y se inspeccionó el estado 
 ### Pendiente
 
 Vincular una aplicación de Meta con WhatsApp Cloud API, generar una credencial de alcance mínimo, conectar el número y ejecutar un mensaje de prueba autorizado. Además siguen pendientes las demás verificaciones aisladas de G3 registradas por la fuente canónica.
+
+## Actualización — 24 de septiembre de 2026 — WhatsApp Cloud API y apertura de G4
+
+### G3: canal WhatsApp
+
+- Se creó y vinculó la aplicación Meta `Salvacion M Mensajeria` con alcance limitado.
+- Se verificó un destinatario real autorizado y se envió una plantilla mediante el número técnico de prueba de Meta.
+- El destinatario aportó evidencia visual de recepción en WhatsApp.
+- Resultado del canal WhatsApp Cloud API: `PASS` extremo a extremo.
+- No se guardaron tokens ni códigos de verificación en el repositorio.
+- La operación desde el número comercial propio y la rotación/revocación del token temporal permanecen como controles previos a producción.
+
+### G4: QA integral
+
+- Se inició G4 con una puerta reproducible `npm run test:g4`.
+- Se amplió la cobertura WCAG 2.2 AA con comportamiento de foco, validación accesible y teclado móvil.
+- Se añadieron contratos de seguridad API inspirados en ASVS para cabeceras, no almacenamiento, CORS, autorización y rechazo de entradas inválidas.
+- Se conservó la regresión integral formulario → D1 → CRM y la agenda con identidad, auditoría, disponibilidad, estados y recordatorios.
+- GitHub Actions preservará un resumen de evidencia G4 como artefacto durante 30 días.
+- La ejecución de G4 detectó y corrigió una incompatibilidad de los breakpoints móviles: las media queries de rango se normalizaron a `max-width` y se añadieron pruebas de teclado para el menú.
+
+### Validación observada
+
+- HTML/CSS/JavaScript: `PASS`.
+- Pa11y: `3/3 PASS`.
+- axe + Playwright: `5/5 PASS`.
+- Worker/D1/CRM/agenda/seguridad: `26/26 PASS`.
+- Críticos o bloqueantes automatizados abiertos: `0`.
+
+### Estado
+
+G4 queda `READY_FOR_VERIFICATION` a la espera de CI y de las comprobaciones manuales no automatizables. La actualización del canal WhatsApp no altera por sí sola los restantes estados de G3.

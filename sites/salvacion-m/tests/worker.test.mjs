@@ -63,3 +63,38 @@ test('logo animation can replay on click',async()=>{const [html,js,css]=await Pr
 test('header assets bypass stale browser cache',async()=>{const html=await worker.fetch(new Request('https://x/')).then(r=>r.text());assert.match(html,/styles\.css\?v=12/);assert.match(html,/app\.js\?v=12/);for(const path of ['/styles.css','/app.js']){const r=await worker.fetch(new Request('https://x'+path));assert.equal(r.headers.get('cache-control'),'no-cache')}});
 test('navigation uses progressive route hover and active section state',async()=>{const [html,js,css]=await Promise.all(['/','/app.js','/styles.css'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(html,/styles\.css\?v=12/);assert.match(html,/app\.js\?v=12/);assert.match(css,/transform:scaleX\(0\)/);assert.match(css,/aria-current="location"/);assert.match(css,/:focus-visible/);assert.match(js,/IntersectionObserver/);assert.match(js,/aria-current/)});
 test('header CTA click triggers accompaniment pulse with reduced-motion fallback',async()=>{const [js,css]=await Promise.all(['/app.js','/styles.css'].map(path=>worker.fetch(new Request('https://x'+path),{}).then(r=>r.text())));assert.match(js,/navCta\.addEventListener\('click'/);assert.match(js,/is-pulsing/);assert.match(css,/@keyframes nav-cta-pulse/);assert.match(css,/scale\(\.97\)/);assert.match(css,/prefers-reduced-motion:reduce/)});
+
+test('G4 API responses enforce no-store and browser security headers',async()=>{
+  const r=await worker.fetch(new Request('https://x/api/health'),{});
+  assert.equal(r.headers.get('cache-control'),'no-store');
+  assert.equal(r.headers.get('x-frame-options'),'DENY');
+  assert.equal(r.headers.get('x-content-type-options'),'nosniff');
+  assert.match(r.headers.get('content-security-policy'),/frame-ancestors 'none'/);
+  assert.match(r.headers.get('strict-transport-security'),/max-age=31536000/);
+  assert.match(r.headers.get('permissions-policy'),/camera=\(\)/);
+});
+
+test('G4 CORS preflight is restricted to the configured CRM origin',async()=>{
+  const r=await worker.fetch(new Request('https://x/api/admin/dashboard',{method:'OPTIONS'}),{CRM_ORIGIN:'https://crm.example.invalid'});
+  assert.equal(r.status,204);
+  assert.equal(r.headers.get('access-control-allow-origin'),'https://crm.example.invalid');
+  assert.equal(r.headers.get('access-control-allow-credentials'),null);
+  assert.equal(r.headers.get('access-control-allow-methods'),'GET,PATCH,PUT,OPTIONS');
+});
+
+test('G4 rejects malformed JSON and invalid public enum values without persistence',async()=>{
+  let prepared=0;
+  const DB={prepare(){prepared++;throw new Error('database must not be reached')}};
+  let r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',body:'{' }),{DB});
+  assert.equal(r.status,400);assert.equal(prepared,0);
+  const payload={name:'Persona',phone:'3001234567',email:'persona@example.com',problem:'script',entity:'eps',order:'si',action:'ninguna',consent:true};
+  r=await worker.fetch(new Request('https://x/api/consultations',{method:'POST',body:JSON.stringify(payload)}),{DB});
+  assert.equal(r.status,422);assert.equal(prepared,0);
+});
+
+test('G4 read-only identity cannot mutate CRM records',async()=>{
+  const identities=JSON.stringify([{token:'reader-token',actor_id:'reader-01',roles:['reader']}]);
+  const r=await worker.fetch(new Request('https://x/api/admin/records/item-01',{method:'PATCH',headers:{authorization:'Bearer reader-token'},body:JSON.stringify({type:'consultation',status:'closed'})}),{CRM_IDENTITIES:identities});
+  assert.equal(r.status,403);
+  assert.equal(r.headers.get('cache-control'),'no-store');
+});
