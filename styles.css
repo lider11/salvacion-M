@@ -754,7 +754,7 @@ textarea[aria-invalid="true"]:focus-visible {
   color: var(--color-muted);
 }
 
-@media (width <= 960px) {
+@media (max-width: 960px) {
   .hero-grid,
   .form-layout,
   .split-grid,
@@ -779,7 +779,7 @@ textarea[aria-invalid="true"]:focus-visible {
   }
 }
 
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .section {
     padding: 4rem 0;
   }
@@ -833,7 +833,7 @@ textarea[aria-invalid="true"]:focus-visible {
   }
 }
 
-@media (width <= 480px) {
+@media (max-width: 480px) {
   .container {
     width: min(calc(100% - 1.25rem), var(--container));
   }
@@ -945,7 +945,7 @@ button,
   touch-action: manipulation;
 }
 
-@media (width <= 760px) {
+@media (max-width: 760px) {
   .main-nav a,
   .footer-nav a {
     min-height: 44px;

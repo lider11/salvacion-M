@@ -79,5 +79,29 @@ jobs:
       - name: Build Salvacion M worker
         run: cd sites/salvacion-m && npm run build
 
-      - name: Run Salvacion M worker tests including D1 and G2
+      - name: Run Salvacion M worker tests including D1, G2, G3 and G4
         run: cd sites/salvacion-m && npm test
+
+      - name: Preserve G4 QA summary
+        if: always()
+        run: |
+          mkdir -p qa-results
+          cat > qa-results/g4-summary.md <<'EOF'
+          # G4 automated QA
+
+          The workflow result is the reproducible gate record for:
+
+          - static validation;
+          - WCAG 2.2 AA automated audits with Pa11y and axe;
+          - public-site E2E behavior;
+          - Worker, D1, CRM and agenda regression;
+          - ASVS-inspired API security contracts.
+          EOF
+
+      - name: Upload G4 QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g4-qa-evidence
+          path: qa-results/g4-summary.md
+          retention-days: 30
