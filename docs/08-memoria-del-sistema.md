@@ -438,3 +438,12 @@ G4 queda `READY_FOR_VERIFICATION` a la espera de CI y de las comprobaciones manu
 - Commit Sites: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9`.
 - `INDIVIDUAL_ACTOR_IDENTITY` queda listo para reconciliación canónica con evidencia de implementación y despliegue.
 - Riesgo residual: el modo `legacy-service-admin` continúa disponible para compatibilidad y debe eliminarse antes del endurecimiento productivo.
+
+## Actualización — 24 de septiembre de 2026 — verificación viva CRM y agenda G3
+
+- El CRM QA autenticado mostró 10 consultas sintéticas y 3 citas activas.
+- Se comprobaron referencias coherentes, consultas con y sin cita, estados solicitada/confirmada/cancelada y profesional en zona horaria Colombia.
+- La interfaz dispone de búsqueda, filtro, lista accesible, disponibilidad, confirmación, reprogramación, atención, no asistencia y cancelación.
+- La verificación fue de solo lectura y no alteró registros.
+- `CLIENT_CONSULTATION_APPOINTMENT_LINK`, `AGENDA_CRM_UI`, `PROFESSIONAL_AVAILABILITY` y `D1_QA_MIGRATION` quedan respaldados por evidencia viva más las pruebas automatizadas.
+- `REMINDERS` conserva un bloqueo: el Site QA no reporta una automatización programada asociada.
