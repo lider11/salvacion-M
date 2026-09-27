@@ -103,3 +103,19 @@ test('G4 read-only identity cannot mutate CRM records',async()=>{
   assert.equal(r.status,403);
   assert.equal(r.headers.get('cache-control'),'no-store');
 });
+
+
+test('G3 external scheduler endpoint requires its dedicated trigger secret',async()=>{
+  let r=await worker.fetch(new Request('https://x/api/internal/reminders/dispatch',{method:'POST'}),{REMINDER_TRIGGER_TOKEN:'scheduler-secret'});
+  assert.equal(r.status,401);
+  r=await worker.fetch(new Request('https://x/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer wrong'}}),{REMINDER_TRIGGER_TOKEN:'scheduler-secret'});
+  assert.equal(r.status,401);
+});
+
+test('G3 external scheduler endpoint invokes reminders with an authorized trigger',async()=>{
+  const DB={prepare(sql){const item={bind(){return item},async all(){return {results:[]}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer scheduler-secret'}}),{DB,REMINDER_TRIGGER_TOKEN:'scheduler-secret',REMINDER_WEBHOOK_URL:'https://provider.example.invalid'});
+  assert.equal(r.status,200);
+  const body=await r.json();
+  assert.equal(body.ok,true);assert.equal(body.queued,0);assert.equal(body.sent,0);assert.equal(body.failed,0);
+});
