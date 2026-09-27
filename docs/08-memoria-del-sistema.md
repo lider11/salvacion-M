@@ -489,3 +489,34 @@ Se conservan los riesgos ya documentados sobre eliminación del modo heredado de
 ### Estado final
 
 `G3 = READY_FOR_VERIFICATION`. No se declara PASS por implementación ni por pruebas simuladas.
+
+
+## Actualización — 27 de septiembre de 2026 — auditoría viva G3 de QA/D1
+
+### Actuación
+
+Se verificó directamente en modo solo lectura el entorno `salvacion-m-gates-qa` y la base D1 asociada, para distinguir evidencia de despliegue de evidencia de ejecución de reminders.
+
+### Resultado acreditado
+
+- QA vigente: versión 9, deployment `appgdep_6ab53828385481919ce0d6048741fdf1`.
+- Reconciliación vigente: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9 → versión 9 → deployment QA`.
+- D1 contiene la estructura operativa de citas, recordatorios, actividades, consultas y disponibilidad.
+- La tabla `appointment_reminders` está vacía.
+- Las citas confirmadas observadas son históricas y no están dentro de la ventana actual de +23 h a +25 h.
+
+### Bloqueantes de gate
+
+1. La versión QA vigente no acredita el endpoint seguro añadido para scheduler externo.
+2. No existe evidencia de scheduler externo configurado ni una capacidad conectada para crearlo mediante HTTP autenticado.
+3. Falta cita QA sintética dentro de la ventana; Trigger #1; Trigger #2; un único registro lógico en D1; auditoría de trigger, respuesta y proveedor; y regresión contra el deployment que incorpore el endpoint.
+
+### Riesgos residuales no bloqueantes para producción
+
+- retiro del modo `legacy-service-admin`;
+- rotación/endurecimiento de credenciales de canales;
+- activación futura del número comercial propio de WhatsApp.
+
+### Estado final
+
+`G3 = READY_FOR_VERIFICATION`. La nueva evidencia corrige el alcance de acceso disponible, pero no sustituye la cadena real requerida para cerrar el gate.
