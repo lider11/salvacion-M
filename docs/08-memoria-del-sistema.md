@@ -447,3 +447,45 @@ G4 queda `READY_FOR_VERIFICATION` a la espera de CI y de las comprobaciones manu
 - La verificación fue de solo lectura y no alteró registros.
 - `CLIENT_CONSULTATION_APPOINTMENT_LINK`, `AGENDA_CRM_UI`, `PROFESSIONAL_AVAILABILITY` y `D1_QA_MIGRATION` quedan respaldados por evidencia viva más las pruebas automatizadas.
 - `REMINDERS` conserva un bloqueo: el Site QA no reporta una automatización programada asociada.
+
+
+## Actualización — 27 de septiembre de 2026 — G3 scheduler externo
+
+### Situación inicial
+
+Los requisitos de CRM/agenda, vínculo cliente→consulta→cita, disponibilidad profesional, D1 QA, identidad individual, Brevo y WhatsApp Cloud API conservan la evidencia vigente registrada. El bloqueo operativo de G3 permanece en REMINDERS: Sites no ofrece la programación nativa requerida y el Worker solo exponía el handler `scheduled`, sin una interfaz HTTP segura para un scheduler externo.
+
+### Solución adoptada
+
+Se mantiene la arquitectura aprobada: scheduler externo autorizado → endpoint seguro → `dispatchReminders` → proveedor → auditoría.
+
+Se añadió `POST /api/internal/reminders/dispatch` protegido por `REMINDER_TRIGGER_TOKEN`. El secreto no se almacena en Git y debe configurarse exclusivamente en QA y en el scheduler.
+
+### Cambios y evidencia
+
+- Endpoint protegido: commit `9198981d796dfffe2852bcf870609e9d440ea1f8`.
+- Pruebas de autenticación/invocación: commit `f0ead03f2d74a8a83283adad05cb2d008b20d551`.
+- Evidencia: `docs/evidencia-g3-reminders-scheduler-2026-09-27.md`.
+
+### Pruebas ejecutadas
+
+Se inspeccionó el código y la evidencia versionada. La suite histórica incluye idempotencia simulada de reminders, pero no se convierte en evidencia de integración real. En esta actuación no se dispone de acceso operativo al deployment QA/D1/scheduler externo para desplegar los commits, crear la cita sintética y ejecutar dos triggers reales.
+
+### Bloqueantes de gate
+
+- desplegar la versión nueva en QA;
+- configurar el secreto dedicado y scheduler externo horario;
+- ejecutar cita sintética confirmada dentro de la ventana 24 h;
+- repetir el trigger sobre la misma cita;
+- demostrar un solo envío/registro lógico;
+- conservar auditoría de trigger, respuesta, proveedor y D1;
+- reconciliar SHA → build/version → deployment QA;
+- ejecutar regresión de la versión desplegada.
+
+### Riesgos residuales no bloqueantes de producción
+
+Se conservan los riesgos ya documentados sobre eliminación del modo heredado de administración y endurecimiento/rotación de credenciales de canales antes de producción.
+
+### Estado final
+
+`G3 = READY_FOR_VERIFICATION`. No se declara PASS por implementación ni por pruebas simuladas.
