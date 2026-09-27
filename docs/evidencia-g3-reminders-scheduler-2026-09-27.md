@@ -91,3 +91,26 @@ Las suites históricas permanecen como evidencia previa. Las pruebas nuevas qued
 ## Conclusión
 
 G3 permanece `READY_FOR_VERIFICATION`. No procede PASS mientras falte la cadena real reproducible en QA.
+
+
+## Verificación adicional — 27 de septiembre de 2026
+
+### QA y D1 observados
+
+Se verificó directamente el Site QA y su D1 en modo solo lectura:
+
+- Site QA: `salvacion-m-gates-qa`, versión 9, despliegue `appgdep_6ab53828385481919ce0d6048741fdf1`.
+- Relación vigente: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9 → versión 9 → deployment QA`.
+- D1 contiene `appointments`, `appointment_reminders`, `activities`, `consultations` y `professional_availability`.
+- `appointment_reminders` estaba vacío al momento de la lectura.
+- Existe una cita confirmada histórica, pero su fecha ya está fuera de la ventana de +23 h a +25 h; no es admisible para la prueba actual.
+
+### Resultado
+
+La reconciliación histórica de la versión 9 queda acreditada, pero **no acredita el endpoint de scheduler externo**, pues los commits `9198981d…` y `f0ead03f…` no están relacionados con ese deployment. La ejecución real sigue pendiente.
+
+### Bloqueo operativo preciso
+
+No se detectó un scheduler externo configurado ni existe una capacidad conectada en esta sesión para crear uno que realice solicitudes HTTP autenticadas. Configurar un proveedor externo de cron/webhook implicaría introducir un servicio externo y custodiar `REMINDER_TRIGGER_TOKEN`, decisión reservada expresamente a autorización humana por `AGENTS.md`.
+
+Para cerrar G3 se requiere: (1) desplegar el commit que contiene el endpoint en QA, (2) configurar el secreto solo en QA y en un scheduler externo autorizado, (3) crear una cita sintética confirmada en la ventana, y (4) ejecutar dos POST autenticados sobre dicha cita, conservando respuesta, auditoría de proveedor y un único registro en D1.
