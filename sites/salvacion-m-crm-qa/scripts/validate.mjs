@@ -1,0 +1,1 @@
+import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';const src=await readFile('dist/server/index.js','utf8');const mod=await import(`data:text/javascript;base64,${Buffer.from(src).toString('base64')}`);assert.equal(typeof mod.default?.fetch,'function');console.log('CRM Worker valid');
