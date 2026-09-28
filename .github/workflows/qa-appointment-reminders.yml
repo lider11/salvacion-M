@@ -29,6 +29,14 @@ jobs:
           test -n "$SITES_QA_AUTHORIZATION"
           mkdir -p evidence
           date -u +%Y-%m-%dT%H:%M:%SZ > evidence/started-at.txt
+          health_status="$(curl --silent --show-error --output health.json --write-out '%{http_code}' \
+            --header "OAI-Sites-Authorization: Bearer $SITES_QA_AUTHORIZATION" \
+            --connect-timeout 10 --max-time 30 \
+            "https://salvacion-m-gates-qa.devergel1980.chatgpt.site/api/health")"
+          printf '%s\n' "$health_status" > evidence/site-auth-status.txt
+          echo "Sites authentication health HTTP: $health_status"
+          test "$health_status" = 200
+          jq -e '.ok == true and .service == "salvacion-m"' health.json
           status="$(curl --silent --show-error --output response.json --write-out '%{http_code}' \
             --request POST \
             --header "OAI-Sites-Authorization: Bearer $SITES_QA_AUTHORIZATION" \
