@@ -2,7 +2,6 @@ name: QA appointment reminders
 
 on:
   schedule:
-    # Runs hourly at minute 0. UTC is equivalent to hourly America/Bogota.
     - cron: "0 * * * *"
   workflow_dispatch:
 
@@ -15,42 +14,45 @@ concurrency:
 
 jobs:
   dispatch:
-    name: Dispatch QA reminders
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: qa
-
     steps:
       - name: Invoke protected QA dispatcher
-        id: dispatch
         env:
           DISPATCH_URL: https://salvacion-m-gates-qa.devergel1980.chatgpt.site/api/internal/reminders/dispatch
           REMINDER_TRIGGER_TOKEN: ${{ secrets.REMINDER_TRIGGER_TOKEN }}
+          SITES_QA_AUTHORIZATION: ${{ secrets.SITES_QA_AUTHORIZATION }}
         run: |
+          set -euo pipefail
           test -n "$REMINDER_TRIGGER_TOKEN"
+          test -n "$SITES_QA_AUTHORIZATION"
+          mkdir -p evidence
+          date -u +%Y-%m-%dT%H:%M:%SZ > evidence/started-at.txt
           status="$(curl --silent --show-error --output response.json --write-out '%{http_code}' \
             --request POST \
+            --header "OAI-Sites-Authorization: Bearer $SITES_QA_AUTHORIZATION" \
             --header "Authorization: Bearer $REMINDER_TRIGGER_TOKEN" \
             --header "Accept: application/json" \
-            --connect-timeout 10 \
-            --max-time 30 \
-            --retry 2 \
-            --retry-all-errors \
-            "$DISPATCH_URL")"
-          test "$status" -ge 200
-          test "$status" -lt 300
-          echo "http_status=$status" >> "$GITHUB_OUTPUT"
-
+            --connect-timeout 10 --max-time 30 "$DISPATCH_URL")"
+          printf '%s\n' "$status" > evidence/http-status.txt
+          test "$status" -ge 200 && test "$status" -lt 300
+          jq '{ok, queued, sent, failed, skipped}' response.json > evidence/response.json
+          jq -e '.ok == true and .failed == 0 and (.skipped == null)' response.json
       - name: Preserve safe execution evidence
         if: always()
-        env:
-          HTTP_STATUS: ${{ steps.dispatch.outputs.http_status }}
         run: |
           {
-            echo "## QA reminder dispatch"
-            echo
-            echo "- UTC timestamp: `$(date -u +%Y-%m-%dT%H:%M:%SZ)`"
-            echo "- HTTP status: `${HTTP_STATUS:-not-observed}`"
-            echo "- Workflow run: `${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}`"
-            echo "- Trigger: `${GITHUB_EVENT_NAME}`"
+            printf '## QA reminder dispatch\n\n'
+            printf -- '- Workflow: %s/%s/actions/runs/%s\n' "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID"
+            printf -- '- Trigger: %s\n' "$GITHUB_EVENT_NAME"
+            if test -f evidence/http-status.txt; then
+              printf -- '- HTTP status: %s\n' "$(cat evidence/http-status.txt)"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-reminder-dispatch-evidence
+          path: evidence/
+          retention-days: 30
