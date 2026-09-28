@@ -520,3 +520,18 @@ Se verificó directamente en modo solo lectura el entorno `salvacion-m-gates-qa`
 ### Estado final
 
 `G3 = READY_FOR_VERIFICATION`. La nueva evidencia corrige el alcance de acceso disponible, pero no sustituye la cadena real requerida para cerrar el gate.
+
+## Actualización — 27 de septiembre de 2026 — QA v10 y scheduler privado
+
+- Fuente PR #5 incorporada: c1a7b99d5755d51bd97a74559264f26a71882344.
+- SHA Sites: 6dcd190b2eeb58a890ffe5cb4404f7ba3b55cbf8; versión 10; deployment appgdep_6ab9d29217d88191aee3d639080744e6, succeeded.
+- URL QA: https://salvacion-m-gates-qa.devergel1980.chatgpt.site
+- Build, validación y 30 pruebas locales aprobados. Adaptación QA conserva Brevo y añade endpoint protegido; no equivale a entrega real.
+- Variables revisión 18 y acceso privado conservados. REMINDER_TRIGGER_TOKEN existe, pero Sites no devuelve su valor.
+- Inspección viva D1: appointment_reminders vacío; ninguna cita confirmada en ventana actual +23 a +25 horas.
+- Solicitud HTTP sin autenticación Sites devuelve 401 antes del Worker.
+- Workflow corregido en commit 8f071bac0a3f1da05f3cf4b6b337ba337b0b3b59: añade secreto SITES_QA_AUTHORIZATION para OAI-Sites-Authorization, conserva REMINDER_TRIGGER_TOKEN independiente, valida JSON y guarda evidencia segura. Configuración de estos secretos en GitHub NO verificada.
+- El workflow no existe en main al inspeccionarlo. No se ha activado ni ejecutado el cron; no se fusionó el PR.
+- Conector disponible no permite configurar secretos GitHub ni iniciar workflow_dispatch. No se solicita exponer secretos en conversación.
+- Pendientes: habilitar scheduler con ambas credenciales, cita sintética autorizada y confirmada en ventana, dos ejecuciones reales, evidencia proveedor y un registro lógico en D1. La respuesta actual del Worker no persiste messageId del proveedor; se requiere evidencia adicional de Brevo.
+- G3 permanece READY_FOR_VERIFICATION.
