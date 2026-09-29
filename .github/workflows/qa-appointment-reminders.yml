@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 * * * *"
   workflow_dispatch:
+    inputs:
+      auth_only:
+        description: 'Check Sites authentication without sending reminders'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -20,33 +25,74 @@ jobs:
     steps:
       - name: Invoke protected QA dispatcher
         env:
+          AUTH_ONLY: ${{ inputs.auth_only || false }}
           DISPATCH_URL: https://salvacion-m-gates-qa.devergel1980.chatgpt.site/api/internal/reminders/dispatch
           REMINDER_TRIGGER_TOKEN: ${{ secrets.REMINDER_TRIGGER_TOKEN }}
           SITES_QA_AUTHORIZATION: ${{ secrets.SITES_QA_AUTHORIZATION }}
         run: |
-          set -euo pipefail
-          test -n "$REMINDER_TRIGGER_TOKEN"
-          test -n "$SITES_QA_AUTHORIZATION"
-          mkdir -p evidence
-          date -u +%Y-%m-%dT%H:%M:%SZ > evidence/started-at.txt
-          health_status="$(curl --silent --show-error --output health.json --write-out '%{http_code}' \
-            --header "OAI-Sites-Authorization: Bearer $SITES_QA_AUTHORIZATION" \
-            --connect-timeout 10 --max-time 30 \
-            "https://salvacion-m-gates-qa.devergel1980.chatgpt.site/api/health")"
-          printf '%s\n' "$health_status" > evidence/site-auth-status.txt
-          echo "Sites authentication health HTTP: $health_status"
-          test "$health_status" = 200
-          jq -e '.ok == true and .service == "salvacion-m"' health.json
-          status="$(curl --silent --show-error --output response.json --write-out '%{http_code}' \
-            --request POST \
-            --header "OAI-Sites-Authorization: Bearer $SITES_QA_AUTHORIZATION" \
-            --header "Authorization: Bearer $REMINDER_TRIGGER_TOKEN" \
-            --header "Accept: application/json" \
-            --connect-timeout 10 --max-time 30 "$DISPATCH_URL")"
-          printf '%s\n' "$status" > evidence/http-status.txt
-          test "$status" -ge 200 && test "$status" -lt 300
-          jq '{ok, queued, sent, failed, skipped}' response.json > evidence/response.json
-          jq -e '.ok == true and .failed == 0 and (.skipped == null)' response.json
+          node --input-type=module <<'JAVASCRIPT'
+          import { mkdir, writeFile } from 'node:fs/promises';
+          
+          export function bearer(raw, name) {
+            if (typeof raw !== 'string' || /[\r\n\0]/.test(raw)) throw new Error(name + '_INVALID');
+            const token = raw.trim().replace(/^Bearer +/i, '');
+            if (!/^[A-Za-z0-9._~+\/-]+=*$/.test(token)) throw new Error(name + '_INVALID');
+            return 'Bearer ' + token;
+          }
+          
+          export async function run(env = process.env, request = fetch, save = writeFile, log = console.log) {
+            const origin = 'https://salvacion-m-gates-qa.devergel1980.chatgpt.site';
+            let stage = 'configuration';
+            const evidence = { started_at: new Date().toISOString(), stage };
+            try {
+              const siteAuth = bearer(env.SITES_QA_AUTHORIZATION, 'SITES_QA_AUTHORIZATION');
+              const triggerAuth = env.AUTH_ONLY === 'true' ? null : bearer(env.REMINDER_TRIGGER_TOKEN, 'REMINDER_TRIGGER_TOKEN');
+              const call = async (path, method, authorization) => {
+                const headers = { Accept: 'application/json', 'OAI-Sites-Authorization': siteAuth };
+                if (authorization) headers.Authorization = authorization;
+                let response;
+                try {
+                  response = await request(origin + path, {
+                    method, headers, redirect: 'error', signal: AbortSignal.timeout(30000)
+                  });
+                } catch { throw new Error('NETWORK_TIMEOUT_OR_REDIRECT'); }
+                evidence[stage + '_http_status'] = response.status;
+                log(stage + ' HTTP: ' + response.status);
+                if (!response.ok) throw new Error(stage.toUpperCase() + '_HTTP_' + response.status);
+                if (!(response.headers.get('content-type') || '').includes('application/json')) throw new Error('INVALID_CONTENT_TYPE');
+                try { return await response.json(); } catch { throw new Error('INVALID_JSON'); }
+              };
+              stage = 'site_auth';
+              const health = await call('/api/health', 'GET');
+              if (health.ok !== true || health.service !== 'salvacion-m') throw new Error('UNEXPECTED_SERVICE');
+              if (env.AUTH_ONLY === 'true') { evidence.result = 'AUTHENTICATED_NO_SEND'; return; }
+              stage = 'dispatch';
+              // No automatic retry: a timeout after POST can mean the provider accepted the email.
+              const result = await call('/api/internal/reminders/dispatch', 'POST', triggerAuth);
+              const counts = ['queued', 'sent', 'failed', 'duplicates'];
+              if (typeof result.ok !== 'boolean' || counts.some(k => !Number.isSafeInteger(result[k]) || result[k] < 0)) throw new Error('INVALID_DISPATCH_RESPONSE');
+              evidence.dispatch = Object.fromEntries(counts.map(k => [k, result[k]]));
+              for (const key of ['run_id', 'started_at', 'finished_at', 'window_from', 'window_to']) {
+                const value = result[key];
+                if (typeof value === 'string' && /^[a-zA-Z0-9.:+\-]{1,80}$/.test(value)) evidence.dispatch[key] = value;
+              }
+              if (!result.ok || result.failed !== 0 || result.skipped != null) throw new Error('DISPATCH_REQUIRES_REVIEW');
+              evidence.result = 'DISPATCH_COMPLETED';
+            } catch (error) {
+              evidence.result = 'FAILED';
+              evidence.error = error.message;
+              throw error;
+            } finally {
+              evidence.stage = stage;
+              evidence.finished_at = new Date().toISOString();
+              await save('evidence/auth-dispatch.json', JSON.stringify(evidence, null, 2), { mode: 0o600 });
+            }
+          }
+          
+          await mkdir('evidence', { recursive: true });
+          try { await run(); } catch (error) { console.error('QA authentication/dispatch failed: ' + error.message); process.exitCode = 1; }
+          
+          JAVASCRIPT
       - name: Preserve safe execution evidence
         if: always()
         run: |
