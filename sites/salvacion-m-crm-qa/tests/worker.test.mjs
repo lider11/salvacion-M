@@ -34,3 +34,21 @@ test('G3 evidence mutations require same-origin requests before proxying',async(
  assert.equal((await call('https://crm.test')).status,200);assert.equal(calls,1);
  }finally{globalThis.fetch=previous}
 });
+
+
+test('Auth v2 login rejects invalid credentials without disclosing account state',async()=>{
+ const DB={prepare(sql){const item={bind(){return item},async first(){return null},async run(){return {}}};return item}};
+ const r=await worker.fetch(new Request('https://x/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'nobody@example.invalid',password:'not-a-valid-password'})}),{DB});
+ assert.equal(r.status,401);assert.equal((await r.json()).error,'Credenciales inválidas.');
+});
+test('Auth v2 protects session cookie from JavaScript',async()=>{
+ const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('FROM crm_users')?{id:'u1',email:'owner@example.invalid',password_salt:'salt',password_hash:'invalid',password_iterations:210000,role:'ADMIN',active:1}:null},async run(){return {}}};return item}};
+ const r=await worker.fetch(new Request('https://x/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'owner@example.invalid',password:'not-a-valid-password'})}),{DB});
+ assert.equal(r.status,401);
+ const source=await worker.fetch(new Request('https://x/auth.js')).then(x=>x.text());assert.doesNotMatch(source,/localStorage|sessionStorage|ADMIN_API_TOKEN|REMINDER_TRIGGER_TOKEN/);
+});
+test('Auth v2 anonymous users cannot proxy CRM APIs',async()=>{
+ const DB={prepare(){const item={bind(){return item},async first(){return null},async run(){return {}}};return item}};
+ const r=await worker.fetch(new Request('https://x/api/dashboard'),{DB,BACKEND_URL:'https://qa.test',ADMIN_API_TOKEN:'service'});
+ assert.equal(r.status,401);
+});
