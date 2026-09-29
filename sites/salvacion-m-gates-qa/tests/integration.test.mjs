@@ -165,3 +165,30 @@ test('G3 failed provider attempts are visible and never silently resent',async()
   const row=await DB.prepare('SELECT status,error_code FROM appointment_reminders').first();assert.equal(row.status,'failed');assert.equal(row.error_code,'provider_503');
  }finally{globalThis.fetch=previous;DB.close()}
 });
+
+test('G3 workflow persists reviewed evidence, enforces transitions and never invents canonical PASS',async()=>{
+ const DB=createD1(),previous=globalThis.fetch,at=new Date(),slot=new Date(at.getTime()+86400000).toISOString();
+ globalThis.fetch=async()=>Response.json({messageId:'message-flow-1'},{status:201});
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cg','Synthetic','3000000000','flow@example.invalid',at.toISOString()).run();
+  await DB.prepare('INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind('qg','SM-2026-000987','rg','cg','medicamento','eps','si','ninguna','no','','new','medium',at.toISOString(),at.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('ag','qg',slot,'America/Bogota','confirmed','Daniel Vergel',at.toISOString(),at.toISOString()).run();
+  const env={DB,BREVO_API_KEY:'synthetic',BREVO_FROM_EMAIL:'qa@example.invalid',REMINDER_TRIGGER_TOKEN:'trigger',CRM_IDENTITIES:JSON.stringify([{token:'admin-flow',actor_id:'reviewer-1',roles:['admin']},{token:'reader-flow',actor_id:'reader-1',roles:['reader']}])};
+  const get=()=>publicWorker.fetch(new Request('https://qa.test/api/admin/g3/verification?appointment_id=ag',{headers:{authorization:'Bearer admin-flow'}}),env);
+  const save=(body,token='admin-flow')=>publicWorker.fetch(new Request('https://qa.test/api/admin/g3/verification?appointment_id=ag',{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(body)}),env);
+  const base={request_id:crypto.randomUUID(),revision:0,kind:'review',url:'https://evidence.example.invalid/review',reviewed:true};
+  assert.equal((await save(base)).status,409);assert.equal((await save(base,'reader-flow')).status,403);
+  assert.equal((await save({...base,kind:'recipient',authorized:true,url:'https://evidence.example.invalid/?token=secret'})).status,422);
+  assert.equal((await save(null)).status,422);
+  let state=await (await get()).json();assert.equal(state.status,'READY_FOR_VERIFICATION');assert.equal(state.history.length,0);
+  const trigger=()=>publicWorker.fetch(new Request('https://qa.test/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer trigger'}}),env);
+  const first=await (await trigger()).json(),second=await (await trigger()).json();
+  const proofs=[{kind:'scheduler',first_run_id:first.run_id,second_run_id:second.run_id},{kind:'recipient',authorized:true},{kind:'delivery',message_id:'message-flow-1'},{kind:'visual',desktop:true,mobile:true,keyboard:true,errors:true,regression:true,backend_sha:'a'.repeat(40),crm_sha:'b'.repeat(40)},{kind:'documentation',backend_sha:'a'.repeat(40),crm_sha:'b'.repeat(40)}];
+  assert.equal((await save({...base,kind:'delivery',message_id:'wrong-message'})).status,422);
+  for(const proof of proofs){state=await (await get()).json();const body={...base,...proof,request_id:crypto.randomUUID(),revision:state.revision};const r=await save(body);assert.equal(r.status,201,await r.clone().text());const retry=await save(body);assert.equal(retry.status,200);assert.equal((await retry.json()).revision,state.revision+1);}
+  state=await (await get()).json();assert.equal(state.ready_for_review,true);assert.equal(state.status,'READY_FOR_REVIEW');assert.equal(state.canonical_gate_changed,false);assert.equal(state.stages.every(s=>s.ok),true);
+  assert.equal((await save({...base,revision:0,kind:'recipient',authorized:true})).status,409);
+  const review=await save({...base,request_id:crypto.randomUUID(),revision:state.revision});assert.equal(review.status,201);state=await review.json();assert.equal(state.status,'REVIEW_RECORDED');assert.equal(state.canonical_gate_changed,false);assert.equal(state.review.actor,'reviewer-1');assert.equal(state.history.length,6);
+  const changed=await save({...base,kind:'documentation',backend_sha:'c'.repeat(40),crm_sha:'b'.repeat(40),request_id:crypto.randomUUID(),revision:state.revision});assert.equal(changed.status,201);state=await changed.json();assert.equal(state.ready_for_review,false);assert.equal(state.review,null);
+ }finally{globalThis.fetch=previous;DB.close()}
+});

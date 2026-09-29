@@ -25,3 +25,12 @@ test('reminder monitor uses authenticated proxy and preserves query parameters',
  assert.equal((await worker.fetch(new Request('https://crm.test/api/reminders'),env)).status,401);
  }finally{globalThis.fetch=previous}
 });
+
+test('G3 evidence mutations require same-origin requests before proxying',async()=>{
+ const previous=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;return Response.json({ok:true})};
+ try{const env={BACKEND_URL:'https://qa.test',ADMIN_API_TOKEN:'test',CRM_USERS_JSON:roles};
+ const call=origin=>worker.fetch(new Request('https://crm.test/api/g3/verification?appointment_id=test',{method:'POST',headers:{...identity,origin,'content-type':'application/json'},body:'{}'}),env);
+ assert.equal((await call('https://attacker.invalid')).status,403);assert.equal(calls,0);
+ assert.equal((await call('https://crm.test')).status,200);assert.equal(calls,1);
+ }finally{globalThis.fetch=previous}
+});
