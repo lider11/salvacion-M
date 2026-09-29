@@ -1,0 +1,8 @@
+const $=s=>document.querySelector(s);
+async function request(path,options={}){const r=await fetch(path,{credentials:'same-origin',headers:{'content-type':'application/json',...(options.headers||{})},...options});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.error||'Operación no disponible');return data}
+async function session(){try{const me=await request('/api/auth/me');showApp(me)}catch{showLogin()}}
+function showLogin(){document.body.dataset.auth='anonymous';$('#loginView').hidden=false;$('#appShell').hidden=true;$('#email').focus()}
+function showApp(me){document.body.dataset.auth='authenticated';$('#loginView').hidden=true;$('#appShell').hidden=false;$('#sessionUser').textContent=me.email;$('#sessionRole').textContent=me.role;window.AUTH={...me,request:async(path,opt={})=>request(path,{...opt,headers:{...(opt.headers||{}),'x-csrf-token':me.csrf_token}})};window.dispatchEvent(new CustomEvent('auth:ready',{detail:me}))}
+$('#loginForm').addEventListener('submit',async e=>{e.preventDefault();const button=$('#loginSubmit'),notice=$('#loginNotice');button.disabled=true;notice.textContent='Verificando…';try{const form=new FormData(e.currentTarget);await request('/api/auth/login',{method:'POST',body:JSON.stringify({email:form.get('email'),password:form.get('password')})});e.currentTarget.reset();await session()}catch(error){notice.textContent=error.message}finally{button.disabled=false}});
+$('#logout').addEventListener('click',async()=>{try{const me=window.AUTH;await request('/api/auth/logout',{method:'POST',headers:{'x-csrf-token':me?.csrf_token||''}})}finally{window.AUTH=null;showLogin()}});
+session();
