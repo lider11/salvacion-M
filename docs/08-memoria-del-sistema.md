@@ -396,3 +396,173 @@ Se validó la integración real de correo con Brevo y se inspeccionó el estado 
 ### Pendiente
 
 Vincular una aplicación de Meta con WhatsApp Cloud API, generar una credencial de alcance mínimo, conectar el número y ejecutar un mensaje de prueba autorizado. Además siguen pendientes las demás verificaciones aisladas de G3 registradas por la fuente canónica.
+
+## Actualización — 24 de septiembre de 2026 — WhatsApp Cloud API y apertura de G4
+
+### G3: canal WhatsApp
+
+- Se creó y vinculó la aplicación Meta `Salvacion M Mensajeria` con alcance limitado.
+- Se verificó un destinatario real autorizado y se envió una plantilla mediante el número técnico de prueba de Meta.
+- El destinatario aportó evidencia visual de recepción en WhatsApp.
+- Resultado del canal WhatsApp Cloud API: `PASS` extremo a extremo.
+- No se guardaron tokens ni códigos de verificación en el repositorio.
+- La operación desde el número comercial propio y la rotación/revocación del token temporal permanecen como controles previos a producción.
+
+### G4: QA integral
+
+- Se inició G4 con una puerta reproducible `npm run test:g4`.
+- Se amplió la cobertura WCAG 2.2 AA con comportamiento de foco, validación accesible y teclado móvil.
+- Se añadieron contratos de seguridad API inspirados en ASVS para cabeceras, no almacenamiento, CORS, autorización y rechazo de entradas inválidas.
+- Se conservó la regresión integral formulario → D1 → CRM y la agenda con identidad, auditoría, disponibilidad, estados y recordatorios.
+- GitHub Actions preservará un resumen de evidencia G4 como artefacto durante 30 días.
+- La ejecución de G4 detectó y corrigió una incompatibilidad de los breakpoints móviles: las media queries de rango se normalizaron a `max-width` y se añadieron pruebas de teclado para el menú.
+
+### Validación observada
+
+- HTML/CSS/JavaScript: `PASS`.
+- Pa11y: `3/3 PASS`.
+- axe + Playwright: `5/5 PASS`.
+- Worker/D1/CRM/agenda/seguridad: `26/26 PASS`.
+- Críticos o bloqueantes automatizados abiertos: `0`.
+
+### Estado
+
+G4 queda `READY_FOR_VERIFICATION` a la espera de CI y de las comprobaciones manuales no automatizables. La actualización del canal WhatsApp no altera por sí sola los restantes estados de G3.
+
+## Actualización — 24 de septiembre de 2026 — identidad individual G3 en QA
+
+- Se corrigió la atribución del actor entre el CRM privado y el backend QA.
+- El backend reconoce el identificador autenticado por Sites y aplica el rol validado por el proxy CRM.
+- Suite posterior al build: `24/24 PASS`.
+- Despliegue QA `appgdep_6ab53828385481919ce0d6048741fdf1`: `SUCCEEDED`.
+- Commit Sites: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9`.
+- `INDIVIDUAL_ACTOR_IDENTITY` queda listo para reconciliación canónica con evidencia de implementación y despliegue.
+- Riesgo residual: el modo `legacy-service-admin` continúa disponible para compatibilidad y debe eliminarse antes del endurecimiento productivo.
+
+## Actualización — 24 de septiembre de 2026 — verificación viva CRM y agenda G3
+
+- El CRM QA autenticado mostró 10 consultas sintéticas y 3 citas activas.
+- Se comprobaron referencias coherentes, consultas con y sin cita, estados solicitada/confirmada/cancelada y profesional en zona horaria Colombia.
+- La interfaz dispone de búsqueda, filtro, lista accesible, disponibilidad, confirmación, reprogramación, atención, no asistencia y cancelación.
+- La verificación fue de solo lectura y no alteró registros.
+- `CLIENT_CONSULTATION_APPOINTMENT_LINK`, `AGENDA_CRM_UI`, `PROFESSIONAL_AVAILABILITY` y `D1_QA_MIGRATION` quedan respaldados por evidencia viva más las pruebas automatizadas.
+- `REMINDERS` conserva un bloqueo: el Site QA no reporta una automatización programada asociada.
+
+
+## Actualización — 27 de septiembre de 2026 — G3 scheduler externo
+
+### Situación inicial
+
+Los requisitos de CRM/agenda, vínculo cliente→consulta→cita, disponibilidad profesional, D1 QA, identidad individual, Brevo y WhatsApp Cloud API conservan la evidencia vigente registrada. El bloqueo operativo de G3 permanece en REMINDERS: Sites no ofrece la programación nativa requerida y el Worker solo exponía el handler `scheduled`, sin una interfaz HTTP segura para un scheduler externo.
+
+### Solución adoptada
+
+Se mantiene la arquitectura aprobada: scheduler externo autorizado → endpoint seguro → `dispatchReminders` → proveedor → auditoría.
+
+Se añadió `POST /api/internal/reminders/dispatch` protegido por `REMINDER_TRIGGER_TOKEN`. El secreto no se almacena en Git y debe configurarse exclusivamente en QA y en el scheduler.
+
+### Cambios y evidencia
+
+- Endpoint protegido: commit `9198981d796dfffe2852bcf870609e9d440ea1f8`.
+- Pruebas de autenticación/invocación: commit `f0ead03f2d74a8a83283adad05cb2d008b20d551`.
+- Evidencia: `docs/evidencia-g3-reminders-scheduler-2026-09-27.md`.
+
+### Pruebas ejecutadas
+
+Se inspeccionó el código y la evidencia versionada. La suite histórica incluye idempotencia simulada de reminders, pero no se convierte en evidencia de integración real. En esta actuación no se dispone de acceso operativo al deployment QA/D1/scheduler externo para desplegar los commits, crear la cita sintética y ejecutar dos triggers reales.
+
+### Bloqueantes de gate
+
+- desplegar la versión nueva en QA;
+- configurar el secreto dedicado y scheduler externo horario;
+- ejecutar cita sintética confirmada dentro de la ventana 24 h;
+- repetir el trigger sobre la misma cita;
+- demostrar un solo envío/registro lógico;
+- conservar auditoría de trigger, respuesta, proveedor y D1;
+- reconciliar SHA → build/version → deployment QA;
+- ejecutar regresión de la versión desplegada.
+
+### Riesgos residuales no bloqueantes de producción
+
+Se conservan los riesgos ya documentados sobre eliminación del modo heredado de administración y endurecimiento/rotación de credenciales de canales antes de producción.
+
+### Estado final
+
+`G3 = READY_FOR_VERIFICATION`. No se declara PASS por implementación ni por pruebas simuladas.
+
+
+## Actualización — 27 de septiembre de 2026 — auditoría viva G3 de QA/D1
+
+### Actuación
+
+Se verificó directamente en modo solo lectura el entorno `salvacion-m-gates-qa` y la base D1 asociada, para distinguir evidencia de despliegue de evidencia de ejecución de reminders.
+
+### Resultado acreditado
+
+- QA vigente: versión 9, deployment `appgdep_6ab53828385481919ce0d6048741fdf1`.
+- Reconciliación vigente: `34719b3a10bfcc2f09c78a2c6d8ba8c31d63bca9 → versión 9 → deployment QA`.
+- D1 contiene la estructura operativa de citas, recordatorios, actividades, consultas y disponibilidad.
+- La tabla `appointment_reminders` está vacía.
+- Las citas confirmadas observadas son históricas y no están dentro de la ventana actual de +23 h a +25 h.
+
+### Bloqueantes de gate
+
+1. La versión QA vigente no acredita el endpoint seguro añadido para scheduler externo.
+2. No existe evidencia de scheduler externo configurado ni una capacidad conectada para crearlo mediante HTTP autenticado.
+3. Falta cita QA sintética dentro de la ventana; Trigger #1; Trigger #2; un único registro lógico en D1; auditoría de trigger, respuesta y proveedor; y regresión contra el deployment que incorpore el endpoint.
+
+### Riesgos residuales no bloqueantes para producción
+
+- retiro del modo `legacy-service-admin`;
+- rotación/endurecimiento de credenciales de canales;
+- activación futura del número comercial propio de WhatsApp.
+
+### Estado final
+
+`G3 = READY_FOR_VERIFICATION`. La nueva evidencia corrige el alcance de acceso disponible, pero no sustituye la cadena real requerida para cerrar el gate.
+
+## Actualización — 27 de septiembre de 2026 — QA v10 y scheduler privado
+
+- Fuente PR #5 incorporada: c1a7b99d5755d51bd97a74559264f26a71882344.
+- SHA Sites: 6dcd190b2eeb58a890ffe5cb4404f7ba3b55cbf8; versión 10; deployment appgdep_6ab9d29217d88191aee3d639080744e6, succeeded.
+- URL QA: https://salvacion-m-gates-qa.devergel1980.chatgpt.site
+- Build, validación y 30 pruebas locales aprobados. Adaptación QA conserva Brevo y añade endpoint protegido; no equivale a entrega real.
+- Variables revisión 18 y acceso privado conservados. REMINDER_TRIGGER_TOKEN existe, pero Sites no devuelve su valor.
+- Inspección viva D1: appointment_reminders vacío; ninguna cita confirmada en ventana actual +23 a +25 horas.
+- Solicitud HTTP sin autenticación Sites devuelve 401 antes del Worker.
+- Workflow corregido en commit 8f071bac0a3f1da05f3cf4b6b337ba337b0b3b59: añade secreto SITES_QA_AUTHORIZATION para OAI-Sites-Authorization, conserva REMINDER_TRIGGER_TOKEN independiente, valida JSON y guarda evidencia segura. Configuración de estos secretos en GitHub NO verificada.
+- El workflow no existe en main al inspeccionarlo. No se ha activado ni ejecutado el cron; no se fusionó el PR.
+- Conector disponible no permite configurar secretos GitHub ni iniciar workflow_dispatch. No se solicita exponer secretos en conversación.
+- Pendientes: habilitar scheduler con ambas credenciales, cita sintética autorizada y confirmada en ventana, dos ejecuciones reales, evidencia proveedor y un registro lógico en D1. La respuesta actual del Worker no persiste messageId del proveedor; se requiere evidencia adicional de Brevo.
+- G3 permanece READY_FOR_VERIFICATION.
+
+
+## 28 de septiembre de 2026 — implementación G3 en HTML, JavaScript y CSS
+
+- Monitor de recordatorios en CRM QA independiente: citas dentro de ventana, totales, filtro por estado, recibos del proveedor y auditoría. Interfaz responsive con estados de carga/error/vacío y sin secretos.
+- Backend GET /api/admin/reminders protegido por roles. dispatchReminders registra run_id, inicio, aceptación/error y duplicados evitados en activities. Conserva messageId cuando existe. La aceptación no acredita entrega.
+- D1, migraciones, datos existentes y variables conservados; revisiones backend 18 y CRM 4. No se envían recordatorios reales durante esta actuación ni se crea programación nativa.
+- Build y validate: PASS. Pruebas backend 32/32; CRM 8/8. Proveedores simulados: no equivalen a verificación real.
+- QA: versión 11; SHA 725db4f82f653e8e7e103882adc8ddb9550e9d4d; deployment appgdep_6abad268c280819186aa21dc7056f067; SUCCEEDED.
+- CRM QA: versión 9; SHA 97b83aec255e5584c6da546b4fe189d232117c35; deployment appgdep_6abad2854d288191a9daabec6713c216; SUCCEEDED.
+- Fuente reproducible aislada en sites/salvacion-m-gates-qa/ y sites/salvacion-m-crm-qa/. Ejecutar npm run build, npm run validate y npm test en cada carpeta. dist/server y dist/.openai se generan con build.
+- Producción no modificada. No se fusiona PR #5.
+- Limitación: no hay preview de navegador compatible para estos Workers; no se acredita auditoría visual en navegador.
+- G3 sigue READY_FOR_VERIFICATION. Falta verificar/resolver autenticación del scheduler privado, cita sintética confirmada en ventana, doble disparo real y evidencia de entrega del proveedor. No se marca PASS desde la interfaz ni por pruebas simuladas.
+
+
+## 28 de septiembre de 2026 — flujo interactivo de verificación G3
+
+- HTML semántico, CSS responsive y JavaScript sin dependencias: pestaña Flujo G3 con selección de cita, ocho pasos navegables, condiciones sí/no, progreso y acción correctiva.
+- Endpoint GET/POST /api/admin/g3/verification: cálculo de requisitos en servidor y evidencia documental append-only en activities, sin cambios de esquema o migraciones.
+- Roles: consulta para lectores; escritura solo para administrador identificado. No se acepta administración heredada para evidencias. Proxy exige Origin coincidente para POST.
+- Registro documental incluye URL HTTPS sin credenciales/parámetros/fragmentos, identidad y fecha; no se consultan URLs del usuario desde el servidor. No se almacenan secretos ni datos clínicos.
+- Control optimista de concurrencia y request_id idempotente para reintentos. Validación en servidor, límites de entrada y render mediante textContent.
+- Primer/segundo disparo y messageId se contrastan con D1. Evidencias del scheduler, destinatario, entrega, interfaz y reconciliación se identifican explícitamente como revisiones humanas.
+- Una decisión de revisión solo se registra cuando los siete criterios tienen soporte. No cambia el gate canónico de GitHub: estados READY_FOR_VERIFICATION → READY_FOR_REVIEW → REVIEW_RECORDED. Cualquier nueva evidencia invalida la revisión anterior; los SHA de revisión visual y documentación deben coincidir.
+- Exportación JSON del expediente; no se usa localStorage como fuente de verdad. Las credenciales y el envío siguen en servidor/scheduler; el frontend no dispara recordatorios.
+- Validación: build y validate PASS en ambos proyectos; 33 pruebas backend y 9 CRM aprobadas. Casos de permisos, CSRF, reintento, conflicto, URLs inválidas, cierre prematuro, correlación y revisión invalidada. Envíos simulados, sin comunicación real.
+- Referencias consultadas el 28-09-2026: WCAG 2.2 (https://www.w3.org/TR/WCAG22/) y OWASP ASVS 5.0.0 (https://owasp.org/www-project-application-security-verification-standard/). Se aplican controles concretos; no se declara certificación WCAG/ASVS integral.
+- Pendiente: revisión visual real en navegador (Workers sin preview compatible), ejecución del scheduler y evidencia real de entrega. G3 conserva READY_FOR_VERIFICATION.
+
+Despliegues verificados: backend QA v12, SHA f5f760c03d8bc6cfbe593f73b9ef7f4cf2eaeaae, deployment appgdep_6abad61aedf48191b0c0d95cfe75be91; CRM QA v10, SHA a8ca6b33a4a71d6a56191f1f38736ebc6118433c, deployment appgdep_6abad63611ec819192fec74f682bd029. Ambos SUCCEEDED. Variables revisiones 18 y 4 conservadas.

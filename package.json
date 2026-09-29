@@ -11,7 +11,8 @@
     "test:a11y": "npx --yes http-server . -p 4173 -a 127.0.0.1 -c-1",
     "serve": "http-server . -p 4173 -a 127.0.0.1 -c-1",
     "test:a11y:axe": "playwright test",
-    "test:a11y:pa11y": "pa11y-ci --config .pa11yci.json"
+    "test:a11y:pa11y": "pa11y-ci --config .pa11yci.json",
+    "test:g4": "node scripts/run-g4.mjs"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
