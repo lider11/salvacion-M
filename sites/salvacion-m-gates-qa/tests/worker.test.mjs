@@ -119,3 +119,13 @@ test('G3 external scheduler endpoint invokes reminders with an authorized trigge
   const body=await r.json();
   assert.equal(body.ok,true);assert.equal(body.queued,0);assert.equal(body.sent,0);assert.equal(body.failed,0);
 });
+
+test('Auth v2 backend rejects untrusted CRM callers',async()=>{
+ const r=await worker.fetch(new Request('https://x/api/internal/auth/me'),{CRM_AUTH_SERVICE_TOKEN:'service'});
+ assert.equal(r.status,401);
+});
+test('Auth v2 backend rejects invalid credentials generically',async()=>{
+ const DB={prepare(sql){const item={bind(){return item},async first(){return null},async run(){return {}}};return item}};
+ const r=await worker.fetch(new Request('https://x/api/internal/auth/login',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'nobody@example.invalid',password:'invalid-password'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+ assert.equal(r.status,401);assert.equal((await r.json()).error,'Credenciales inválidas.');
+});
