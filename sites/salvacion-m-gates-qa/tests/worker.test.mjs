@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {pbkdf2Sync} from 'node:crypto';
 const source=await readFile(new URL('../dist/server/index.js',import.meta.url),'utf8');const worker=(await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`)).default;
 test('health and unknown API are explicit',async()=>{let r=await worker.fetch(new Request('https://x/api/health'),{});assert.equal(r.status,200);assert.equal((await r.json()).ok,true);r=await worker.fetch(new Request('https://x/api/missing'),{});assert.equal(r.status,404)});
 test('public form rejects incomplete and missing consent',async()=>{const req=new Request('https://x/api/consultations',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});const r=await worker.fetch(req,{DB:{}});assert.equal(r.status,422);const p=await r.json();assert.match(p.error,/campos/)});
@@ -118,4 +118,104 @@ test('G3 external scheduler endpoint invokes reminders with an authorized trigge
   assert.equal(r.status,200);
   const body=await r.json();
   assert.equal(body.ok,true);assert.equal(body.queued,0);assert.equal(body.sent,0);assert.equal(body.failed,0);
+});
+
+test('Auth v2 backend rejects untrusted CRM callers',async()=>{
+ const r=await worker.fetch(new Request('https://x/api/internal/auth/me'),{CRM_AUTH_SERVICE_TOKEN:'service'});
+ assert.equal(r.status,401);
+});
+test('Auth v2 backend rejects invalid credentials generically',async()=>{
+ const DB={prepare(sql){const item={bind(){return item},async first(){return null},async run(){return {}}};return item}};
+ const r=await worker.fetch(new Request('https://x/api/internal/auth/login',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'nobody@example.invalid',password:'invalid-password'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+ assert.equal(r.status,401);assert.equal((await r.json()).error,'Credenciales inválidas.');
+});
+
+
+test('Auth v2 bootstrap is internal, service-authenticated and one-time',async()=>{
+  const statements=[];
+  const DB={
+    prepare(sql){const item={sql,bind(){return item},async first(){return null}};return item},
+    async batch(items){statements.push(...items.map(x=>x.sql));return [{meta:{changes:1}},{meta:{changes:1}}]}
+  };
+  let r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,401);
+  r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,201);
+  const body=await r.json();
+  assert.equal(body.user.role,'ADMIN');
+  assert.equal(body.user.email,'admin@example.invalid');
+  assert.equal('password' in body,false);assert.equal('password_hash' in body,false);assert.equal('password_salt' in body,false);
+  assert.equal(statements.some(sql=>/INSERT INTO crm_users/i.test(sql)),true);
+  assert.equal(statements.some(sql=>/INSERT INTO crm_auth_audit/i.test(sql)),true);
+});
+
+test('Auth v2 bootstrap refuses a second initial admin',async()=>{
+  const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('SELECT id FROM crm_users')?{id:'existing'}:null}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin2@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,409);
+  assert.match((await r.json()).error,/bootstrap inicial/);
+});
+
+
+test('Auth v2 setup status reports whether first user is required',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return {total:0}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/setup-status',{headers:{authorization:'Bearer service'}}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,200);assert.equal((await r.json()).needs_setup,true);
+});
+
+test('Auth v2 setup status is service protected',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return {total:0}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/setup-status'),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,401);
+});
+
+test('Auth v2 diagnostics reports expected schema safely',async()=>{
+  const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('count(*)')?{total:0}:null},async all(){if(sql.includes('sqlite_master'))return {results:[{name:'crm_auth_audit'},{name:'crm_sessions'},{name:'crm_users'}]};if(sql.includes('PRAGMA'))return {results:[{name:'id'},{name:'email'},{name:'password_hash'}]};return {results:[]}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/diagnostics',{headers:{authorization:'Bearer service'}}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,200);
+  const body=await r.json();
+  assert.equal(body.ok,true);assert.equal(body.db_bound,true);assert.equal(body.user_count,0);
+  assert.deepEqual(body.tables,['crm_auth_audit','crm_sessions','crm_users']);
+  assert.equal(body.crm_users_columns.includes('password_hash'),true);
+});
+
+test('Auth v2 bootstrap reports missing schema without leaking database errors',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){throw new Error('no such table: crm_users')}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,503);
+  const body=await r.json();assert.equal(body.code,'AUTH_SCHEMA_UNAVAILABLE');assert.equal(JSON.stringify(body).includes('no such table'),false);
+});
+
+
+test('Auth v2 PBKDF2-SHA-256 is exactly equivalent at 210000 iterations',async()=>{
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/crypto-self-test',{headers:{authorization:'Bearer service'}}),{CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,200);
+  const body=await r.json();
+  assert.deepEqual(body,{ok:true,algorithm:'PBKDF2-SHA-256',iterations:210000,derived_bits:256});
+});
+
+test('Auth v2 bootstrap stores a Node-equivalent PBKDF2-SHA-256 hash with 210000 iterations',async()=>{
+  let userArgs;
+  const DB={
+    prepare(sql){
+      const item={sql,args:[],bind(...args){item.args=args;return item},async first(){return null}};
+      return item;
+    },
+    async batch(items){
+      const user=items.find(x=>/INSERT INTO crm_users/i.test(x.sql));
+      userArgs=user?.args;
+      return [{meta:{changes:1}},{meta:{changes:1}}];
+    }
+  };
+  const password='Strong-Temporary-Password-123!';
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,201);
+  assert.ok(userArgs);
+  const [,email,saltEncoded,storedHash,iterations]=userArgs;
+  assert.equal(email,'admin@example.invalid');
+  assert.equal(iterations,210000);
+  const salt=Buffer.from(String(saltEncoded).replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-String(saltEncoded).length%4)%4),'base64');
+  assert.equal(salt.length,24);
+  const expected=pbkdf2Sync(password,salt,210000,32,'sha256').toString('base64url');
+  assert.equal(storedHash,expected);
 });

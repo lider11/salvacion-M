@@ -12,6 +12,8 @@ on:
       - "playwright.config.js"
       - "tests/**"
       - "sites/salvacion-m/**"
+      - "sites/salvacion-m-gates-qa/**"
+      - "sites/salvacion-m-crm-qa/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -26,6 +28,8 @@ on:
       - "playwright.config.js"
       - "tests/**"
       - "sites/salvacion-m/**"
+      - "sites/salvacion-m-gates-qa/**"
+      - "sites/salvacion-m-crm-qa/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -81,6 +85,20 @@ jobs:
 
       - name: Run Salvacion M worker tests including D1, G2, G3 and G4
         run: cd sites/salvacion-m && npm test
+
+      - name: Build and test Gates QA
+        run: |
+          cd sites/salvacion-m-gates-qa
+          npm run build
+          npm run validate
+          npm test
+
+      - name: Build and test CRM QA Auth v2
+        run: |
+          cd sites/salvacion-m-crm-qa
+          npm run build
+          npm run validate
+          npm test
 
       - name: Preserve G4 QA summary
         if: always()
