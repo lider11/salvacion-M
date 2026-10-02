@@ -132,8 +132,11 @@ test('Auth v2 backend rejects invalid credentials generically',async()=>{
 
 
 test('Auth v2 bootstrap is internal, service-authenticated and one-time',async()=>{
-  let bootstrapSql='';
-  const DB={prepare(sql){const item={bind(){bootstrapSql=bootstrapSql||sql;return item},async run(){if(sql.includes('INSERT INTO crm_users'))return {meta:{changes:1}};return {meta:{changes:1}}}};return item}};
+  const statements=[];
+  const DB={
+    prepare(sql){const item={sql,bind(){return item},async first(){return null}};return item},
+    async batch(items){statements.push(...items.map(x=>x.sql));return [{meta:{changes:1}},{meta:{changes:1}}]}
+  };
   let r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
   assert.equal(r.status,401);
   r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
@@ -142,11 +145,12 @@ test('Auth v2 bootstrap is internal, service-authenticated and one-time',async()
   assert.equal(body.user.role,'ADMIN');
   assert.equal(body.user.email,'admin@example.invalid');
   assert.equal('password' in body,false);assert.equal('password_hash' in body,false);assert.equal('password_salt' in body,false);
-  assert.match(bootstrapSql,/WHERE NOT EXISTS \(SELECT 1 FROM crm_users\)/);
+  assert.equal(statements.some(sql=>/INSERT INTO crm_users/i.test(sql)),true);
+  assert.equal(statements.some(sql=>/INSERT INTO crm_auth_audit/i.test(sql)),true);
 });
 
 test('Auth v2 bootstrap refuses a second initial admin',async()=>{
-  const DB={prepare(sql){const item={bind(){return item},async run(){return {meta:{changes:sql.includes('INSERT INTO crm_users')?0:1}}}};return item}};
+  const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('SELECT id FROM crm_users')?{id:'existing'}:null}};return item}};
   const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin2@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
   assert.equal(r.status,409);
   assert.match((await r.json()).error,/bootstrap inicial/);
@@ -163,4 +167,21 @@ test('Auth v2 setup status is service protected',async()=>{
   const DB={prepare(){const item={bind(){return item},async first(){return {total:0}}};return item}};
   const r=await worker.fetch(new Request('https://x/api/internal/auth/setup-status'),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
   assert.equal(r.status,401);
+});
+
+test('Auth v2 diagnostics reports expected schema safely',async()=>{
+  const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('count(*)')?{total:0}:null},async all(){if(sql.includes('sqlite_master'))return {results:[{name:'crm_auth_audit'},{name:'crm_sessions'},{name:'crm_users'}]};if(sql.includes('PRAGMA'))return {results:[{name:'id'},{name:'email'},{name:'password_hash'}]};return {results:[]}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/diagnostics',{headers:{authorization:'Bearer service'}}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,200);
+  const body=await r.json();
+  assert.equal(body.ok,true);assert.equal(body.db_bound,true);assert.equal(body.user_count,0);
+  assert.deepEqual(body.tables,['crm_auth_audit','crm_sessions','crm_users']);
+  assert.equal(body.crm_users_columns.includes('password_hash'),true);
+});
+
+test('Auth v2 bootstrap reports missing schema without leaking database errors',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){throw new Error('no such table: crm_users')}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,503);
+  const body=await r.json();assert.equal(body.code,'AUTH_SCHEMA_UNAVAILABLE');assert.equal(JSON.stringify(body).includes('no such table'),false);
 });
