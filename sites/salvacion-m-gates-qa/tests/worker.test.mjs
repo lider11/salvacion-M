@@ -129,3 +129,25 @@ test('Auth v2 backend rejects invalid credentials generically',async()=>{
  const r=await worker.fetch(new Request('https://x/api/internal/auth/login',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'nobody@example.invalid',password:'invalid-password'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
  assert.equal(r.status,401);assert.equal((await r.json()).error,'Credenciales inválidas.');
 });
+
+
+test('Auth v2 bootstrap is internal, service-authenticated and one-time',async()=>{
+  let bootstrapSql='';
+  const DB={prepare(sql){const item={bind(){bootstrapSql=bootstrapSql||sql;return item},async run(){if(sql.includes('INSERT INTO crm_users'))return {meta:{changes:1}};return {meta:{changes:1}}}};return item}};
+  let r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,401);
+  r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,201);
+  const body=await r.json();
+  assert.equal(body.user.role,'ADMIN');
+  assert.equal(body.user.email,'admin@example.invalid');
+  assert.equal('password' in body,false);assert.equal('password_hash' in body,false);assert.equal('password_salt' in body,false);
+  assert.match(bootstrapSql,/WHERE NOT EXISTS \(SELECT 1 FROM crm_users\)/);
+});
+
+test('Auth v2 bootstrap refuses a second initial admin',async()=>{
+  const DB={prepare(sql){const item={bind(){return item},async run(){return {meta:{changes:sql.includes('INSERT INTO crm_users')?0:1}}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer service','content-type':'application/json'},body:JSON.stringify({email:'admin2@example.invalid',password:'Strong-Temporary-Password-123!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,409);
+  assert.match((await r.json()).error,/bootstrap inicial/);
+});
