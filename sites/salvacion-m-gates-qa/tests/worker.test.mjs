@@ -151,3 +151,16 @@ test('Auth v2 bootstrap refuses a second initial admin',async()=>{
   assert.equal(r.status,409);
   assert.match((await r.json()).error,/bootstrap inicial/);
 });
+
+
+test('Auth v2 setup status reports whether first user is required',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return {total:0}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/setup-status',{headers:{authorization:'Bearer service'}}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,200);assert.equal((await r.json()).needs_setup,true);
+});
+
+test('Auth v2 setup status is service protected',async()=>{
+  const DB={prepare(){const item={bind(){return item},async first(){return {total:0}}};return item}};
+  const r=await worker.fetch(new Request('https://x/api/internal/auth/setup-status'),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+  assert.equal(r.status,401);
+});
