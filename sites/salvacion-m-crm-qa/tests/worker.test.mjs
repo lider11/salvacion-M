@@ -126,3 +126,33 @@ test('logout forwards CSRF and clears the browser session cookie',async()=>{
     assert.match(r.headers.get('set-cookie')||'',/Max-Age=0/);
   }finally{globalThis.fetch=previous}
 });
+
+
+test('CRM exposes initial setup only through its server-side auth proxy',async()=>{
+  const previous=globalThis.fetch;let target,service;
+  globalThis.fetch=async(url,init)=>{target=url;service=init.headers.authorization;return json({needs_setup:true})};
+  try{
+    const r=await worker.fetch(new Request('https://crm.test/api/auth/setup-status'),envBase);
+    assert.equal(r.status,200);assert.equal((await r.json()).needs_setup,true);
+    assert.equal(target,'https://qa.test/api/internal/auth/setup-status');
+    assert.equal(service,'Bearer auth-service');
+  }finally{globalThis.fetch=previous}
+});
+
+test('CRM initial ADMIN form is present but setup secret is never rendered',async()=>{
+  const html=await worker.fetch(new Request('https://crm.test/')).then(r=>r.text());
+  assert.match(html,/id="setupForm"/);assert.match(html,/Crear acceso ADMIN/);
+  assert.doesNotMatch(html,/CRM_AUTH_SERVICE_TOKEN|auth-service|ADMIN_API_TOKEN/);
+});
+
+test('CRM bootstrap forwards credentials to the internal one-time endpoint and rejects cross-origin calls',async()=>{
+  const previous=globalThis.fetch;let calls=0,target;
+  globalThis.fetch=async(url)=>{calls++;target=url;return json({ok:true,user:{id:'admin-1',email:'owner@example.invalid',role:'ADMIN'}},201)};
+  try{
+    let r=await worker.fetch(new Request('https://crm.test/api/auth/bootstrap-admin',{method:'POST',headers:{origin:'https://attacker.invalid','content-type':'application/json'},body:'{}'}),envBase);
+    assert.equal(r.status,403);assert.equal(calls,0);
+    r=await worker.fetch(new Request('https://crm.test/api/auth/bootstrap-admin',{method:'POST',headers:{origin:'https://crm.test','content-type':'application/json'},body:JSON.stringify({email:'owner@example.invalid',password:'Strong-Temporary-Password-123!'})}),envBase);
+    assert.equal(r.status,201);assert.equal(calls,1);assert.equal(target,'https://qa.test/api/internal/auth/bootstrap-admin');
+    const body=await r.text();assert.doesNotMatch(body,/Strong-Temporary-Password|password_hash|password_salt/);
+  }finally{globalThis.fetch=previous}
+});
