@@ -71,3 +71,8 @@ La congelación debe hacerse después del último cambio ejecutable: fases G/H p
 Scheduler, Recipient, First trigger, Second trigger, Delivery, Visual, Documentation: PENDING para el nuevo RC.
 G3_CRITERIA: 0/7 acreditados para el release final; no se invalida la evidencia histórica dentro de su alcance.
 No hubo envío real, RC final, provider message ID nuevo, delivery, revisión final ni transición PASS.
+
+
+## Resultado CI observado — 12 de octubre de 2026
+
+Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejecutable 6492d1d1a29403817de0e3a24ebd2e92ad61b403: SUCCESS, job 114861096115 completo. HTML/CSS/JS, Pa11y, axe/Playwright, build/tests público, build/validate/tests Gates y CRM: success. Los commits documentales posteriores no modifican el código ejecutable. Este resultado acredita el workflow existente, no el cumplimiento de todas las exigencias nuevas de CI (npm ci general, lockfile CRM, pin SHA, QA browser integral/provenance). No sustituye pruebas reales ni habilita G3 PASS.
