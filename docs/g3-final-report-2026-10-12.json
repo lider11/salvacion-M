@@ -49,5 +49,7 @@
     "https://salvacion-m-gates-qa.devergel1980.chatgpt.site",
     "https://salvacion-m-crm-qa.devergel1980.chatgpt.site"
   ],
-  "NEXT_ACTION": "Human secure credential update in GitHub qa and initial ADMIN creation; then repeat scheduler health and execute controlled reminders/security E2E on unchanged RC"
+  "NEXT_ACTION": "Human secure credential update in GitHub qa and initial ADMIN creation; then repeat scheduler health and execute controlled reminders/security E2E on unchanged RC",
+  "ANONYMOUS_ACCESS": "PASS REAL: Gates /api/admin/dashboard 401; CRM /api/dashboard 401; Sites service access valid, no application session",
+  "GITHUB_QA_SECRETS": "Both required secret names present in GitHub qa UI; values not read"
 }

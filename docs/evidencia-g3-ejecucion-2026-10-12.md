@@ -93,3 +93,9 @@ CRM v14: source `e3fd0bb842eb3ba7fd91dca5d86926f93bea0d71`, deployment `appgdep_
 La actualización final de evidencia es documental; no altera RC, Workers ni resultados anteriores. El PR6 HEAD documental posterior se informa separadamente del SHA ejecutable congelado.
 
 La política de navegador exige intervención humana para introducir y guardar una nueva credencial. Se prepara la interfaz segura de GitHub para el secreto SITES_QA_AUTHORIZATION de qa y el formulario ADMIN de CRM; no se pide compartir secretos por chat. El cambio requiere acción humana, no aprobación de despliegue. Continuación: corregir secreto, auth_only real en main y luego en RC, crear ADMIN, confirmar cita controlada autorizada, dos triggers y entrega correlacionada, E2E roles y mobile. No cambiar PASS mientras falte evidencia.
+
+### Controles adicionales del mismo RC
+
+Acceso sin sesión de aplicación: GET Gates /api/admin/dashboard y CRM /api/dashboard con acceso privado Sites autorizado pero sin cookie/token de aplicación devuelve HTTP401 en ambos. Esto acredita denegación anónima, no roles ni CSRF positivos.
+
+GitHub UI muestra environment qa con REMINDER_TRIGGER_TOKEN y SITES_QA_AUTHORIZATION presentes; autorización Sites actualizada por última vez el 28-09-2026. Valores no leídos. Se confirma disponibilidad del secreto, pero su contenido fue rechazado en auth_only. Para modificar una credencial por navegador se requiere entrada y guardado humanos.
