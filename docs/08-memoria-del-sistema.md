@@ -579,3 +579,8 @@ Despliegues verificados: backend QA v12, SHA f5f760c03d8bc6cfbe593f73b9ef7f4cf2e
 - Bloqueo operativo: herramientas GitHub disponibles no permiten modificar secretos de qa ni iniciar workflow_dispatch. Acción mínima: ejecutar QA appointment reminders en main, auth_only=true y aportar URL; si 401, actualizar SITES_QA_AUTHORIZATION del Gates QA mediante interfaz segura y repetir. No introducir secretos al chat.
 - Evidencia completa: docs/evidencia-g3-auditoria-2026-10-12.md.
 - G3 = READY_FOR_VERIFICATION; 0/7 acreditados para release final, no RC congelado, sin envíos ni revisión final. Continuar desde fases E/F. La congelación final debe ocurrir después de todos los cambios ejecutables.
+
+
+## Resultado CI observado — 12 de octubre de 2026
+
+Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejecutable 6492d1d1a29403817de0e3a24ebd2e92ad61b403: SUCCESS, job 114861096115 completo. HTML/CSS/JS, Pa11y, axe/Playwright, build/tests público, build/validate/tests Gates y CRM: success. Los commits documentales posteriores no modifican el código ejecutable. Este resultado acredita el workflow existente, no el cumplimiento de todas las exigencias nuevas de CI (npm ci general, lockfile CRM, pin SHA, QA browser integral/provenance). No sustituye pruebas reales ni habilita G3 PASS.
