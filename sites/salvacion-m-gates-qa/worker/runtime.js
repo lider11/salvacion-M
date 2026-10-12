@@ -75,7 +75,7 @@ async function authBootstrapAdmin(request,env){
   try{
     const results=await env.DB.batch([
       env.DB.prepare("INSERT INTO crm_users (id,email,password_salt,password_hash,password_iterations,role,active,created_at,updated_at) SELECT ?,?,?,?,?,'ADMIN',1,?,? WHERE NOT EXISTS (SELECT 1 FROM crm_users)").bind(id,email,salt,hash,AUTH_ITERATIONS,now,now),
-      env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),id,email.slice(0,3).toLowerCase(),'bootstrap_admin','success',now)
+      env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM crm_users WHERE id=?)').bind(crypto.randomUUID(),id,email.slice(0,3).toLowerCase(),'bootstrap_admin','success',now,id)
     ]);
     const changes=Number(results?.[0]?.meta?.changes??results?.[0]?.changes??1);
     if(changes!==1)return json({error:'El bootstrap inicial ya fue utilizado.'},409);
