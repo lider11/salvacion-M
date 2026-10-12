@@ -78,7 +78,7 @@ async function authBootstrapAdmin(request,env){
     if(changes!==1)return json({error:'No fue posible crear el ADMIN.',code:'ADMIN_INSERT_NOT_APPLIED'},503);
   }catch(e){
     const message=String(e||'');
-    if(/UNIQUE|constraint/i.test(message))return json({error:'El bootstrap inicial ya fue utilizado.',409);
+    if(/UNIQUE|constraint/i.test(message))return json({error:'El bootstrap inicial ya fue utilizado.'},409);
     if(/no such table|no such column/i.test(message))return json({error:'Esquema de autenticación no disponible.',code:'AUTH_SCHEMA_UNAVAILABLE'},503);
     return json({error:'No fue posible guardar el ADMIN en QA. Intenta nuevamente.',code:'ADMIN_WRITE_FAILED'},503);
   }
