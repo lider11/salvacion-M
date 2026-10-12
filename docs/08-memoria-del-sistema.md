@@ -597,3 +597,13 @@ Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejec
 - Revisión viva posterior: CRM tenía colisión de const $ entre scripts y conexión Auth 401. Se aíslan scripts como módulos y preservan headers cliente. Secrets CRM_AUTH_SERVICE_TOKEN reconciliados entre ambos QA; acceso privado backend actualizado en CRM. Nuevo RC requerido; producción intacta.
 
 - Autoprueba criptográfica viva v19: FAIL REAL 503 PBKDF2_UNAVAILABLE; sin reducir 210000 iteraciones se implementa fallback PBKDF2-HMAC-SHA-256 estándar y se verifica equivalencia Node, incluida contraseña larga Unicode. Gates 49/49 locales; RC anterior invalidado por nuevo código. Setup-status/diagnóstico vivos ya responden 200, sin usuarios existentes.
+
+## 12 de octubre de 2026 — resultado final de ejecución G3
+
+- RC ejecutable congelado `247ccf4222a2a075820ffde9df1b6d253f2773c8`. CI 38269252363/38269252132 SUCCESS; Gates 50/50, CRM 15/15.
+- Gates QA v20/source 99e4954c8e749db45c43baef49d446c3f20c5fab/deployment appgdep_6accfac50bc08191b050717d3e3c5537, env 20. CRM QA v14/source e3fd0bb842eb3ba7fd91dca5d86926f93bea0d71/deployment appgdep_6accfadd55b48191a2a396fbf6da3511, env 9. Succeeded, acceso privado y D1 conservados.
+- Reconciliación de 46 archivos y archives; matriz final versionada. SHA monorepo y SHAs Sites separados, contenido cotejado.
+- PBKDF2 vivo PASS a 210000/256 bits. Diagnostics y setup-status 200; no usuarios existentes. No reducir iteraciones ni migrar 600000 sin aprobación.
+- auth_only real en main run 38269316778 FAIL REAL HTTP401; no POST. Requiere actualización humana del secreto GitHub qa y primer ADMIN por formulario seguro.
+- Desktop y teclado parcial vivos; mobile/autenticación integral/entrega pendientes. D1 reminders 0. No nuevos envíos.
+- G3 3/7 acreditados: CI, reconciliación, documentación. READY_FOR_VERIFICATION. Expediente `docs/evidencia-g3-ejecucion-2026-10-12.md` y reporte `docs/g3-final-report-2026-10-12.json`. Última actualización documental no modifica RC.

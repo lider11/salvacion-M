@@ -52,3 +52,44 @@ RC c2bf687932e9034248d0ca0bf0225fae835eeb49: CI general 38267255548 y QA 3826725
 Se añade fallback PBKDF2-HMAC-SHA-256 JavaScript conforme a RFC 8018, con 210000 evaluaciones encadenadas y XOR del bloque completo, 256 bits. No divide ni concatena derivaciones. Se usa solo si deriveBits nativo falla; parámetros, formato y compatibilidad se conservan. Equivalencia con Node verificada para contraseña normal, clave larga Unicode y rechazo de coste reducido. Gates 49/49 locales. Falta autoprueba viva sobre la nueva versión. Requiere otro RC y publicación.
 
 - Control adicional: bootstrap concurrente crea exactamente un ADMIN y un registro de éxito correlacionado, mediante INSERT condicional del usuario y auditoría en el mismo batch. Prueba SQLite real local: dos solicitudes simultáneas producen 201/409, users=1 y audit=1. Gates 50/50. Este cambio genera el RC definitivo posterior.
+
+## Estado final verificable de esta actuación
+
+RC único: `247ccf4222a2a075820ffde9df1b6d253f2773c8`. CI general [38269252363](https://github.com/lider11/salvacion-M/actions/runs/38269252363) SUCCESS; QA release [38269252132](https://github.com/lider11/salvacion-M/actions/runs/38269252132) SUCCESS. Gates 50/50 y CRM 15/15. No merge de PR, producción intacta.
+
+Gates v20: source `99e4954c8e749db45c43baef49d446c3f20c5fab`, deployment `appgdep_6accfac50bc08191b050717d3e3c5537`, succeeded, env revision 20.
+CRM v14: source `e3fd0bb842eb3ba7fd91dca5d86926f93bea0d71`, deployment `appgdep_6accfadd55b48191a2a396fbf6da3511`, succeeded, env revision 9.
+
+46 archivos de fuente, incluidos lockfiles y fallback criptográfico, reconciliados por SHA256 con los commits Sites. Los SHA Sites difieren del monorepo por sus repositorios independientes; contenido de componentes y Workers de archives verificado. Matriz: `g3-reconciliation-final-2026-10-12.json`. No afirmar igualdad de SHA Git entre repositorios.
+
+### Ejecuciones vivas
+
+- Health directo de Gates: 200, service salvacion-m.
+- Crypto-self-test protegido de Gates v20: **200 ok=true PBKDF2-SHA-256 iterations=210000 derived_bits=256**. Superado fallo real v19 sin reducir coste.
+- Diagnostics: 200, DB bound, user_count 0. No lectura de credenciales/tabla de sesiones.
+- CRM setup-status: 200 needs_setup=true. Muestra formulario Crear acceso ADMIN.
+- Se inició sesión segura GitHub como lider11 y se ejecutó realmente auth_only=true en main: [run 38269316778](https://github.com/lider11/salvacion-M/actions/runs/38269316778), SHA main 8d4fda70ea65a3eb208352c272dc681059d88fdf. Logs: AUTH_ONLY true, 2026-10-12T15:19:00.2576112Z site_auth HTTP 401, SITE_AUTH_HTTP_401. No POST ni envío. Esta prueba de conectividad no acredita el scheduler sobre RC ni 7/7.
+- Evidence artifact 11756371280, digest sha256:da910bc37301eafe147ab54ddd318ee665447dd241e0d28cbf687d3ef16c4802.
+- D1 appointment_reminders: 0 filas, has_more=false; no triggers reales ni entrega nueva.
+- Navegador vivo v20/v14: validación de Gates sin selección muestra mensaje y enfoca radio; Space/Tab/Enter avanza paso 1→2. CRM Tab enfoca contraseña con outline solid. Ancho 1363px; sin overflow horizontal en ambas superficies observadas. Sin credenciales introducidas por el agente, sin submit de solicitud ni ADMIN.
+- No se repitió error JavaScript $ después de módulos. Errores anteriores retenidos en logs se distinguen por hora; errores de extensión del navegador no se atribuyen al Site.
+- Mobile y E2E autenticado completos NO EJECUTADOS. API de navegador conectada no permite cambiar viewport/emular dispositivo. Inspección CSS no se toma como prueba mobile.
+- Evidencia visual: `evidence/g3-crm-v14.jpg`, `evidence/g3-gates-v20.jpg`, `evidence/g3-auth-only-38269316778.jpg`.
+
+### Matriz de decisión
+
+| Nº | Criterio | Estado | Evidencia RC/deployment | Riesgo residual |
+|---|---|---|---|---|
+| 1 | CI y RC | ACREDITADO | RC 247ccf4; dos runs SUCCESS, artifacts y contratos | CI no sustituye pruebas vivas |
+| 2 | GitHub/Sites | ACREDITADO | 46 archivos; Gates v20/CRM v14; ambos archives y deployments | SHA Sites diferente por repositorios separados |
+| 3 | Scheduler | FAIL REAL | auth_only main run 38269316778, HTTP 401 | Secreto requiere ajuste humano; falta run RC PASS |
+| 4 | Envíos/proveedor/idempotencia | NO ACREDITADO | D1 0; local SQLite/simulación PASS | Aceptación y entrega no ejecutadas |
+| 5 | Auth/RBAC/CSRF | NO ACREDITADO | PBKDF2 vivo PASS; suites locales; users 0 | Falta primer ADMIN y E2E roles/CSRF/logout/expiración; rate limit sin política |
+| 6 | Visual/accesibilidad | NO ACREDITADO | Desktop/teclado parcial vivo, capturas | Falta mobile y flujo autenticado integral |
+| 7 | Documentación/trazabilidad | ACREDITADO | Memoria, reporte JSON, matriz y PR actualizados | Expediente identifica explícitamente faltantes |
+
+**G3_CRITERIA: 3/7. G3_STATUS: READY_FOR_VERIFICATION.**
+
+La actualización final de evidencia es documental; no altera RC, Workers ni resultados anteriores. El PR6 HEAD documental posterior se informa separadamente del SHA ejecutable congelado.
+
+La política de navegador exige intervención humana para introducir y guardar una nueva credencial. Se prepara la interfaz segura de GitHub para el secreto SITES_QA_AUTHORIZATION de qa y el formulario ADMIN de CRM; no se pide compartir secretos por chat. El cambio requiere acción humana, no aprobación de despliegue. Continuación: corregir secreto, auth_only real en main y luego en RC, crear ADMIN, confirmar cita controlada autorizada, dos triggers y entrega correlacionada, E2E roles y mobile. No cambiar PASS mientras falte evidencia.
