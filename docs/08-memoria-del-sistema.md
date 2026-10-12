@@ -566,3 +566,16 @@ Se verificó directamente en modo solo lectura el entorno `salvacion-m-gates-qa`
 - Pendiente: revisión visual real en navegador (Workers sin preview compatible), ejecución del scheduler y evidencia real de entrega. G3 conserva READY_FOR_VERIFICATION.
 
 Despliegues verificados: backend QA v12, SHA f5f760c03d8bc6cfbe593f73b9ef7f4cf2eaeaae, deployment appgdep_6abad61aedf48191b0c0d95cfe75be91; CRM QA v10, SHA a8ca6b33a4a71d6a56191f1f38736ebc6118433c, deployment appgdep_6abad63611ec819192fec74f682bd029. Ambos SUCCEEDED. Variables revisiones 18 y 4 conservadas.
+
+
+## 12 de octubre de 2026 — auditoría actual de G3 y corrección CI
+
+- HEAD iniciales: main 8d4fda70ea65a3eb208352c272dc681059d88fdf; PR #5 70c3d30e00c73de3f2e6398bb011d1513520326d; PR #6 7b83a720e3e15fcf3be1c609856208d1eba993e5.
+- SyntaxError de la respuesta 409 del bootstrap reproducido y corregido en 6492d1d1a29403817de0e3a24ebd2e92ad61b403. Gates build/validate/tests 43/43; CRM build/validate/tests 14/14 PASS locales. Proveedores simulados.
+- CI histórico run 37068908953 FAIL en Gates. Nuevo run 38263902763 iniciado para el commit corregido; no declarar resultado antes de comprobarlo.
+- Sites observados: Gates v17 source 0bb2e15235a3ac0eb580cd95ff05e8e745b0e02f deployment appgdep_6ac023affafc8191adef62a259c363b9 succeeded; CRM v11 source 76fa817059744616423bbc79dd190565a68565d9 deployment appgdep_6ac01c58427c8191a69a479cb6aa0e0f succeeded. Acceso privado conservado; no desplegados cambios de esta actuación.
+- D1 DB contiene tablas Auth/CRM/agenda; appointment_reminders tiene 0 filas en lectura completa. Sin lectura de credenciales ni datos de pacientes.
+- Brechas abiertas: ventana +23/+25h, timeout ambiguo, PBKDF2 sólo 210000 sin password_algorithm/migración 600000, CI reproducible/supply chain, reconciliación por archivo, revisión visual y cadena real.
+- Bloqueo operativo: herramientas GitHub disponibles no permiten modificar secretos de qa ni iniciar workflow_dispatch. Acción mínima: ejecutar QA appointment reminders en main, auth_only=true y aportar URL; si 401, actualizar SITES_QA_AUTHORIZATION del Gates QA mediante interfaz segura y repetir. No introducir secretos al chat.
+- Evidencia completa: docs/evidencia-g3-auditoria-2026-10-12.md.
+- G3 = READY_FOR_VERIFICATION; 0/7 acreditados para release final, no RC congelado, sin envíos ni revisión final. Continuar desde fases E/F. La congelación final debe ocurrir después de todos los cambios ejecutables.
