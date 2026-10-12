@@ -1,0 +1,38 @@
+name: G3 QA release validation
+on:
+  pull_request:
+    paths: ['sites/salvacion-m-gates-qa/**', 'sites/salvacion-m-crm-qa/**', 'scripts/g3-verify.mjs', '.github/workflows/**']
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.19.0'
+      - name: Reproducible QA installs
+        run: |
+          npm ci --prefix sites/salvacion-m-gates-qa --ignore-scripts --no-audit --no-fund
+          npm ci --prefix sites/salvacion-m-crm-qa --ignore-scripts --no-audit --no-fund
+      - name: Build and validate both Workers
+        run: |
+          npm run build --prefix sites/salvacion-m-gates-qa
+          npm run validate --prefix sites/salvacion-m-gates-qa
+          npm run build --prefix sites/salvacion-m-crm-qa
+          npm run validate --prefix sites/salvacion-m-crm-qa
+      - name: Migration, syntax, artifact and workflow checks
+        run: node scripts/g3-verify.mjs
+      - name: Auth, RBAC, CSRF, persistence and idempotency regression
+        run: |
+          mkdir -p qa-results
+          node --test --test-reporter=tap sites/salvacion-m-gates-qa/tests/*.test.mjs > qa-results/gates.tap
+          node --test --test-reporter=tap sites/salvacion-m-crm-qa/tests/*.test.mjs > qa-results/crm.tap
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: g3-qa-validation
+          path: qa-results/
+          retention-days: 30

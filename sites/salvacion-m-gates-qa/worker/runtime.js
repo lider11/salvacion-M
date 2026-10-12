@@ -18,7 +18,10 @@ async function authVerifyPassword(password,saltEncoded,expectedHash,iterations){
   let saltBytes;try{saltBytes=authB64uDecode(saltEncoded)}catch{return false}
   if(saltBytes.byteLength<16)return false;
   const calculated=await authPasswordHash(password,saltBytes);
-  return authSafeEqual(calculated,expectedHash);
+  if(authSafeEqual(calculated,expectedHash))return true;
+  // v17 encoded the salt as UTF-8 text. Preserve verification without reducing iterations.
+  const legacy=await authPasswordHash(password,authEnc.encode(String(saltEncoded)));
+  return authSafeEqual(legacy,expectedHash);
 }
 function authSafeEqual(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
 async function authAudit(env,userId,email,action,outcome){await env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),userId||null,String(email||'').slice(0,3).toLowerCase(),action,outcome,iso()).run()}
@@ -71,11 +74,11 @@ async function authBootstrapAdmin(request,env){
   const saltBytes=authBytes(24),salt=authB64u(saltBytes),hash=await authPasswordHash(password,saltBytes),now=iso(),id=crypto.randomUUID();
   try{
     const results=await env.DB.batch([
-      env.DB.prepare("INSERT INTO crm_users (id,email,password_salt,password_hash,password_iterations,role,active,created_at,updated_at) VALUES (?,?,?,?,?,'ADMIN',1,?,?)").bind(id,email,salt,hash,AUTH_ITERATIONS,now,now),
+      env.DB.prepare("INSERT INTO crm_users (id,email,password_salt,password_hash,password_iterations,role,active,created_at,updated_at) SELECT ?,?,?,?,?,'ADMIN',1,?,? WHERE NOT EXISTS (SELECT 1 FROM crm_users)").bind(id,email,salt,hash,AUTH_ITERATIONS,now,now),
       env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),id,email.slice(0,3).toLowerCase(),'bootstrap_admin','success',now)
     ]);
     const changes=Number(results?.[0]?.meta?.changes??results?.[0]?.changes??1);
-    if(changes!==1)return json({error:'No fue posible crear el ADMIN.',code:'ADMIN_INSERT_NOT_APPLIED'},503);
+    if(changes!==1)return json({error:'El bootstrap inicial ya fue utilizado.'},409);
   }catch(e){
     const message=String(e||'');
     if(/UNIQUE|constraint/i.test(message))return json({error:'El bootstrap inicial ya fue utilizado.'},409);
@@ -122,7 +125,7 @@ async function sendBrevoReminder(env,item){
   const senderEmail=clean(env.BREVO_FROM_EMAIL,160),senderName=clean(env.BREVO_FROM_NAME,120)||'SALVACIÓN M';
   if(!env.BREVO_API_KEY||!senderEmail)throw new Error('provider_not_configured');
   const when=new Intl.DateTimeFormat('es-CO',{timeZone:item.timezone||'America/Bogota',dateStyle:'long',timeStyle:'short'}).format(new Date(item.scheduled_at));
-  return fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{accept:'application/json','content-type':'application/json','api-key':env.BREVO_API_KEY},body:JSON.stringify({sender:{name:senderName,email:senderEmail},to:[{email:item.email,name:clean(item.name,120)}],subject:'Recordatorio de cita – SALVACIÓN M',htmlContent:`<p>Hola ${htmlEscape(item.name)},</p><p>Te recordamos tu cita de orientación con SALVACIÓN M para el <strong>${htmlEscape(when)}</strong>.</p><p>Profesional: ${htmlEscape(item.professional)}.<br>Referencia: ${htmlEscape(item.reference)}.</p><p>Si necesitas reprogramar, comunícate con nuestro equipo.</p>`})});
+  return fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{accept:'application/json','content-type':'application/json','api-key':env.BREVO_API_KEY},signal:AbortSignal.timeout(30000),redirect:'error',body:JSON.stringify({sender:{name:senderName,email:senderEmail},to:[{email:item.email,name:clean(item.name,120)}],subject:'Recordatorio de cita – SALVACIÓN M',htmlContent:`<p>Hola ${htmlEscape(item.name)},</p><p>Te recordamos tu cita de orientación con SALVACIÓN M para el <strong>${htmlEscape(when)}</strong>.</p><p>Profesional: ${htmlEscape(item.professional)}.<br>Referencia: ${htmlEscape(item.reference)}.</p><p>Si necesitas reprogramar, comunícate con nuestro equipo.</p>`})});
 }
 // Audit only operational identifiers; never persist credentials or message bodies.
 async function reminderAudit(env,item,runId,details){
@@ -142,18 +145,18 @@ async function dispatchReminders(env,now=new Date()){
     if(Number(inserted?.meta?.changes??inserted?.changes)!==1){duplicates++;await reminderAudit(env,item,run_id,{outcome:'duplicate_skipped'});continue}
     queued++;
     await reminderAudit(env,item,run_id,{outcome:'started',provider,reminder_id:id});
-    let response,error_code=null,provider_message_id=null;
+    let response,error_code=null,provider_message_id=null,ambiguous=false;
     try{
-      response=env.REMINDER_WEBHOOK_URL?await fetch(env.REMINDER_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/json','authorization':env.REMINDER_WEBHOOK_TOKEN?`Bearer ${env.REMINDER_WEBHOOK_TOKEN}`:''},body:JSON.stringify({event:'appointment.reminder.24h',reference:item.reference,scheduled_at:item.scheduled_at,timezone:item.timezone,professional:item.professional,recipient:{name:item.name,phone:item.phone,email:item.email}})}):await sendBrevoReminder(env,item);
+      response=env.REMINDER_WEBHOOK_URL?await fetch(env.REMINDER_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/json','authorization':env.REMINDER_WEBHOOK_TOKEN?`Bearer ${env.REMINDER_WEBHOOK_TOKEN}`:''},signal:AbortSignal.timeout(30000),redirect:'error',body:JSON.stringify({event:'appointment.reminder.24h',reference:item.reference,scheduled_at:item.scheduled_at,timezone:item.timezone,professional:item.professional,recipient:{name:item.name,phone:item.phone,email:item.email}})}):await sendBrevoReminder(env,item);
       if(!response.ok)error_code=`provider_${response.status}`;
-      else {const receipt=await response.json().catch(()=>({}));provider_message_id=clean(receipt.messageId||receipt.message_id,200)||null}
-    }catch{error_code='provider_connection_error'}
+      else {try{const receipt=await response.json();provider_message_id=clean(receipt.messageId||receipt.message_id,200)||null}catch{if(response.status!==204){ambiguous=true;error_code='provider_receipt_unreadable'}}}
+    }catch{ambiguous=true;error_code='provider_unknown_requires_review'}
     const accepted=!error_code;
     // Persist status and receipt atomically. A persistence failure leaves the reservation
     // pending, so another trigger cannot accidentally send the message again.
     await env.DB.batch([
-      env.DB.prepare('UPDATE appointment_reminders SET status=?,attempted_at=?,sent_at=?,error_code=? WHERE id=?').bind(accepted?'sent':'failed',created,accepted?iso():null,error_code,id),
-      env.DB.prepare('INSERT INTO activities (id,consultation_id,actor,action,new_value,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),item.consultation_id,'reminder-service','reminder_dispatch',JSON.stringify({run_id,appointment_id:item.appointment_id,reminder_id:id,provider,provider_status:response?.status||null,provider_message_id,outcome:accepted?'provider_accepted':'failed',error_code}),iso())
+      env.DB.prepare('UPDATE appointment_reminders SET status=?,attempted_at=?,sent_at=?,error_code=? WHERE id=?').bind(accepted?'sent':ambiguous?'unknown_requires_review':'failed',created,accepted?iso():null,error_code,id),
+      env.DB.prepare('INSERT INTO activities (id,consultation_id,actor,action,new_value,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),item.consultation_id,'reminder-service','reminder_dispatch',JSON.stringify({run_id,appointment_id:item.appointment_id,reminder_id:id,provider,provider_status:response?.status||null,provider_message_id,outcome:accepted?'provider_accepted':ambiguous?'unknown_requires_review':'failed',error_code}),iso())
     ]);
     if(accepted)sent++;else failed++;
   }
@@ -162,7 +165,7 @@ async function dispatchReminders(env,now=new Date()){
 async function reminderOverview(env){
   const now=new Date(),from=new Date(now.getTime()+23*3600000).toISOString(),to=new Date(now.getTime()+25*3600000).toISOString();
   const [summary,reminders,eligible,events]=await env.DB.batch([
-    env.DB.prepare("SELECT count(*) total, sum(status='sent') sent, sum(status='pending') pending, sum(status='failed') failed FROM appointment_reminders"),
+    env.DB.prepare("SELECT count(*) total, sum(status='sent') sent, sum(status IN ('pending','unknown_requires_review')) pending, sum(status='failed') failed FROM appointment_reminders"),
     env.DB.prepare('SELECT r.id,r.appointment_id,r.status,r.scheduled_for,r.attempted_at,r.sent_at,r.error_code,r.created_at,c.reference,a.status appointment_status FROM appointment_reminders r JOIN appointments a ON a.id=r.appointment_id JOIN consultations c ON c.id=a.consultation_id ORDER BY r.created_at DESC LIMIT 100'),
     env.DB.prepare("SELECT a.id appointment_id,a.scheduled_at,c.reference,r.status reminder_status FROM appointments a JOIN consultations c ON c.id=a.consultation_id LEFT JOIN appointment_reminders r ON r.appointment_id=a.id AND r.reminder_type='24h' WHERE a.status='confirmed' AND a.scheduled_at>=? AND a.scheduled_at<? ORDER BY a.scheduled_at LIMIT 100").bind(from,to),
     env.DB.prepare("SELECT a.id,a.new_value,a.created_at,c.reference FROM activities a JOIN consultations c ON c.id=a.consultation_id WHERE a.action='reminder_dispatch' ORDER BY a.created_at DESC LIMIT 200")

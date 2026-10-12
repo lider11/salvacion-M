@@ -219,3 +219,15 @@ test('Auth v2 bootstrap stores a Node-equivalent PBKDF2-SHA-256 hash with 210000
   const expected=pbkdf2Sync(password,salt,210000,32,'sha256').toString('base64url');
   assert.equal(storedHash,expected);
 });
+
+
+test('Auth v2 verifies both historical textual salts and canonical byte salts',async()=>{
+ const password='Synthetic-Strong-Password-2026!',salt=Buffer.alloc(24,17).toString('base64url');
+ for(const bytes of [Buffer.from(salt),Buffer.from(salt,'base64url')]){
+ const hash=pbkdf2Sync(password,bytes,210000,32,'sha256').toString('base64url');
+ const DB={prepare(sql){const item={bind(){return item},async first(){return sql.includes('FROM crm_users')?{id:'test',email:'qa@example.invalid',password_salt:salt,password_hash:hash,password_iterations:210000,role:'ADMIN',active:1}:null},async run(){return {meta:{changes:1}}}};return item}};
+ const result=await worker.fetch(new Request('https://x/api/internal/auth/login',{method:'POST',headers:{authorization:'Bearer service'},body:JSON.stringify({email:'qa@example.invalid',password})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});
+ assert.equal(result.status,200);
+ const denied=await worker.fetch(new Request('https://x/api/internal/auth/login',{method:'POST',headers:{authorization:'Bearer service'},body:JSON.stringify({email:'qa@example.invalid',password:'Wrong-Password-2026!'})}),{DB,CRM_AUTH_SERVICE_TOKEN:'service'});assert.equal(denied.status,401);
+ }
+});

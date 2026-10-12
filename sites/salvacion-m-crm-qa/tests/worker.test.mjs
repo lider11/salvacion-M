@@ -156,3 +156,9 @@ test('CRM bootstrap forwards credentials to the internal one-time endpoint and r
     const body=await r.text();assert.doesNotMatch(body,/Strong-Temporary-Password|password_hash|password_salt/);
   }finally{globalThis.fetch=previous}
 });
+
+
+test('cross-origin login is rejected before calling the auth backend',async()=>{
+ const previous=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;return json({})};
+ try{const r=await worker.fetch(new Request('https://crm.test/api/auth/login',{method:'POST',headers:{origin:'https://attacker.invalid'},body:'{}'}),envBase);assert.equal(r.status,403);assert.equal(calls,0)}finally{globalThis.fetch=previous}
+});

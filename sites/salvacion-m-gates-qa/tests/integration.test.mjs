@@ -192,3 +192,31 @@ test('G3 workflow persists reviewed evidence, enforces transitions and never inv
   const changed=await save({...base,kind:'documentation',backend_sha:'c'.repeat(40),crm_sha:'b'.repeat(40),request_id:crypto.randomUUID(),revision:state.revision});assert.equal(changed.status,201);state=await changed.json();assert.equal(state.ready_for_review,false);assert.equal(state.review,null);
  }finally{globalThis.fetch=previous;DB.close()}
 });
+test('G3 ambiguous provider outcome requires review and cannot send twice',async()=>{
+ const DB=createD1(),previous=globalThis.fetch,at=new Date(),slot=new Date(at.getTime()+86400000).toISOString();let attempts=0;
+ globalThis.fetch=async(_url,init)=>{attempts++;assert.ok(init.signal);assert.equal(init.redirect,'error');throw new Error('synthetic timeout after acceptance')};
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cf','Failure','3000000000','failure@example.invalid',at.toISOString()).run();
+  await DB.prepare('INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind('qf','SM-2026-009998','rf','cf','medicamento','eps','si','ninguna','no','','new','medium',at.toISOString(),at.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('af','qf',slot,'America/Bogota','confirmed','Daniel Vergel',at.toISOString(),at.toISOString()).run();
+  const env={DB,REMINDER_WEBHOOK_URL:'https://provider.invalid',REMINDER_TRIGGER_TOKEN:'trigger'};
+  const call=()=>publicWorker.fetch(new Request('https://qa.test/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer trigger'}}),env);
+  const first=await (await call()).json();assert.equal(first.ok,false);assert.equal(first.failed,1);
+  await call();assert.equal(attempts,1);
+  const row=await DB.prepare('SELECT status,error_code FROM appointment_reminders').first();assert.equal(row.status,'unknown_requires_review');assert.equal(row.error_code,'provider_unknown_requires_review');
+ }finally{globalThis.fetch=previous;DB.close()}
+});
+test('G3 unreadable successful receipt requires review and cannot send twice',async()=>{
+ const DB=createD1(),previous=globalThis.fetch,at=new Date(),slot=new Date(at.getTime()+86400000).toISOString();let attempts=0;
+ globalThis.fetch=async()=>{attempts++;return new Response('{broken',{status:201})};
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cf','Failure','3000000000','failure@example.invalid',at.toISOString()).run();
+  await DB.prepare('INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind('qf','SM-2026-009998','rf','cf','medicamento','eps','si','ninguna','no','','new','medium',at.toISOString(),at.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('af','qf',slot,'America/Bogota','confirmed','Daniel Vergel',at.toISOString(),at.toISOString()).run();
+  const env={DB,REMINDER_WEBHOOK_URL:'https://provider.invalid',REMINDER_TRIGGER_TOKEN:'trigger'};
+  const call=()=>publicWorker.fetch(new Request('https://qa.test/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer trigger'}}),env);
+  const first=await (await call()).json();assert.equal(first.ok,false);assert.equal(first.failed,1);
+  await call();assert.equal(attempts,1);
+  const row=await DB.prepare('SELECT status,error_code FROM appointment_reminders').first();assert.equal(row.status,'unknown_requires_review');assert.equal(row.error_code,'provider_receipt_unreadable');
+ }finally{globalThis.fetch=previous;DB.close()}
+});

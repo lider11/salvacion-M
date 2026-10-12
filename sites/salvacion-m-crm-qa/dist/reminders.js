@@ -1,6 +1,6 @@
 (() => {
   const el = id => document.getElementById(id);
-  const labels = {sent:'Aceptado por proveedor',pending:'Pendiente de verificación',failed:'Error de envío',started:'Disparo iniciado',provider_accepted:'Aceptado por proveedor',duplicate_skipped:'Duplicado evitado'};
+  const labels = {sent:'Aceptado por proveedor',pending:'Pendiente de verificación',unknown_requires_review:'Resultado desconocido: requiere revisión',failed:'Error de envío',started:'Disparo iniciado',provider_accepted:'Aceptado por proveedor',duplicate_skipped:'Duplicado evitado'};
   let snapshot = null, loading = false;
   const when = value => value && Number.isFinite(Date.parse(value)) ? new Intl.DateTimeFormat('es-CO',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Bogota'}).format(new Date(value)) : 'Sin registro';
   function node(tag, text, className) { const n=document.createElement(tag); n.textContent=text; if(className)n.className=className; return n; }

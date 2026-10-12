@@ -17,7 +17,7 @@ async function bootstrapAdmin(request,env){
   if(result instanceof Response)return result;
   return json(result.data,result.r.status);
 }
-async function login(request,env){const body=await request.text();const result=await authBackend(request,env,'/api/internal/auth/login',body);if(result instanceof Response)return result;if(!result.r.ok)return json(result.data,result.r.status);return json({ok:true},200,{'set-cookie':setSessionCookie(result.data.token)})}
+async function login(request,env){if(request.headers.get('origin')&&request.headers.get('origin')!==new URL(request.url).origin)return json({error:'Origen no permitido.'},403);const body=await request.text();const result=await authBackend(request,env,'/api/internal/auth/login',body);if(result instanceof Response)return result;if(!result.r.ok)return json(result.data,result.r.status);return json({ok:true},200,{'set-cookie':setSessionCookie(result.data.token)})}
 async function me(request,env){const result=await authBackend(request,env,'/api/internal/auth/me');if(result instanceof Response)return result;return json(result.data,result.r.status)}
 async function logout(request,env){const result=await authBackend(request,env,'/api/internal/auth/logout');if(result instanceof Response)return result;return json(result.data,result.r.status,{'set-cookie':clearSessionCookie()})}
 async function authenticated(request,env){const result=await authBackend(request,env,'/api/internal/auth/me');if(result instanceof Response||!result.r.ok)return null;return result.data}

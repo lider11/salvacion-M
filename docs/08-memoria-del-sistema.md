@@ -584,3 +584,12 @@ Despliegues verificados: backend QA v12, SHA f5f760c03d8bc6cfbe593f73b9ef7f4cf2e
 ## Resultado CI observado — 12 de octubre de 2026
 
 Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejecutable 6492d1d1a29403817de0e3a24ebd2e92ad61b403: SUCCESS, job 114861096115 completo. HTML/CSS/JS, Pa11y, axe/Playwright, build/tests público, build/validate/tests Gates y CRM: success. Los commits documentales posteriores no modifican el código ejecutable. Este resultado acredita el workflow existente, no el cumplimiento de todas las exigencias nuevas de CI (npm ci general, lockfile CRM, pin SHA, QA browser integral/provenance). No sustituye pruebas reales ni habilita G3 PASS.
+
+## 12 de octubre de 2026 — ejecución autónoma G3 posterior a auditoría
+
+- Run programado 38214936354 acreditó HTTP 401 en health, antes de POST. Nuevo auth_only no ejecutado: conector sin dispatch y navegador GitHub sin sesión.
+- Implementadas reservas sin reenvío ante resultados ambiguos, timeout de proveedor, etiquetas de revisión, bloqueo de login cross-origin y exclusión atómica del bootstrap.
+- Completados controles CI de QA, lockfiles e integridad de migraciones. Gates 45/45 y CRM 15/15 locales; pruebas simuladas.
+- Fuentes Sites abiertas y comparadas por archivo. Procedencias separadas; matriz SHA256 versionada.
+- Se conserva PBKDF2 210000 y ventana +23/+25h: política 600000, recuperación tardía y rate limiting requieren reglas aprobadas. No inventar umbrales.
+- Expediente: `docs/evidencia-g3-ejecucion-2026-10-12.md`. G3 conserva READY_FOR_VERIFICATION hasta evidencia viva completa.

@@ -1,0 +1,20 @@
+import {readFile,readdir,mkdir,writeFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+const db=new DatabaseSync(':memory:');
+const migrations='sites/salvacion-m-gates-qa/drizzle/';
+const journal=JSON.parse(await readFile(migrations+'meta/_journal.json','utf8'));
+for(const entry of journal.entries) db.exec(await readFile(migrations+entry.tag+'.sql','utf8'));
+assert.equal(db.prepare("SELECT count(*) n FROM pragma_table_info('crm_users') WHERE name IN ('password_iterations','password_salt','password_hash')").get().n,3);
+db.exec(await readFile(migrations+'0007_auth_v2.sql','utf8'));
+assert.equal(db.prepare('PRAGMA integrity_check').get().integrity_check,'ok');db.close();
+const manifest=[];
+async function walk(dir){for(const entry of await readdir(dir,{withFileTypes:true})){const p=dir+'/'+entry.name;if(['node_modules','.git'].includes(entry.name))continue;if(entry.isDirectory())await walk(p);else {const bytes=await readFile(p);if(/\.(?:js|mjs)$/.test(p))execFileSync(process.execPath,['--check',p]);if(p.includes('/dist/')){const src=bytes.toString();assert.doesNotMatch(src,/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-proj-[A-Za-z0-9_-]{20,}/,p);manifest.push({path:p,sha256:createHash('sha256').update(bytes).digest('hex')})}}}}
+for(const dir of ['sites/salvacion-m-gates-qa','sites/salvacion-m-crm-qa'])await walk(dir);
+const workflow=await readFile('.github/workflows/qa-appointment-reminders.yml','utf8');
+assert.match(workflow,/auth_only:/);assert.match(workflow,/OAI-Sites-Authorization/);assert.match(workflow,/\/api\/health/);assert.match(workflow,/environment: qa/);
+const inline=workflow.split("node --input-type=module <<'JAVASCRIPT'\n")[1]?.split('\n          JAVASCRIPT')[0];assert.ok(inline);execFileSync(process.execPath,['--input-type=module','--check'],{input:inline});
+await mkdir('qa-results',{recursive:true});await writeFile('qa-results/g3-artifact-manifest.json',JSON.stringify({migration_integrity:'ok',syntax:'ok',secret_scan:'bounded patterns only',artifacts:manifest},null,2)+'\n');
+console.log('Migration integrity, syntax, workflow contracts and bounded secret scan passed');
