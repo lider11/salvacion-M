@@ -595,3 +595,5 @@ Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejec
 - Expediente: `docs/evidencia-g3-ejecucion-2026-10-12.md`. G3 conserva READY_FOR_VERIFICATION hasta evidencia viva completa.
 
 - Revisión viva posterior: CRM tenía colisión de const $ entre scripts y conexión Auth 401. Se aíslan scripts como módulos y preservan headers cliente. Secrets CRM_AUTH_SERVICE_TOKEN reconciliados entre ambos QA; acceso privado backend actualizado en CRM. Nuevo RC requerido; producción intacta.
+
+- Autoprueba criptográfica viva v19: FAIL REAL 503 PBKDF2_UNAVAILABLE; sin reducir 210000 iteraciones se implementa fallback PBKDF2-HMAC-SHA-256 estándar y se verifica equivalencia Node, incluida contraseña larga Unicode. Gates 49/49 locales; RC anterior invalidado por nuevo código. Setup-status/diagnóstico vivos ya responden 200, sin usuarios existentes.

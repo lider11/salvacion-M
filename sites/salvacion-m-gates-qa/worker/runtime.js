@@ -10,8 +10,8 @@ async function authDigest(value){return authB64u(new Uint8Array(await crypto.sub
 async function authPasswordHash(password,saltBytes){
   if(!(saltBytes instanceof Uint8Array)||saltBytes.byteLength<16)throw new Error('invalid_pbkdf2_salt');
   const key=await crypto.subtle.importKey('raw',authEnc.encode(String(password)),'PBKDF2',false,['deriveBits']);
-  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:saltBytes,iterations:AUTH_ITERATIONS},key,256);
-  return authB64u(new Uint8Array(bits));
+  try{const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:saltBytes,iterations:AUTH_ITERATIONS},key,256);return authB64u(new Uint8Array(bits))}
+  catch{return authB64u(pbkdf2Sha256Fallback(authEnc.encode(String(password)),saltBytes,AUTH_ITERATIONS))}
 }
 async function authVerifyPassword(password,saltEncoded,expectedHash,iterations){
   if(Number(iterations)!==AUTH_ITERATIONS)return false;
