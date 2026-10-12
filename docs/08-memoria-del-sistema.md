@@ -593,3 +593,5 @@ Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejec
 - Fuentes Sites abiertas y comparadas por archivo. Procedencias separadas; matriz SHA256 versionada.
 - Se conserva PBKDF2 210000 y ventana +23/+25h: política 600000, recuperación tardía y rate limiting requieren reglas aprobadas. No inventar umbrales.
 - Expediente: `docs/evidencia-g3-ejecucion-2026-10-12.md`. G3 conserva READY_FOR_VERIFICATION hasta evidencia viva completa.
+
+- Revisión viva posterior: CRM tenía colisión de const $ entre scripts y conexión Auth 401. Se aíslan scripts como módulos y preservan headers cliente. Secrets CRM_AUTH_SERVICE_TOKEN reconciliados entre ambos QA; acceso privado backend actualizado en CRM. Nuevo RC requerido; producción intacta.

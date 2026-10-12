@@ -38,3 +38,9 @@ MAIN 8d4fda70ea65a3eb208352c272dc681059d88fdf; PR5 70c3d30e00c73de3f2e6398bb011d
 CI, reconciliación final, scheduler, envíos, seguridad viva, E2E y documentación final aún no acreditados sobre un RC. No alterar evidencia histórica. La publicación y los resultados finales se agregarán en una actualización posterior de este expediente.
 
 Health directo con acceso de servicio vigente de Sites: HTTP 200, service salvacion-m. Esto no acredita que el secreto guardado en GitHub sea válido. CRM v11 setup-status devolvió HTTP 401 porque su fuente desplegada no contiene esa ruta.
+
+## Hallazgos vivos posteriores al primer despliegue
+
+Gates v18 y CRM v12 publicados sobre candidato 52f6ae19bb61b6c1c42178460feea68aba88a7e4. CI general 38266447854 SUCCESS y QA 38266447587 SUCCESS. 43 archivos canónicos coinciden con los commits Sites; los Workers coinciden con los archives.
+
+Navegador CRM v12: SyntaxError Identifier '$' has already been declared en crm.js; scripts clásicos compartían ámbito. Se corrige mediante módulos Web estándar. El cliente auth reemplazaba headers por el spread de options; se corrige para conservar Content-Type y CSRF. Health Gates HTTP 200; setup-status CRM HTTP 401 No autorizado. CRM_AUTH_SERVICE_TOKEN se reconcilia entre ambos QA y BACKEND_SITE_AUTH_TOKEN contra acceso vigente de Gates mediante secretos de Sites, sin exponer valores. Revisión Gates 20 y CRM 9; otras variables preservadas. Nuevo RC y despliegues requeridos.
