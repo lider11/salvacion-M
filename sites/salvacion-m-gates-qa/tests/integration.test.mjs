@@ -13,7 +13,7 @@ const crmWorker=(await import(`data:text/javascript;base64,${Buffer.from(crmSour
 
 function createD1(){
   const sql=new DatabaseSync(':memory:');
-  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql']){
+  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql','../drizzle/0008_scheduler_runs.sql']){
     sql.exec((awaitText(file)).replaceAll('--> statement-breakpoint',''));
   }
   function awaitText(file){return files.get(file)}
@@ -23,7 +23,7 @@ function createD1(){
   }
   return {prepare:statement,async batch(statements){sql.exec('BEGIN');try{const result=statements.map(s=>(/^\s*SELECT\b/i.test(s.sql)?{results:s.all()}:{results:[],meta:{changes:s.run().changes}}));sql.exec('COMMIT');return result}catch(e){sql.exec('ROLLBACK');throw e}},count(table){return sql.prepare(`SELECT count(*) n FROM ${table}`).get().n},close(){sql.close()}};
 }
-const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
+const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql','../drizzle/0008_scheduler_runs.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
 
 test('consultation persists and appears through the separate CRM proxy with the same reference',async()=>{
   const DB=createD1(),token='synthetic-test-token';

@@ -14,6 +14,9 @@
   function render(){
     if(!snapshot)return;
     const d=snapshot;
+    const scheduler=d.scheduler||{},latest=scheduler.latest_run;
+    const host=el('schedulerSummary');host.replaceChildren();
+    for(const [title,value] of [['Mecanismo',scheduler.mechanism||'Sin verificar'],['Habilitado',scheduler.configured===true?'Sí':'No'],['Última ejecución',when(latest?.started_at)],['Resultado',latest?.status||'NO EJECUTADO'],['Procesados',latest?.result?.queued??'Sin evidencia'],['SHA',latest?.release_sha||scheduler.release_sha||'Sin evidencia']])host.append(node('dt',title),node('dd',value));
     for(const [id,key] of [['reminderTotal','total'],['reminderSent','sent'],['reminderPending','pending'],['reminderFailed','failed']])el(id).textContent=d.stats[key]||0;
     el('reminderWindow').textContent=when(d.window.from)+' — '+when(d.window.to)+' (fin no incluido)';
     list('reminderEligible',d.eligible,'No hay citas confirmadas en la ventana actual.',x=>card(x.reference,x.reminder_status||'Sin recordatorio registrado',[['Cita',when(x.scheduled_at)]]));

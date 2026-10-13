@@ -617,3 +617,13 @@ Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejec
 - Matriz booleana TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE. G3_PASS FALSE,3/7; READY_FOR_VERIFICATION.
 - Se guardan reporte, bitácora de iteraciones y captura. Bloqueos: secreto GitHub y primer ADMIN humanos; triggers/entrega/roles/mobile pendientes. No reenvíos ni cambios de producción.
 - Expediente: docs/evidencia-g3-gauntlet-2026-10-12.md. Detención por dependencia humana y falta de progreso, no por éxito ficticio.
+
+## 12 de octubre de 2026 — Gauntlet scheduler independiente de GitHub Actions
+
+- Instrucción del propietario: GitHub como fuente; recordatorios automáticos independientes del navegador; GitHub Actions no obligatorio para el scheduler.
+- Se prepara endpoint MCP QA con OAuth/identidad verificada de Sites y lista de operador exacta; no acepta token de acceso privado como identidad humana. La ruta anterior con REMINDER_TRIGGER_TOKEN conserva su autorización.
+- La nueva vía queda deshabilitada hasta comprobar conexión y autenticación viva. Declaración MCP no demuestra ejecución periódica.
+- Migración aditiva 0008_scheduler_runs conserva toda la evidencia anterior; reserva única por request_id, SHA de ejecución, estados started/completed/requires_review/unknown_requires_review. No reenvía una ejecución ambigua.
+- Panel CRM Vanilla/CSS muestra mecanismo, habilitación, última ejecución, procesados y SHA. Aceptación != entrega; un flag habilitado no acredita programación real.
+- Constructor/crítico/árbitro lógicos secuenciales. Iteración1: regresión monitor por formato D1/SQLite detectada y corregida; Gates57/57, CRM15/15 y motor booleano7/7 PASS_LOCAL_ONLY. Sin envíos reales ni scheduler activado.
+- Código nuevo invalida el RC anterior para las verificaciones afectadas. Nuevo candidato pendiente CI y evidencia del mismo despliegue.
