@@ -31,6 +31,7 @@ async function schedulerMcp(request,env){
  if(!request.headers.get('content-type')?.includes('application/json'))return json({error:'JSON required'},415);
  const raw=await request.text();if(raw.length>8192)return json({error:'Request too large'},413);
  let rpc;try{rpc=JSON.parse(raw)}catch{return json({error:'Invalid JSON'},400)}
+ if(!rpc||Array.isArray(rpc)||typeof rpc!=='object')return json({error:'Invalid request'},400);
  const reply=result=>json({jsonrpc:'2.0',id:rpc.id??null,result});
  const fail=(code,message)=>json({jsonrpc:'2.0',id:rpc.id??null,error:{code,message}});
  if(rpc.jsonrpc!=='2.0'||typeof rpc.method!=='string')return fail(-32600,'Invalid request');
