@@ -1,0 +1,202 @@
+{
+  "G3_STATUS": "READY_FOR_VERIFICATION",
+  "G3_PASS": false,
+  "G3_RELEASE_CANDIDATE_SHA": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+  "MAIN_HEAD": "8d4fda70ea65a3eb208352c272dc681059d88fdf",
+  "PR5_HEAD": "70c3d30e00c73de3f2e6398bb011d1513520326d",
+  "PR6_EXECUTABLE_HEAD": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+  "BACKEND_SHA": "813a2c243f8c0f2c7ee0f969d63e7f51090b3e33",
+  "CRM_SHA": "9a5f910e3b53e4e5bd5c727fb92a7a67b6c32b0e",
+  "BACKEND_VERSION": 22,
+  "CRM_VERSION": 15,
+  "BACKEND_DEPLOYMENT_ID": "appgdep_6acda19c34e08191a812c68740d29694",
+  "CRM_DEPLOYMENT_ID": "appgdep_6acda089f27c819184db4a15799fe050",
+  "CI": {
+    "status": "PASS",
+    "runs": [
+      {
+        "id": 38340517234,
+        "status": "completed",
+        "conclusion": "success",
+        "sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+        "url": "https://github.com/lider11/salvacion-M/actions/runs/38340517234"
+      },
+      {
+        "id": 38340517246,
+        "status": "completed",
+        "conclusion": "success",
+        "sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+        "url": "https://github.com/lider11/salvacion-M/actions/runs/38340517246"
+      }
+    ]
+  },
+  "SITE_AUTH": {
+    "status": "PASS",
+    "scope": "service access to GET health only"
+  },
+  "SCHEDULER_HEALTH": {
+    "status": "BLOCKED",
+    "plugin_installation_confirmed": true,
+    "tools_exposed_in_current_turn": false,
+    "positive_oauth_tool_call_verified": false,
+    "enabled": false,
+    "schedule_created": false
+  },
+  "TRIGGER_1": "NOT_RUN",
+  "TRIGGER_2": "NOT_RUN",
+  "D1_LOGICAL_REMINDER_COUNT": 0,
+  "PROVIDER_ACCEPTED": "NOT_RUN",
+  "PROVIDER_DELIVERED": "NO_ACREDITADO",
+  "IDEMPOTENCY": "PASS_LOCAL_ONLY; live NOT_RUN",
+  "RBAC": "PASS_LOCAL_ONLY; live positive role coverage NOT_RUN",
+  "CSRF": "PASS_LOCAL_ONLY; live NOT_RUN",
+  "VISUAL_DESKTOP": "PARTIAL; new panel not independently authenticated in Work",
+  "VISUAL_MOBILE": "NOT_RUN",
+  "KEYBOARD": "PARTIAL HISTORICAL",
+  "DOCUMENTATION": "PASS",
+  "g3": {
+    "ciAndReleaseCandidate": true,
+    "githubSitesReconciled": true,
+    "automaticSchedulerAuthenticated": false,
+    "realRemindersAndIdempotency": false,
+    "authRbacCsrf": false,
+    "e2eAndAccessibility": false,
+    "documentationAndTraceability": true
+  },
+  "G3_CRITERIA": "3/7",
+  "auditComplete": false,
+  "criticalDefectsOpen": null,
+  "highDefectsOpen": null,
+  "releaseCandidateEvidenceConsistent": true,
+  "BLOCKERS": [
+    "Confirmed installed Site plugin tools not exposed in this turn: positive OAuth scheduler_status call cannot be made.",
+    "Autonomous cloud task authorization and execution not yet verified.",
+    "Controlled eligible appointment, two real dispatches and provider delivery evidence remain pending.",
+    "Final-RC authenticated E2E/mobile/keyboard and negative roles/CSRF remain unverified."
+  ],
+  "RISKS": [
+    "No automatic reminders currently active: old GitHub reminder workflow disabled, new Sites dispatch false.",
+    "MCP caller identity must be verified by Sites; do not replace with client-invented credentials or bypass token.",
+    "A scheduler flag is not evidence of a periodic task.",
+    "Historical ADMIN screenshot belongs to CRM v14; final panel is v15.",
+    "Rate limiting/600000-iteration migration/recovery rules require approved functional policy."
+  ],
+  "EVIDENCE_URLS": [
+    "https://github.com/lider11/salvacion-M/actions/runs/38340517234",
+    "https://github.com/lider11/salvacion-M/actions/runs/38340517246",
+    "https://github.com/lider11/salvacion-M/commit/4cb25c2a2695bd203068f3eae76788174b5a746c",
+    "https://github.com/lider11/salvacion-M/actions/workflows/qa-appointment-reminders.yml"
+  ],
+  "live_checks": [
+    {
+      "name": "gates_health",
+      "http": 200,
+      "ok": true,
+      "error": null,
+      "at": "2026-10-13T03:13:47.677Z"
+    },
+    {
+      "name": "mcp_service_token_denied",
+      "http": 401,
+      "ok": false,
+      "error": null,
+      "at": "2026-10-13T03:13:48.043Z"
+    },
+    {
+      "name": "crm_application_session_required",
+      "http": 401,
+      "ok": false,
+      "error": "Inicia sesi\u00f3n para acceder al CRM.",
+      "at": "2026-10-13T03:13:51.658Z"
+    }
+  ],
+  "NEXT_ACTION": "Use installed Salvaci\u00f3n M \u2014 QA privado scheduler_status tool when exposed; verify positive operator OAuth and RC. Only then configure and verify a cloud task, authorize enablement and controlled reminders; never repeat an ambiguous send.",
+  "criteria": [
+    {
+      "key": "ciAndReleaseCandidate",
+      "accredited": true,
+      "diagnostic_status": "PASS",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "https://github.com/lider11/salvacion-M/actions/runs/38340517234",
+        "https://github.com/lider11/salvacion-M/actions/runs/38340517246"
+      ],
+      "residual_risk": "CI no acredita ejecuci\u00f3n del scheduler"
+    },
+    {
+      "key": "githubSitesReconciled",
+      "accredited": true,
+      "diagnostic_status": "PASS",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "docs/g3-scheduler-reconciliation-2026-10-12.json"
+      ],
+      "residual_risk": "SHA repositorios diferentes; igualdad por contenido de49 archivos"
+    },
+    {
+      "key": "automaticSchedulerAuthenticated",
+      "accredited": false,
+      "diagnostic_status": "BLOCKED",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "/mcp:401 con token de acceso, instalaci\u00f3n confirmada por usuario"
+      ],
+      "residual_risk": "No llamada OAuth positiva ni tarea autom\u00e1tica"
+    },
+    {
+      "key": "realRemindersAndIdempotency",
+      "accredited": false,
+      "diagnostic_status": "NOT_RUN",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "D1 scheduler_runs=0; appointment_reminders=0"
+      ],
+      "residual_risk": "Entrega e idempotencia viva no verificadas"
+    },
+    {
+      "key": "authRbacCsrf",
+      "accredited": false,
+      "diagnostic_status": "NO_ACREDITADO",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "CI QA y CRM an\u00f3nimo401"
+      ],
+      "residual_risk": "Faltan roles positivos/denegados, CSRF y logout en RC final"
+    },
+    {
+      "key": "e2eAndAccessibility",
+      "accredited": false,
+      "diagnostic_status": "NO_ACREDITADO",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "CI frontend Pa11y/axe; captura ADMIN hist\u00f3rica"
+      ],
+      "residual_risk": "Falta panel autenticado final, mobile y teclado vivo"
+    },
+    {
+      "key": "documentationAndTraceability",
+      "accredited": true,
+      "diagnostic_status": "PASS",
+      "release_candidate_sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+      "backend_deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+      "crm_deployment_id": "appgdep_6acda089f27c819184db4a15799fe050",
+      "evidence": [
+        "docs/evidencia-g3-scheduler-sites-2026-10-12.md",
+        "docs/g3-scheduler-iterations-2026-10-12.json"
+      ],
+      "residual_risk": "Reportes deben actualizarse tras prueba aut\u00f3noma"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "phase": "E-H",
+    "iteration": 1,
+    "constructor_action": "MCP identity-authenticated bridge, scheduler run persistence and Vanilla CRM panel",
+    "adversarial_finding": "D1/SQLite result-shape regression in monitor",
+    "correction": "Accept bounded records.results or test-adapter records array",
+    "test_result": "Gates57/57, CRM15/15, decisions7/7 PASS_LOCAL_ONLY",
+    "sha": "358e7b5eca38ec22cc0aaa205953692921eb492a",
+    "deployment_id": "appgdep_6acda0780ee881918f2cdf9475f874f5",
+    "criterion_passed": false,
+    "evidence_verified": true,
+    "retry_allowed": true,
+    "progress_observed": true,
+    "human_intervention_required": false,
+    "diagnostic_status": "NO_ACREDITADO",
+    "next_action": "Reject malformed RPC and verify CI/operator OAuth"
+  },
+  {
+    "phase": "E-K",
+    "iteration": 2,
+    "constructor_action": "Malformed-RPC rejection and CI arbiter integration; final QA deployment",
+    "adversarial_finding": "null/array RPC must reject before accessing rpc fields; flags cannot claim actual scheduling",
+    "correction": "400 for malformed RPC; UI labels Habilitado; automated evidence booleans remain false",
+    "test_result": "MCP8/8 + decisions7/7 locally; full QA and frontend CI SUCCESS",
+    "sha": "4cb25c2a2695bd203068f3eae76788174b5a746c",
+    "deployment_id": "appgdep_6acda19c34e08191a812c68740d29694",
+    "criterion_passed": false,
+    "evidence_verified": true,
+    "retry_allowed": false,
+    "progress_observed": true,
+    "human_intervention_required": false,
+    "diagnostic_status": "BLOCKED",
+    "next_action": "Use installed Salvación M — QA privado scheduler_status tool when exposed; verify positive operator OAuth and RC. Only then configure and verify a cloud task, authorize enablement and controlled reminders; never repeat an ambiguous send.",
+    "reason": "Fresh capability required; no corrective retry on missing tool exposure"
+  }
+]

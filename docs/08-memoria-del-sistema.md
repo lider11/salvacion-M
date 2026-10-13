@@ -566,3 +566,76 @@ Se verificó directamente en modo solo lectura el entorno `salvacion-m-gates-qa`
 - Pendiente: revisión visual real en navegador (Workers sin preview compatible), ejecución del scheduler y evidencia real de entrega. G3 conserva READY_FOR_VERIFICATION.
 
 Despliegues verificados: backend QA v12, SHA f5f760c03d8bc6cfbe593f73b9ef7f4cf2eaeaae, deployment appgdep_6abad61aedf48191b0c0d95cfe75be91; CRM QA v10, SHA a8ca6b33a4a71d6a56191f1f38736ebc6118433c, deployment appgdep_6abad63611ec819192fec74f682bd029. Ambos SUCCEEDED. Variables revisiones 18 y 4 conservadas.
+
+
+## 12 de octubre de 2026 — auditoría actual de G3 y corrección CI
+
+- HEAD iniciales: main 8d4fda70ea65a3eb208352c272dc681059d88fdf; PR #5 70c3d30e00c73de3f2e6398bb011d1513520326d; PR #6 7b83a720e3e15fcf3be1c609856208d1eba993e5.
+- SyntaxError de la respuesta 409 del bootstrap reproducido y corregido en 6492d1d1a29403817de0e3a24ebd2e92ad61b403. Gates build/validate/tests 43/43; CRM build/validate/tests 14/14 PASS locales. Proveedores simulados.
+- CI histórico run 37068908953 FAIL en Gates. Nuevo run 38263902763 iniciado para el commit corregido; no declarar resultado antes de comprobarlo.
+- Sites observados: Gates v17 source 0bb2e15235a3ac0eb580cd95ff05e8e745b0e02f deployment appgdep_6ac023affafc8191adef62a259c363b9 succeeded; CRM v11 source 76fa817059744616423bbc79dd190565a68565d9 deployment appgdep_6ac01c58427c8191a69a479cb6aa0e0f succeeded. Acceso privado conservado; no desplegados cambios de esta actuación.
+- D1 DB contiene tablas Auth/CRM/agenda; appointment_reminders tiene 0 filas en lectura completa. Sin lectura de credenciales ni datos de pacientes.
+- Brechas abiertas: ventana +23/+25h, timeout ambiguo, PBKDF2 sólo 210000 sin password_algorithm/migración 600000, CI reproducible/supply chain, reconciliación por archivo, revisión visual y cadena real.
+- Bloqueo operativo: herramientas GitHub disponibles no permiten modificar secretos de qa ni iniciar workflow_dispatch. Acción mínima: ejecutar QA appointment reminders en main, auth_only=true y aportar URL; si 401, actualizar SITES_QA_AUTHORIZATION del Gates QA mediante interfaz segura y repetir. No introducir secretos al chat.
+- Evidencia completa: docs/evidencia-g3-auditoria-2026-10-12.md.
+- G3 = READY_FOR_VERIFICATION; 0/7 acreditados para release final, no RC congelado, sin envíos ni revisión final. Continuar desde fases E/F. La congelación final debe ocurrir después de todos los cambios ejecutables.
+
+
+## Resultado CI observado — 12 de octubre de 2026
+
+Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejecutable 6492d1d1a29403817de0e3a24ebd2e92ad61b403: SUCCESS, job 114861096115 completo. HTML/CSS/JS, Pa11y, axe/Playwright, build/tests público, build/validate/tests Gates y CRM: success. Los commits documentales posteriores no modifican el código ejecutable. Este resultado acredita el workflow existente, no el cumplimiento de todas las exigencias nuevas de CI (npm ci general, lockfile CRM, pin SHA, QA browser integral/provenance). No sustituye pruebas reales ni habilita G3 PASS.
+
+## 12 de octubre de 2026 — ejecución autónoma G3 posterior a auditoría
+
+- Run programado 38214936354 acreditó HTTP 401 en health, antes de POST. Nuevo auth_only no ejecutado: conector sin dispatch y navegador GitHub sin sesión.
+- Implementadas reservas sin reenvío ante resultados ambiguos, timeout de proveedor, etiquetas de revisión, bloqueo de login cross-origin y exclusión atómica del bootstrap.
+- Completados controles CI de QA, lockfiles e integridad de migraciones. Gates 45/45 y CRM 15/15 locales; pruebas simuladas.
+- Fuentes Sites abiertas y comparadas por archivo. Procedencias separadas; matriz SHA256 versionada.
+- Se conserva PBKDF2 210000 y ventana +23/+25h: política 600000, recuperación tardía y rate limiting requieren reglas aprobadas. No inventar umbrales.
+- Expediente: `docs/evidencia-g3-ejecucion-2026-10-12.md`. G3 conserva READY_FOR_VERIFICATION hasta evidencia viva completa.
+
+- Revisión viva posterior: CRM tenía colisión de const $ entre scripts y conexión Auth 401. Se aíslan scripts como módulos y preservan headers cliente. Secrets CRM_AUTH_SERVICE_TOKEN reconciliados entre ambos QA; acceso privado backend actualizado en CRM. Nuevo RC requerido; producción intacta.
+
+- Autoprueba criptográfica viva v19: FAIL REAL 503 PBKDF2_UNAVAILABLE; sin reducir 210000 iteraciones se implementa fallback PBKDF2-HMAC-SHA-256 estándar y se verifica equivalencia Node, incluida contraseña larga Unicode. Gates 49/49 locales; RC anterior invalidado por nuevo código. Setup-status/diagnóstico vivos ya responden 200, sin usuarios existentes.
+
+## 12 de octubre de 2026 — resultado final de ejecución G3
+
+- RC ejecutable congelado `247ccf4222a2a075820ffde9df1b6d253f2773c8`. CI 38269252363/38269252132 SUCCESS; Gates 50/50, CRM 15/15.
+- Gates QA v20/source 99e4954c8e749db45c43baef49d446c3f20c5fab/deployment appgdep_6accfac50bc08191b050717d3e3c5537, env 20. CRM QA v14/source e3fd0bb842eb3ba7fd91dca5d86926f93bea0d71/deployment appgdep_6accfadd55b48191a2a396fbf6da3511, env 9. Succeeded, acceso privado y D1 conservados.
+- Reconciliación de 46 archivos y archives; matriz final versionada. SHA monorepo y SHAs Sites separados, contenido cotejado.
+- PBKDF2 vivo PASS a 210000/256 bits. Diagnostics y setup-status 200; no usuarios existentes. No reducir iteraciones ni migrar 600000 sin aprobación.
+- auth_only real en main run 38269316778 FAIL REAL HTTP401; no POST. Requiere actualización humana del secreto GitHub qa y primer ADMIN por formulario seguro.
+- Desktop y teclado parcial vivos; mobile/autenticación integral/entrega pendientes. D1 reminders 0. No nuevos envíos.
+- G3 3/7 acreditados: CI, reconciliación, documentación. READY_FOR_VERIFICATION. Expediente `docs/evidencia-g3-ejecucion-2026-10-12.md` y reporte `docs/g3-final-report-2026-10-12.json`. Última actualización documental no modifica RC.
+
+## 12 de octubre de 2026, 20:28 Bogotá — Gauntlet Loop acotado
+
+- Prompt Gauntlet aplicado con roles lógicos secuenciales, sin agentes independientes y sin reiniciar avances previos.
+- Nuevo auth_only real en main: run38332283708/job115084509775, SHA8d4fda70ea65a3eb208352c272dc681059d88fdf, HTTP401. SCHEDULER_AUTH_PASS FALSE, FAIL_REAL; cero reintentos sin corrección de credenciales.
+- RC247ccf4222a2a075820ffde9df1b6d253f2773c8 y QA v20/v14 conservados. CI y versiones/provenance comprobados; HEAD posterior solo documental. Health directo200; CRM setup-status200 needs_setup=true; D1 reminders0.
+- Auditoría SQLite local adicional de expiración/revocación/logout/CSRF:8/8 PASS_LOCAL_ONLY; helper reproducible bajo docs, sin cambiar Workers ni afirmar incorporación al CI histórico. Un error del fixture corregido, no fallo del producto.
+- Matriz booleana TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE. G3_PASS FALSE,3/7; READY_FOR_VERIFICATION.
+- Se guardan reporte, bitácora de iteraciones y captura. Bloqueos: secreto GitHub y primer ADMIN humanos; triggers/entrega/roles/mobile pendientes. No reenvíos ni cambios de producción.
+- Expediente: docs/evidencia-g3-gauntlet-2026-10-12.md. Detención por dependencia humana y falta de progreso, no por éxito ficticio.
+
+## 12 de octubre de 2026 — Gauntlet scheduler independiente de GitHub Actions
+
+- Instrucción del propietario: GitHub como fuente; recordatorios automáticos independientes del navegador; GitHub Actions no obligatorio para el scheduler.
+- Se prepara endpoint MCP QA con OAuth/identidad verificada de Sites y lista de operador exacta; no acepta token de acceso privado como identidad humana. La ruta anterior con REMINDER_TRIGGER_TOKEN conserva su autorización.
+- La nueva vía queda deshabilitada hasta comprobar conexión y autenticación viva. Declaración MCP no demuestra ejecución periódica.
+- Migración aditiva 0008_scheduler_runs conserva toda la evidencia anterior; reserva única por request_id, SHA de ejecución, estados started/completed/requires_review/unknown_requires_review. No reenvía una ejecución ambigua.
+- Panel CRM Vanilla/CSS muestra mecanismo, habilitación, última ejecución, procesados y SHA. Aceptación != entrega; un flag habilitado no acredita programación real.
+- Constructor/crítico/árbitro lógicos secuenciales. Iteración1: regresión monitor por formato D1/SQLite detectada y corregida; Gates57/57, CRM15/15 y motor booleano7/7 PASS_LOCAL_ONLY. Sin envíos reales ni scheduler activado.
+- Código nuevo invalida el RC anterior para las verificaciones afectadas. Nuevo candidato pendiente CI y evidencia del mismo despliegue.
+
+## Resultado verificado — 12 de octubre, 22:16 Bogotá
+
+RC ejecutable `4cb25c2a2695bd203068f3eae76788174b5a746c`; CI QA38340517234 y frontend38340517246 SUCCESS. Gatesv22 source813a2c243f8c0f2c7ee0f969d63e7f51090b3e33 deploymentappgdep_6acda19c34e08191a812c68740d29694 env22; CRMv15 source9a5f910e3b53e4e5bd5c727fb92a7a67b6c32b0e deploymentappgdep_6acda089f27c819184db4a15799fe050 env9. Ambos succeeded;49 archivos fuente coincidentes. Tabla scheduler_runs presente y vacía; appointment_reminders vacío.
+
+Gates health200; MCP token sin OAuth401; CRM sin sesión401 en el despliegue final. Esto prueba denegación, no autenticación positiva. Plugin instalado según confirmación del propietario22:11; funciones no expuestas en ALL_TOOLS ni tools de este turno. No se repite instalación. Consultar scheduler_status en la siguiente sesión con herramientas actualizadas.
+
+Workflow QA appointment reminders deshabilitado por UI, reversible, conserva69 runs y toda la evidencia. Los CI permanecen habilitados; GitHub no programa recordatorios. Nuevo scheduler Sites sin task creada y SCHEDULER_ENABLED=false. Cero envíos.
+
+Crítica2 detectó RPC null/array que debía devolver400; corregida y8/8 nuevos tests scheduler más7/7 motor booleano aprobados; CI final incluye tests del árbitro. Dos iteraciones correctivas; no agotamiento convertido en PASS.
+
+G3_PASS=false, READY_FOR_VERIFICATION,3/7:CI/reconciliación/documentación. El ADMIN previo es evidencia histórica y no prueba E2E del nuevo panel. Reports: g3-scheduler-report-2026-10-12.json, g3-scheduler-iterations-2026-10-12.json.

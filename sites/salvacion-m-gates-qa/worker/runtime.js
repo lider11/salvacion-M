@@ -1,6 +1,97 @@
 const securityHeaders={'content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",'referrer-policy':'strict-origin-when-cross-origin','x-content-type-options':'nosniff','x-frame-options':'DENY','permissions-policy':'camera=(), microphone=(), geolocation=()','strict-transport-security':'max-age=31536000; includeSubDomains'};
 const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store',...securityHeaders,...extra}});
 const clean=(v,n=700)=>String(v??'').trim().slice(0,n);const allowed=(v,list)=>list.includes(v);const iso=()=>new Date().toISOString();
+const AUTH_IDLE_MS=30*60*1000,AUTH_ABSOLUTE_MS=8*60*60*1000,AUTH_ITERATIONS=210000;
+const authBytes=n=>crypto.getRandomValues(new Uint8Array(n));
+const authB64u=a=>btoa(String.fromCharCode(...a)).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');
+const authB64uDecode=value=>{const normalized=String(value).replaceAll('-','+').replaceAll('_','/'),padded=normalized+'='.repeat((4-normalized.length%4)%4),raw=atob(padded);return Uint8Array.from(raw,ch=>ch.charCodeAt(0))};
+const authEnc=new TextEncoder();
+async function authDigest(value){return authB64u(new Uint8Array(await crypto.subtle.digest('SHA-256',authEnc.encode(value))))}
+async function authPasswordHash(password,saltBytes){
+  if(!(saltBytes instanceof Uint8Array)||saltBytes.byteLength<16)throw new Error('invalid_pbkdf2_salt');
+  const key=await crypto.subtle.importKey('raw',authEnc.encode(String(password)),'PBKDF2',false,['deriveBits']);
+  try{const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:saltBytes,iterations:AUTH_ITERATIONS},key,256);return authB64u(new Uint8Array(bits))}
+  catch{return authB64u(pbkdf2Sha256Fallback(authEnc.encode(String(password)),saltBytes,AUTH_ITERATIONS))}
+}
+async function authVerifyPassword(password,saltEncoded,expectedHash,iterations){
+  if(Number(iterations)!==AUTH_ITERATIONS)return false;
+  let saltBytes;try{saltBytes=authB64uDecode(saltEncoded)}catch{return false}
+  if(saltBytes.byteLength<16)return false;
+  const calculated=await authPasswordHash(password,saltBytes);
+  if(authSafeEqual(calculated,expectedHash))return true;
+  // v17 encoded the salt as UTF-8 text. Preserve verification without reducing iterations.
+  const legacy=await authPasswordHash(password,authEnc.encode(String(saltEncoded)));
+  return authSafeEqual(legacy,expectedHash);
+}
+function authSafeEqual(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
+async function authAudit(env,userId,email,action,outcome){await env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),userId||null,String(email||'').slice(0,3).toLowerCase(),action,outcome,iso()).run()}
+function trustedCrm(request,env){const h=request.headers.get('authorization')||'',token=h.startsWith('Bearer ')?h.slice(7):'';return !!env.CRM_AUTH_SERVICE_TOKEN&&authSafeEqual(token,env.CRM_AUTH_SERVICE_TOKEN)}
+async function authCryptoSelfTest(request,env){
+  if(!trustedCrm(request,env))return json({error:'No autorizado.'},401);
+  try{
+    const salt=Uint8Array.from([0,17,34,51,68,85,102,119,136,153,170,187,204,221,238,255,0,17,34,51,68,85,102,119]);
+    const derived=await authPasswordHash('SalvacionM-Test-Password-2026!',salt);
+    const ok=authSafeEqual(derived,'1UHvV3RVHO2WBBOw_8f2RqKcpCFGnjguCJm1JYrRNZI');
+    return json({ok,algorithm:'PBKDF2-SHA-256',iterations:AUTH_ITERATIONS,derived_bits:256},ok?200:503);
+  }catch{
+    return json({ok:false,algorithm:'PBKDF2-SHA-256',iterations:AUTH_ITERATIONS,code:'PBKDF2_UNAVAILABLE'},503);
+  }
+}
+async function authSetupStatus(request,env){
+  if(!trustedCrm(request,env))return json({error:'No autorizado.'},401);
+  if(!env.DB)return json({error:'Base de autenticación no disponible.',code:'AUTH_DB_UNAVAILABLE'},503);
+  try{
+    const row=await env.DB.prepare('SELECT count(*) total FROM crm_users').first();
+    return json({needs_setup:Number(row?.total||0)===0});
+  }catch{
+    return json({error:'Esquema de autenticación no disponible.',code:'AUTH_SCHEMA_UNAVAILABLE'},503);
+  }
+}
+async function authDiagnostics(request,env){
+  if(!trustedCrm(request,env))return json({error:'No autorizado.'},401);
+  if(!env.DB)return json({ok:false,db_bound:false,code:'AUTH_DB_UNAVAILABLE'},503);
+  try{
+    const tables=await env.DB.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('crm_users','crm_sessions','crm_auth_audit') ORDER BY name").all();
+    const columns=await env.DB.prepare("PRAGMA table_info('crm_users')").all();
+    const count=await env.DB.prepare('SELECT count(*) total FROM crm_users').first();
+    return json({ok:true,db_bound:true,tables:(tables?.results||[]).map(r=>r.name),crm_users_columns:(columns?.results||[]).map(r=>r.name),user_count:Number(count?.total||0)});
+  }catch{
+    return json({ok:false,db_bound:true,code:'AUTH_SCHEMA_UNAVAILABLE'},503);
+  }
+}
+async function authBootstrapAdmin(request,env){
+  if(!trustedCrm(request,env))return json({error:'No autorizado.'},401);
+  if(!env.DB)return json({error:'Base de autenticación no disponible.',code:'AUTH_DB_UNAVAILABLE'},503);
+  let b;try{b=await request.json()}catch{return json({error:'Solicitud inválida.'},400)}
+  const email=clean(b.email,160).toLowerCase(),password=String(b.password||'');
+  if(!/^\S+@\S+\.\S+$/.test(email)||password.length<14||password.length>256)return json({error:'Datos de aprovisionamiento inválidos.'},422);
+  try{
+    const existing=await env.DB.prepare('SELECT id FROM crm_users LIMIT 1').first();
+    if(existing)return json({error:'El bootstrap inicial ya fue utilizado.'},409);
+  }catch{
+    return json({error:'Esquema de autenticación no disponible.',code:'AUTH_SCHEMA_UNAVAILABLE'},503);
+  }
+  const saltBytes=authBytes(24),salt=authB64u(saltBytes),hash=await authPasswordHash(password,saltBytes),now=iso(),id=crypto.randomUUID();
+  try{
+    const results=await env.DB.batch([
+      env.DB.prepare("INSERT INTO crm_users (id,email,password_salt,password_hash,password_iterations,role,active,created_at,updated_at) SELECT ?,?,?,?,?,'ADMIN',1,?,? WHERE NOT EXISTS (SELECT 1 FROM crm_users)").bind(id,email,salt,hash,AUTH_ITERATIONS,now,now),
+      env.DB.prepare('INSERT INTO crm_auth_audit (id,user_id,email_hint,action,outcome,created_at) SELECT ?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM crm_users WHERE id=?)').bind(crypto.randomUUID(),id,email.slice(0,3).toLowerCase(),'bootstrap_admin','success',now,id)
+    ]);
+    const changes=Number(results?.[0]?.meta?.changes??results?.[0]?.changes??1);
+    if(changes!==1)return json({error:'El bootstrap inicial ya fue utilizado.'},409);
+  }catch(e){
+    const message=String(e||'');
+    if(/UNIQUE|constraint/i.test(message))return json({error:'El bootstrap inicial ya fue utilizado.'},409);
+    if(/no such table|no such column/i.test(message))return json({error:'Esquema de autenticación no disponible.',code:'AUTH_SCHEMA_UNAVAILABLE'},503);
+    return json({error:'No fue posible guardar el ADMIN en QA. Intenta nuevamente.',code:'ADMIN_WRITE_FAILED'},503);
+  }
+  return json({ok:true,user:{id,email,role:'ADMIN'}},201);
+}
+async function authLogin(request,env){if(!trustedCrm(request,env))return json({error:'No autorizado.'},401);let b;try{b=await request.json()}catch{return json({error:'Solicitud inválida.'},400)}const email=clean(b.email,160).toLowerCase(),password=String(b.password||'');if(!email||password.length<8||password.length>256)return json({error:'Credenciales inválidas.'},401);const user=await env.DB.prepare('SELECT id,email,password_salt,password_hash,password_iterations,role,active FROM crm_users WHERE email=?').bind(email).first();if(!user||!user.active){await authAudit(env,user?.id,email,'login','denied');return json({error:'Credenciales inválidas.'},401)}const valid=await authVerifyPassword(password,user.password_salt,user.password_hash,user.password_iterations);if(!valid){await authAudit(env,user.id,email,'login','denied');return json({error:'Credenciales inválidas.'},401)}const now=Date.now(),token=authB64u(authBytes(32)),csrf=authB64u(authBytes(24));await env.DB.prepare('INSERT INTO crm_sessions (id,user_id,token_hash,csrf_token,created_at,last_seen_at,expires_at,absolute_expires_at) VALUES (?,?,?,?,?,?,?,?)').bind(crypto.randomUUID(),user.id,await authDigest(token),csrf,new Date(now).toISOString(),new Date(now).toISOString(),new Date(now+AUTH_IDLE_MS).toISOString(),new Date(now+AUTH_ABSOLUTE_MS).toISOString()).run();await authAudit(env,user.id,email,'login','success');return json({token,csrf_token:csrf,user:{id:user.id,email:user.email,role:user.role}})}
+async function authSession(request,env,touch=true){if(!trustedCrm(request,env))return null;const token=request.headers.get('x-auth-session')||'';if(!token)return null;const row=await env.DB.prepare('SELECT s.id session_id,s.user_id,s.csrf_token,s.expires_at,s.absolute_expires_at,u.email,u.role,u.active FROM crm_sessions s JOIN crm_users u ON u.id=s.user_id WHERE s.token_hash=? AND s.revoked_at IS NULL').bind(await authDigest(token)).first();if(!row||!row.active||Date.parse(row.expires_at)<=Date.now()||Date.parse(row.absolute_expires_at)<=Date.now())return null;if(touch)await env.DB.prepare('UPDATE crm_sessions SET last_seen_at=?,expires_at=? WHERE id=?').bind(iso(),new Date(Math.min(Date.now()+AUTH_IDLE_MS,Date.parse(row.absolute_expires_at))).toISOString(),row.session_id).run();return row}
+async function authMe(request,env){const s=await authSession(request,env);return s?json({id:s.user_id,email:s.email,role:s.role,csrf_token:s.csrf_token}):json({error:'No autenticado.'},401)}
+async function authLogout(request,env){const s=await authSession(request,env,false);if(!s)return json({ok:true});if(!authSafeEqual(request.headers.get('x-csrf-token')||'',s.csrf_token))return json({error:'Solicitud no autorizada.'},403);await env.DB.prepare('UPDATE crm_sessions SET revoked_at=? WHERE id=?').bind(iso(),s.session_id).run();await authAudit(env,s.user_id,s.email,'logout','success');return json({ok:true})}
+
 const htmlEscape=value=>clean(value,300).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 function identity(request,env){const h=request.headers.get('authorization')||'',token=h.startsWith('Bearer ')?h.slice(7):'';if(!token)return null;let identities=[];try{identities=JSON.parse(env.CRM_IDENTITIES||'[]')}catch{return null}const found=Array.isArray(identities)?identities.find(item=>item&&item.token===token):null;if(found&&clean(found.actor_id,120)&&Array.isArray(found.roles))return {actor_id:clean(found.actor_id,120),roles:found.roles.map(value=>clean(value,40))};if(env.ADMIN_API_TOKEN&&token===env.ADMIN_API_TOKEN){const actor=clean(request.headers.get('x-crm-actor-id'),120),proxyRole=clean(request.headers.get('x-admin-role'),40).toLowerCase(),roleMap={admin:'admin',asesor:'lawyer',lectura:'reader'};if(actor&&roleMap[proxyRole])return {actor_id:actor,roles:[roleMap[proxyRole]],proxy:true};return {actor_id:'legacy-service-admin',roles:['admin'],legacy:true}}return null}
 function can(user,permission){if(!user)return false;const grants={admin:['read','write','schedule'],lawyer:['read','write','schedule'],reader:['read']};return user.roles.some(role=>grants[role]?.includes(permission))}
@@ -34,7 +125,7 @@ async function sendBrevoReminder(env,item){
   const senderEmail=clean(env.BREVO_FROM_EMAIL,160),senderName=clean(env.BREVO_FROM_NAME,120)||'SALVACIÓN M';
   if(!env.BREVO_API_KEY||!senderEmail)throw new Error('provider_not_configured');
   const when=new Intl.DateTimeFormat('es-CO',{timeZone:item.timezone||'America/Bogota',dateStyle:'long',timeStyle:'short'}).format(new Date(item.scheduled_at));
-  return fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{accept:'application/json','content-type':'application/json','api-key':env.BREVO_API_KEY},body:JSON.stringify({sender:{name:senderName,email:senderEmail},to:[{email:item.email,name:clean(item.name,120)}],subject:'Recordatorio de cita – SALVACIÓN M',htmlContent:`<p>Hola ${htmlEscape(item.name)},</p><p>Te recordamos tu cita de orientación con SALVACIÓN M para el <strong>${htmlEscape(when)}</strong>.</p><p>Profesional: ${htmlEscape(item.professional)}.<br>Referencia: ${htmlEscape(item.reference)}.</p><p>Si necesitas reprogramar, comunícate con nuestro equipo.</p>`})});
+  return fetch('https://api.brevo.com/v3/smtp/email',{method:'POST',headers:{accept:'application/json','content-type':'application/json','api-key':env.BREVO_API_KEY},signal:AbortSignal.timeout(30000),redirect:'error',body:JSON.stringify({sender:{name:senderName,email:senderEmail},to:[{email:item.email,name:clean(item.name,120)}],subject:'Recordatorio de cita – SALVACIÓN M',htmlContent:`<p>Hola ${htmlEscape(item.name)},</p><p>Te recordamos tu cita de orientación con SALVACIÓN M para el <strong>${htmlEscape(when)}</strong>.</p><p>Profesional: ${htmlEscape(item.professional)}.<br>Referencia: ${htmlEscape(item.reference)}.</p><p>Si necesitas reprogramar, comunícate con nuestro equipo.</p>`})});
 }
 // Audit only operational identifiers; never persist credentials or message bodies.
 async function reminderAudit(env,item,runId,details){
@@ -54,18 +145,18 @@ async function dispatchReminders(env,now=new Date()){
     if(Number(inserted?.meta?.changes??inserted?.changes)!==1){duplicates++;await reminderAudit(env,item,run_id,{outcome:'duplicate_skipped'});continue}
     queued++;
     await reminderAudit(env,item,run_id,{outcome:'started',provider,reminder_id:id});
-    let response,error_code=null,provider_message_id=null;
+    let response,error_code=null,provider_message_id=null,ambiguous=false;
     try{
-      response=env.REMINDER_WEBHOOK_URL?await fetch(env.REMINDER_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/json','authorization':env.REMINDER_WEBHOOK_TOKEN?`Bearer ${env.REMINDER_WEBHOOK_TOKEN}`:''},body:JSON.stringify({event:'appointment.reminder.24h',reference:item.reference,scheduled_at:item.scheduled_at,timezone:item.timezone,professional:item.professional,recipient:{name:item.name,phone:item.phone,email:item.email}})}):await sendBrevoReminder(env,item);
+      response=env.REMINDER_WEBHOOK_URL?await fetch(env.REMINDER_WEBHOOK_URL,{method:'POST',headers:{'content-type':'application/json','authorization':env.REMINDER_WEBHOOK_TOKEN?`Bearer ${env.REMINDER_WEBHOOK_TOKEN}`:''},signal:AbortSignal.timeout(30000),redirect:'error',body:JSON.stringify({event:'appointment.reminder.24h',reference:item.reference,scheduled_at:item.scheduled_at,timezone:item.timezone,professional:item.professional,recipient:{name:item.name,phone:item.phone,email:item.email}})}):await sendBrevoReminder(env,item);
       if(!response.ok)error_code=`provider_${response.status}`;
-      else {const receipt=await response.json().catch(()=>({}));provider_message_id=clean(receipt.messageId||receipt.message_id,200)||null}
-    }catch{error_code='provider_connection_error'}
+      else {try{const receipt=await response.json();provider_message_id=clean(receipt.messageId||receipt.message_id,200)||null}catch{if(response.status!==204){ambiguous=true;error_code='provider_receipt_unreadable'}}}
+    }catch{ambiguous=true;error_code='provider_unknown_requires_review'}
     const accepted=!error_code;
     // Persist status and receipt atomically. A persistence failure leaves the reservation
     // pending, so another trigger cannot accidentally send the message again.
     await env.DB.batch([
-      env.DB.prepare('UPDATE appointment_reminders SET status=?,attempted_at=?,sent_at=?,error_code=? WHERE id=?').bind(accepted?'sent':'failed',created,accepted?iso():null,error_code,id),
-      env.DB.prepare('INSERT INTO activities (id,consultation_id,actor,action,new_value,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),item.consultation_id,'reminder-service','reminder_dispatch',JSON.stringify({run_id,appointment_id:item.appointment_id,reminder_id:id,provider,provider_status:response?.status||null,provider_message_id,outcome:accepted?'provider_accepted':'failed',error_code}),iso())
+      env.DB.prepare('UPDATE appointment_reminders SET status=?,attempted_at=?,sent_at=?,error_code=? WHERE id=?').bind(accepted?'sent':ambiguous?'unknown_requires_review':'failed',created,accepted?iso():null,error_code,id),
+      env.DB.prepare('INSERT INTO activities (id,consultation_id,actor,action,new_value,created_at) VALUES (?,?,?,?,?,?)').bind(crypto.randomUUID(),item.consultation_id,'reminder-service','reminder_dispatch',JSON.stringify({run_id,appointment_id:item.appointment_id,reminder_id:id,provider,provider_status:response?.status||null,provider_message_id,outcome:accepted?'provider_accepted':ambiguous?'unknown_requires_review':'failed',error_code}),iso())
     ]);
     if(accepted)sent++;else failed++;
   }
@@ -74,15 +165,16 @@ async function dispatchReminders(env,now=new Date()){
 async function reminderOverview(env){
   const now=new Date(),from=new Date(now.getTime()+23*3600000).toISOString(),to=new Date(now.getTime()+25*3600000).toISOString();
   const [summary,reminders,eligible,events]=await env.DB.batch([
-    env.DB.prepare("SELECT count(*) total, sum(status='sent') sent, sum(status='pending') pending, sum(status='failed') failed FROM appointment_reminders"),
+    env.DB.prepare("SELECT count(*) total, sum(status='sent') sent, sum(status IN ('pending','unknown_requires_review')) pending, sum(status='failed') failed FROM appointment_reminders"),
     env.DB.prepare('SELECT r.id,r.appointment_id,r.status,r.scheduled_for,r.attempted_at,r.sent_at,r.error_code,r.created_at,c.reference,a.status appointment_status FROM appointment_reminders r JOIN appointments a ON a.id=r.appointment_id JOIN consultations c ON c.id=a.consultation_id ORDER BY r.created_at DESC LIMIT 100'),
     env.DB.prepare("SELECT a.id appointment_id,a.scheduled_at,c.reference,r.status reminder_status FROM appointments a JOIN consultations c ON c.id=a.consultation_id LEFT JOIN appointment_reminders r ON r.appointment_id=a.id AND r.reminder_type='24h' WHERE a.status='confirmed' AND a.scheduled_at>=? AND a.scheduled_at<? ORDER BY a.scheduled_at LIMIT 100").bind(from,to),
     env.DB.prepare("SELECT a.id,a.new_value,a.created_at,c.reference FROM activities a JOIN consultations c ON c.id=a.consultation_id WHERE a.action='reminder_dispatch' ORDER BY a.created_at DESC LIMIT 200")
   ]);
   const audit=events.results.map(row=>{let detail={};try{detail=JSON.parse(row.new_value)}catch{}return {id:row.id,reference:row.reference,created_at:row.created_at,run_id:detail.run_id,appointment_id:detail.appointment_id,outcome:detail.outcome,provider:detail.provider,provider_status:detail.provider_status,provider_message_id:detail.provider_message_id,error_code:detail.error_code}});
-  return json({generated_at:now.toISOString(),timezone:'America/Bogota',window:{from,to},provider_configured:!!(env.REMINDER_WEBHOOK_URL||(env.BREVO_API_KEY&&env.BREVO_FROM_EMAIL)),stats:summary.results[0]||{},reminders:reminders.results,eligible:eligible.results,audit,limit:100,audit_limit:200});
+  const scheduler=await schedulerStatus(env);
+  return json({scheduler,generated_at:now.toISOString(),timezone:'America/Bogota',window:{from,to},provider_configured:!!(env.REMINDER_WEBHOOK_URL||(env.BREVO_API_KEY&&env.BREVO_FROM_EMAIL)),stats:summary.results[0]||{},reminders:reminders.results,eligible:eligible.results,audit,limit:100,audit_limit:200});
 }
-export default{async fetch(request,env){const url=new URL(request.url),path=url.pathname;if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{...securityHeaders,'access-control-allow-origin':env.CRM_ORIGIN||'','access-control-allow-headers':'authorization,content-type','access-control-allow-methods':'GET,PATCH,PUT,OPTIONS'}});if(path==='/api/health')return json({ok:true,service:'salvacion-m',time:iso()});if(path==='/api/internal/reminders/dispatch'&&request.method==='POST'){const h=request.headers.get('authorization')||'',token=h.startsWith('Bearer ')?h.slice(7):'';if(!env.REMINDER_TRIGGER_TOKEN||token!==env.REMINDER_TRIGGER_TOKEN)return json({error:'No autorizado.'},401);try{const result=await dispatchReminders(env,new Date());return json({ok:!result.failed&&!result.skipped,...result})}catch{return json({ok:false,error:'No fue posible completar o registrar el disparo. Revisa la auditoría antes de reintentar.'},503)}}if(path==='/api/consultations'&&request.method==='POST')return publicCreate(request,env);if(path==='/api/provider-test'&&request.method==='POST'){const token=(request.headers.get('authorization')||'').replace(/^Bearer\s+/,'');if(!env.PROVIDER_TEST_TOKEN||token!==env.PROVIDER_TEST_TOKEN)return json({error:'Ruta no encontrada.'},404);const scheduledAt=new Date(Date.now()+86400000).toISOString();try{const response=await sendBrevoReminder(env,{name:'Daniel',email:env.BREVO_FROM_EMAIL,reference:'SM-G3-PRUEBA',scheduled_at:scheduledAt,timezone:'America/Bogota',professional:'Daniel Vergel'});if(!response.ok)return json({ok:false,provider_status:response.status},502);return json({ok:true,provider:'brevo',provider_status:response.status,recipient:env.BREVO_FROM_EMAIL,reference:'SM-G3-PRUEBA'},200)}catch{return json({ok:false,error:'provider_error'},502)}}const user=path.startsWith('/api/admin/')?identity(request,env):null;if(path==='/api/admin/availability'&&request.method==='GET'){
+export default{async fetch(request,env){const url=new URL(request.url),path=url.pathname;if(path==='/mcp')return schedulerMcp(request,env);if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{...securityHeaders,'access-control-allow-origin':env.CRM_ORIGIN||'','access-control-allow-headers':'authorization,content-type','access-control-allow-methods':'GET,PATCH,PUT,OPTIONS'}});if(path==='/api/internal/auth/crypto-self-test'&&request.method==='GET')return authCryptoSelfTest(request,env);if(path==='/api/internal/auth/setup-status'&&request.method==='GET')return authSetupStatus(request,env);if(path==='/api/internal/auth/diagnostics'&&request.method==='GET')return authDiagnostics(request,env);if(path==='/api/internal/auth/bootstrap-admin'&&request.method==='POST')return authBootstrapAdmin(request,env);if(path==='/api/internal/auth/login'&&request.method==='POST')return authLogin(request,env);if(path==='/api/internal/auth/me'&&request.method==='GET')return authMe(request,env);if(path==='/api/internal/auth/logout'&&request.method==='POST')return authLogout(request,env);if(path==='/api/health')return json({ok:true,service:'salvacion-m',time:iso()});if(path==='/api/internal/reminders/dispatch'&&request.method==='POST'){const h=request.headers.get('authorization')||'',token=h.startsWith('Bearer ')?h.slice(7):'';if(!env.REMINDER_TRIGGER_TOKEN||token!==env.REMINDER_TRIGGER_TOKEN)return json({error:'No autorizado.'},401);try{const result=await dispatchReminders(env,new Date());return json({ok:!result.failed&&!result.skipped,...result})}catch{return json({ok:false,error:'No fue posible completar o registrar el disparo. Revisa la auditoría antes de reintentar.'},503)}}if(path==='/api/consultations'&&request.method==='POST')return publicCreate(request,env);if(path==='/api/provider-test'&&request.method==='POST'){const token=(request.headers.get('authorization')||'').replace(/^Bearer\s+/,'');if(!env.PROVIDER_TEST_TOKEN||token!==env.PROVIDER_TEST_TOKEN)return json({error:'Ruta no encontrada.'},404);const scheduledAt=new Date(Date.now()+86400000).toISOString();try{const response=await sendBrevoReminder(env,{name:'Daniel',email:env.BREVO_FROM_EMAIL,reference:'SM-G3-PRUEBA',scheduled_at:scheduledAt,timezone:'America/Bogota',professional:'Daniel Vergel'});if(!response.ok)return json({ok:false,provider_status:response.status},502);return json({ok:true,provider:'brevo',provider_status:response.status,recipient:env.BREVO_FROM_EMAIL,reference:'SM-G3-PRUEBA'},200)}catch{return json({ok:false,error:'provider_error'},502)}}const user=path.startsWith('/api/admin/')?identity(request,env):null;if(path==='/api/admin/availability'&&request.method==='GET'){
   if(!can(user,'read'))return json({error:'No autorizado.'},401);
   const date=clean(url.searchParams.get('date'),10),professional=clean(url.searchParams.get('professional'),120);
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number.isNaN(Date.parse(date))||!professional)return json({error:'Fecha y profesional obligatorios.'},422);

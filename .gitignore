@@ -1,3 +1,9 @@
 node_modules/
 test-results/
 playwright-report/
+
+qa-results/
+sites/salvacion-m-gates-qa/dist/server/
+sites/salvacion-m-gates-qa/dist/.openai/
+sites/salvacion-m-crm-qa/dist/server/
+sites/salvacion-m-crm-qa/dist/.openai/

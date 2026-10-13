@@ -8,10 +8,13 @@ on:
       - "**/*.css"
       - "**/*.js"
       - "package.json"
+      - "package-lock.json"
       - ".pa11yci.json"
       - "playwright.config.js"
       - "tests/**"
       - "sites/salvacion-m/**"
+      - "sites/salvacion-m-gates-qa/**"
+      - "sites/salvacion-m-crm-qa/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -22,10 +25,13 @@ on:
       - "**/*.css"
       - "**/*.js"
       - "package.json"
+      - "package-lock.json"
       - ".pa11yci.json"
       - "playwright.config.js"
       - "tests/**"
       - "sites/salvacion-m/**"
+      - "sites/salvacion-m-gates-qa/**"
+      - "sites/salvacion-m-crm-qa/**"
       - ".htmlvalidate.json"
       - ".stylelintrc.json"
       - "eslint.config.js"
@@ -41,15 +47,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
@@ -82,6 +88,20 @@ jobs:
       - name: Run Salvacion M worker tests including D1, G2, G3 and G4
         run: cd sites/salvacion-m && npm test
 
+      - name: Build and test Gates QA
+        run: |
+          cd sites/salvacion-m-gates-qa
+          npm run build
+          npm run validate
+          npm test
+
+      - name: Build and test CRM QA Auth v2
+        run: |
+          cd sites/salvacion-m-crm-qa
+          npm run build
+          npm run validate
+          npm test
+
       - name: Preserve G4 QA summary
         if: always()
         run: |
@@ -100,7 +120,7 @@ jobs:
 
       - name: Upload G4 QA evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: g4-qa-evidence
           path: qa-results/g4-summary.md

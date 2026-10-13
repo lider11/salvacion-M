@@ -13,7 +13,7 @@ const crmWorker=(await import(`data:text/javascript;base64,${Buffer.from(crmSour
 
 function createD1(){
   const sql=new DatabaseSync(':memory:');
-  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql']){
+  for(const file of ['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql','../drizzle/0008_scheduler_runs.sql']){
     sql.exec((awaitText(file)).replaceAll('--> statement-breakpoint',''));
   }
   function awaitText(file){return files.get(file)}
@@ -23,7 +23,7 @@ function createD1(){
   }
   return {prepare:statement,async batch(statements){sql.exec('BEGIN');try{const result=statements.map(s=>(/^\s*SELECT\b/i.test(s.sql)?{results:s.all()}:{results:[],meta:{changes:s.run().changes}}));sql.exec('COMMIT');return result}catch(e){sql.exec('ROLLBACK');throw e}},count(table){return sql.prepare(`SELECT count(*) n FROM ${table}`).get().n},close(){sql.close()}};
 }
-const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
+const files=new Map(await Promise.all(['../drizzle/0000_initial.sql','../drizzle/0001_reference_counters.sql','../drizzle/0002_client_address.sql','../drizzle/0003_confirmed_slots.sql','../drizzle/0004_professional_availability.sql','../drizzle/0005_availability_audit.sql','../drizzle/0006_identity_reminders.sql','../drizzle/0007_auth_v2.sql','../drizzle/0008_scheduler_runs.sql'].map(async p=>[p,await readFile(new URL(p,import.meta.url),'utf8')])));
 
 test('consultation persists and appears through the separate CRM proxy with the same reference',async()=>{
   const DB=createD1(),token='synthetic-test-token';
@@ -191,4 +191,43 @@ test('G3 workflow persists reviewed evidence, enforces transitions and never inv
   const review=await save({...base,request_id:crypto.randomUUID(),revision:state.revision});assert.equal(review.status,201);state=await review.json();assert.equal(state.status,'REVIEW_RECORDED');assert.equal(state.canonical_gate_changed,false);assert.equal(state.review.actor,'reviewer-1');assert.equal(state.history.length,6);
   const changed=await save({...base,kind:'documentation',backend_sha:'c'.repeat(40),crm_sha:'b'.repeat(40),request_id:crypto.randomUUID(),revision:state.revision});assert.equal(changed.status,201);state=await changed.json();assert.equal(state.ready_for_review,false);assert.equal(state.review,null);
  }finally{globalThis.fetch=previous;DB.close()}
+});
+test('G3 ambiguous provider outcome requires review and cannot send twice',async()=>{
+ const DB=createD1(),previous=globalThis.fetch,at=new Date(),slot=new Date(at.getTime()+86400000).toISOString();let attempts=0;
+ globalThis.fetch=async(_url,init)=>{attempts++;assert.ok(init.signal);assert.equal(init.redirect,'error');throw new Error('synthetic timeout after acceptance')};
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cf','Failure','3000000000','failure@example.invalid',at.toISOString()).run();
+  await DB.prepare('INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind('qf','SM-2026-009998','rf','cf','medicamento','eps','si','ninguna','no','','new','medium',at.toISOString(),at.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('af','qf',slot,'America/Bogota','confirmed','Daniel Vergel',at.toISOString(),at.toISOString()).run();
+  const env={DB,REMINDER_WEBHOOK_URL:'https://provider.invalid',REMINDER_TRIGGER_TOKEN:'trigger'};
+  const call=()=>publicWorker.fetch(new Request('https://qa.test/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer trigger'}}),env);
+  const first=await (await call()).json();assert.equal(first.ok,false);assert.equal(first.failed,1);
+  await call();assert.equal(attempts,1);
+  const row=await DB.prepare('SELECT status,error_code FROM appointment_reminders').first();assert.equal(row.status,'unknown_requires_review');assert.equal(row.error_code,'provider_unknown_requires_review');
+ }finally{globalThis.fetch=previous;DB.close()}
+});
+test('G3 unreadable successful receipt requires review and cannot send twice',async()=>{
+ const DB=createD1(),previous=globalThis.fetch,at=new Date(),slot=new Date(at.getTime()+86400000).toISOString();let attempts=0;
+ globalThis.fetch=async()=>{attempts++;return new Response('{broken',{status:201})};
+ try{
+  await DB.prepare('INSERT INTO clients (id,name,phone,email,created_at) VALUES (?,?,?,?,?)').bind('cf','Failure','3000000000','failure@example.invalid',at.toISOString()).run();
+  await DB.prepare('INSERT INTO consultations (id,reference,request_id,client_id,problem,entity_type,has_order,prior_action,urgent,summary,status,priority,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind('qf','SM-2026-009998','rf','cf','medicamento','eps','si','ninguna','no','','new','medium',at.toISOString(),at.toISOString()).run();
+  await DB.prepare('INSERT INTO appointments (id,consultation_id,scheduled_at,timezone,status,professional,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?)').bind('af','qf',slot,'America/Bogota','confirmed','Daniel Vergel',at.toISOString(),at.toISOString()).run();
+  const env={DB,REMINDER_WEBHOOK_URL:'https://provider.invalid',REMINDER_TRIGGER_TOKEN:'trigger'};
+  const call=()=>publicWorker.fetch(new Request('https://qa.test/api/internal/reminders/dispatch',{method:'POST',headers:{authorization:'Bearer trigger'}}),env);
+  const first=await (await call()).json();assert.equal(first.ok,false);assert.equal(first.failed,1);
+  await call();assert.equal(attempts,1);
+  const row=await DB.prepare('SELECT status,error_code FROM appointment_reminders').first();assert.equal(row.status,'unknown_requires_review');assert.equal(row.error_code,'provider_receipt_unreadable');
+ }finally{globalThis.fetch=previous;DB.close()}
+});
+
+
+test('concurrent bootstrap creates one ADMIN and one matching success audit atomically',async()=>{
+ const DB=createD1();try{
+ const env={DB,CRM_AUTH_SERVICE_TOKEN:'synthetic-service'};
+ const call=email=>publicWorker.fetch(new Request('https://qa.test/api/internal/auth/bootstrap-admin',{method:'POST',headers:{authorization:'Bearer synthetic-service'},body:JSON.stringify({email,password:'Synthetic-Bootstrap-Password-2026!'})}),env);
+ const results=await Promise.all([call('first@example.invalid'),call('second@example.invalid')]);assert.deepEqual(results.map(r=>r.status).sort(),[201,409]);
+ assert.equal(DB.count('crm_users'),1);assert.equal(DB.count('crm_auth_audit'),1);
+ const event=await DB.prepare('SELECT user_id FROM crm_auth_audit').first(),user=await DB.prepare('SELECT id FROM crm_users').first();assert.equal(event.user_id,user.id);
+ }finally{DB.close()}
 });

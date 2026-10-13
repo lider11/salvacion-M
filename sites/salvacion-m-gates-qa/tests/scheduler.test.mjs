@@ -1,0 +1,19 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+const source=await readFile(new URL('../worker/scheduler-mcp.js',import.meta.url),'utf8');
+const module=await import('data:text/javascript;base64,'+Buffer.from(`const iso=()=>new Date().toISOString();const json=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{'content-type':'application/json'}});let calls=0,ambiguous=false;const dispatchReminders=async()=>{calls++;if(ambiguous)throw Error('timeout');return {queued:1,sent:1,failed:0,duplicates:0}};${source};export {schedulerMcp,schedulerDispatch,schedulerStatus};export const count=()=>calls;export const timeout=()=>{ambiguous=true};`).toString('base64'));
+const db=new DatabaseSync(':memory:');db.exec(await readFile(new URL('../drizzle/0008_scheduler_runs.sql',import.meta.url),'utf8'));
+const DB={prepare(sql){let args=[];return {bind(...a){args=a;return this},async run(){return {meta:{changes:db.prepare(sql).run(...args).changes}}},async first(){return db.prepare(sql).get(...args)},async all(){return {results:db.prepare(sql).all(...args)}}}}};
+const env={DB,SCHEDULER_OPERATOR_EMAIL:'owner@example.invalid',SCHEDULER_ENABLED:'true',G3_RELEASE_CANDIDATE_SHA:'a'.repeat(40)};
+const rpc=(name,args={},identity=true)=>new Request('https://qa.test/mcp',{method:'POST',headers:{'content-type':'application/json',...(identity?{'oai-authenticated-user-email':'owner@example.invalid','oai-authenticated-user-id':'verified-site-user'}:{})},body:JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/call',params:{name,arguments:args}})});
+test('anonymous service caller cannot use MCP tools',async()=>assert.equal((await module.schedulerMcp(rpc('scheduler_status',{},false),env)).status,403));
+test('different verified identity cannot invoke scheduler',async()=>assert.equal((await module.schedulerMcp(rpc('scheduler_status'),{...env,SCHEDULER_OPERATOR_EMAIL:'someone@example.invalid'})).status,403));
+test('readiness query never dispatches',async()=>{const before=module.count();const r=await module.schedulerMcp(rpc('scheduler_status'),env);assert.equal((await r.json()).result.isError,false);assert.equal(module.count(),before)});
+test('invalid invocation identifier is rejected before writes',async()=>{const r=await module.schedulerMcp(rpc('dispatch_appointment_reminders',{request_id:'bad'}),env);assert.equal((await r.json()).error.code,-32602);assert.equal(db.prepare('SELECT count(*) n FROM scheduler_runs').get().n,0)});
+test('disabled scheduler refuses dispatch',async()=>assert.rejects(module.schedulerDispatch({...env,SCHEDULER_ENABLED:'false'},'00000000-0000-0000-0000-000000000001'),/NOT_ENABLED/));
+test('concurrent identical invocation dispatches once and retains RC',async()=>{const before=module.count(),id='00000000-0000-0000-0000-000000000002';const results=await Promise.all([module.schedulerDispatch(env,id),module.schedulerDispatch(env,id)]);assert.equal(module.count(),before+1);assert.equal(results.filter(x=>x.replayed).length,1);const row=db.prepare('SELECT * FROM scheduler_runs WHERE id=?').get(id);assert.equal(row.status,'completed');assert.equal(row.release_sha,env.G3_RELEASE_CANDIDATE_SHA)});
+test('ambiguous operation remains reserved and cannot be resent',async()=>{module.timeout();const id='00000000-0000-0000-0000-000000000003';await assert.rejects(module.schedulerDispatch(env,id),/UNKNOWN_REQUIRES_REVIEW/);const before=module.count();const result=await module.schedulerDispatch(env,id);assert.equal(result.status,'unknown_requires_review');assert.equal(module.count(),before)});
+
+test('malformed JSON-RPC values are rejected without storage or sends',async()=>{for(const body of ['null','[]','42']){const r=await module.schedulerMcp(new Request('https://qa.test/mcp',{method:'POST',headers:{'content-type':'application/json'},body}),env);assert.equal(r.status,400)}});
