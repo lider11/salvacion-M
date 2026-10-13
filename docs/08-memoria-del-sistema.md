@@ -396,3 +396,29 @@ Se validó la integración real de correo con Brevo y se inspeccionó el estado 
 ### Pendiente
 
 Vincular una aplicación de Meta con WhatsApp Cloud API, generar una credencial de alcance mínimo, conectar el número y ejecutar un mensaje de prueba autorizado. Además siguen pendientes las demás verificaciones aisladas de G3 registradas por la fuente canónica.
+
+
+## Actualización — 13 de octubre de 2026 — separación GitHub / Sites
+
+### Objetivo y autorización
+
+El responsable autorizó corregir el repositorio auditado. Se ratifica que GitHub conserva código e historial, pero no ejecuta recordatorios ni workflows automáticos; Sites/MCP autenticado es la única plataforma operativa del scheduler.
+
+### Implementación versionada
+
+- Eliminado `.github/workflows/qa-appointment-reminders.yml` de `main`, commit `00cfdfb50f0a9355d8c69e44d69c7527aa1fe348`.
+- Eliminado `.github/workflows/frontend-validation.yml` de `main`, commit `b58a96dbd270341705f4f4d8384e2d39cee12ada`.
+- Actualizados `README.md`, `AGENTS.md` y memoria del sistema para prohibir ejecución operativa desde GitHub y exigir comprobación de SHA/versión/deployment ID en Sites.
+- Los workflows anteriores siguen accesibles en el historial Git; su eliminación no constituye una prueba de desactivación de ejecuciones previamente en curso.
+
+### Validación y límites
+
+- Confirmar por consulta de archivos y árbol de `main` que no persisten los dos workflows y verificar la versión final de los documentos.
+- No se modificaron Sites QA, producción, D1, credenciales ni destinatarios durante esta corrección.
+- No se ha acreditado ejecución autónoma del scheduler Sites ni idempotencia de envíos reales por esta actuación; por tanto `G3_PASS = FALSE`.
+
+### Pendientes
+
+- Verificar estado actual de scheduler Sites autenticado, periodicidad aceptada por la plataforma y registros autónomos reales.
+- Efectuar pruebas controladas de idempotencia con cita QA y destinatario autorizados, con evidencia D1 y del proveedor.
+- Evaluar los siete criterios G3 mediante evidencia actual y trazable; no declarar PASS por documentación o simulaciones.
