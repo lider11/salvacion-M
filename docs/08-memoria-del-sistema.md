@@ -607,3 +607,13 @@ Run https://github.com/lider11/salvacion-M/actions/runs/38263902763, commit ejec
 - auth_only real en main run 38269316778 FAIL REAL HTTP401; no POST. Requiere actualización humana del secreto GitHub qa y primer ADMIN por formulario seguro.
 - Desktop y teclado parcial vivos; mobile/autenticación integral/entrega pendientes. D1 reminders 0. No nuevos envíos.
 - G3 3/7 acreditados: CI, reconciliación, documentación. READY_FOR_VERIFICATION. Expediente `docs/evidencia-g3-ejecucion-2026-10-12.md` y reporte `docs/g3-final-report-2026-10-12.json`. Última actualización documental no modifica RC.
+
+## 12 de octubre de 2026, 20:28 Bogotá — Gauntlet Loop acotado
+
+- Prompt Gauntlet aplicado con roles lógicos secuenciales, sin agentes independientes y sin reiniciar avances previos.
+- Nuevo auth_only real en main: run38332283708/job115084509775, SHA8d4fda70ea65a3eb208352c272dc681059d88fdf, HTTP401. SCHEDULER_AUTH_PASS FALSE, FAIL_REAL; cero reintentos sin corrección de credenciales.
+- RC247ccf4222a2a075820ffde9df1b6d253f2773c8 y QA v20/v14 conservados. CI y versiones/provenance comprobados; HEAD posterior solo documental. Health directo200; CRM setup-status200 needs_setup=true; D1 reminders0.
+- Auditoría SQLite local adicional de expiración/revocación/logout/CSRF:8/8 PASS_LOCAL_ONLY; helper reproducible bajo docs, sin cambiar Workers ni afirmar incorporación al CI histórico. Un error del fixture corregido, no fallo del producto.
+- Matriz booleana TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE. G3_PASS FALSE,3/7; READY_FOR_VERIFICATION.
+- Se guardan reporte, bitácora de iteraciones y captura. Bloqueos: secreto GitHub y primer ADMIN humanos; triggers/entrega/roles/mobile pendientes. No reenvíos ni cambios de producción.
+- Expediente: docs/evidencia-g3-gauntlet-2026-10-12.md. Detención por dependencia humana y falta de progreso, no por éxito ficticio.

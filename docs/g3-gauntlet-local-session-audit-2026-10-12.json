@@ -1,0 +1,56 @@
+{
+  "created_at": "2026-10-13T01:34:23.618Z",
+  "release_candidate_sha": "247ccf4222a2a075820ffde9df1b6d253f2773c8",
+  "source_sha256": "1926bda0343db7006395c04d3e19f9435e6b5b6402c932be01927763d69445ac",
+  "result": "PASS_LOCAL_ONLY",
+  "results": [
+    {
+      "name": "valid session",
+      "http_status": 200,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "idle expiry denies access",
+      "http_status": 401,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "absolute expiry denies access",
+      "http_status": 401,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "revoked session denies access",
+      "http_status": 401,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "logout missing CSRF denies revocation",
+      "http_status": 403,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "logout wrong CSRF denies revocation",
+      "http_status": 403,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "logout matching CSRF revokes session",
+      "http_status": 200,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    },
+    {
+      "name": "revoked logout session cannot be reused",
+      "http_status": 401,
+      "passed": true,
+      "kind": "LOCAL_SQLITE_INTEGRATION_NOT_LIVE"
+    }
+  ]
+}

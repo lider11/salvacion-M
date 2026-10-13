@@ -1,0 +1,26 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
+import {createHash} from 'node:crypto';
+import assert from 'node:assert/strict';
+const root=new URL('../',import.meta.url).pathname;
+const src=await readFile(root+'sites/salvacion-m-gates-qa/dist/server/index.js','utf8');
+const worker=(await import('data:text/javascript;base64,'+Buffer.from(src).toString('base64'))).default;
+const sql=new DatabaseSync(':memory:');sql.exec(await readFile(root+'sites/salvacion-m-gates-qa/drizzle/0007_auth_v2.sql','utf8'));
+const DB={prepare(query){let values=[];return{bind(...args){values=args;return this},async first(){return sql.prepare(query).get(...values)||null},async run(){return {meta:sql.prepare(query).run(...values)}}}}};
+const now=Date.now(),timestamp=ms=>new Date(ms).toISOString(),token='synthetic-session-audit',csrf='synthetic-csrf-audit',tokenHash=createHash('sha256').update(token).digest('base64url');
+sql.prepare('INSERT INTO crm_users VALUES (?,?,?,?,?,?,?,?,?)').run('synthetic-user','audit@example.invalid','synthetic-salt','synthetic-hash',210000,'ADMIN',1,timestamp(now),timestamp(now));
+const seed=(expiry,absolute,revoked=null)=>{sql.exec('DELETE FROM crm_sessions');sql.prepare('INSERT INTO crm_sessions VALUES (?,?,?,?,?,?,?,?,?)').run('synthetic-session','synthetic-user',tokenHash,csrf,timestamp(now),timestamp(now),timestamp(expiry),timestamp(absolute),revoked)};
+const env={DB,CRM_AUTH_SERVICE_TOKEN:'synthetic-service'};
+const call=(path,headers={},method='GET')=>worker.fetch(new Request('https://qa.invalid/api/internal/auth/'+path,{method,headers:{authorization:'Bearer synthetic-service','x-auth-session':token,...headers}}),env);
+const results=[];
+async function check(name,expected,action){const response=await action();assert.equal(response.status,expected,name);results.push({name,http_status:response.status,passed:true,kind:'LOCAL_SQLITE_INTEGRATION_NOT_LIVE'})}
+seed(now+60000,now+120000);await check('valid session',200,()=>call('me'));
+seed(now-60000,now+120000);await check('idle expiry denies access',401,()=>call('me'));
+seed(now+60000,now-60000);await check('absolute expiry denies access',401,()=>call('me'));
+seed(now+60000,now+120000,timestamp(now));await check('revoked session denies access',401,()=>call('me'));
+seed(now+60000,now+120000);await check('logout missing CSRF denies revocation',403,()=>call('logout',{},'POST'));assert.equal(sql.prepare('SELECT revoked_at FROM crm_sessions').get().revoked_at,null);
+await check('logout wrong CSRF denies revocation',403,()=>call('logout',{'x-csrf-token':'wrong'},'POST'));
+await check('logout matching CSRF revokes session',200,()=>call('logout',{'x-csrf-token':csrf},'POST'));
+await check('revoked logout session cannot be reused',401,()=>call('me'));
+const report={created_at:new Date().toISOString(),release_candidate_sha:'247ccf4222a2a075820ffde9df1b6d253f2773c8',source_sha256:createHash('sha256').update(src).digest('hex'),result:'PASS_LOCAL_ONLY',results};
+await writeFile(root+'docs/g3-gauntlet-local-session-audit-2026-10-12.json',JSON.stringify(report,null,2)+'\n');sql.close();console.log(JSON.stringify({checks:results.length,result:report.result}));
