@@ -60,18 +60,19 @@ El sistema se divide conceptualmente en dos superficies:
 
 ## Estado
 
-Repositorio inicializado para consolidar la documentación, arquitectura y posterior implementación del producto.
+Repositorio de código fuente y documentación histórica. El estado operativo de las instancias Sites debe verificarse en cada entorno mediante sus herramientas autenticadas; los archivos y commits aquí conservados no acreditan por sí mismos un despliegue ni su funcionamiento.
 
 Consulta la carpeta `docs/` para la documentación funcional y técnica.
 
-## Código vigente en Sites
+## Copia versionada del código Sites
 
-La versión actualmente publicada en ChatGPT Sites se conserva en
-`sites/salvacion-m/`. Esta carpeta contiene el Worker, la interfaz compilada,
-las migraciones, las pruebas y la configuración de despliegue asociada al sitio
-`salvacion-m`.
+La carpeta `sites/salvacion-m/` contiene una copia del código del sitio, sus pruebas y configuración. **No debe asumirse que corresponde a la versión desplegada o activa**: contrastar SHA, versión y deployment ID con Sites antes de emitir diagnósticos o implementar cambios.
 
-Para validar esa versión:
+GitHub se utiliza exclusivamente para conservar y consultar el código y su historial. **No es scheduler, motor de ejecución operativa ni mecanismo de despliegue**. No usar GitHub Actions, eventos `schedule`, `workflow_dispatch` ni integraciones automáticas de GitHub con Sites para enviar recordatorios. La operación de QA y producción corresponde a Sites/MCP, con credenciales autenticadas y auditoría en D1. No modificar producción sin autorización específica.
+
+La validación puede ejecutarse localmente o en el entorno QA autorizado; sus resultados no equivalen a ejecución real en Sites.
+
+Para validar la copia de este directorio localmente:
 
 ```bash
 cd sites/salvacion-m
