@@ -1,38 +1,24 @@
-# AGENTS.md — Salvación M
+# AGENTS.md — Salvación M (reinicio)
 
-Este repositorio usa un agente de proyecto para mantener cumplimiento, continuidad y trazabilidad.
+## Antes de implementar
+Leer `README.md` y `docs/08-memoria-del-sistema.md`. Inspeccionar el código y documentar riesgos antes de modificar.
 
-## Agente principal
+## Método Gauntlet Loop 2026
+TAREA → MÉTODO → ESTÁNDAR → TERMINACIÓN.
+PLANIFICAR → CONSTRUIR → PROBAR → CRITICAR → CORREGIR → VERIFICAR.
+Roles lógicos: Constructor, Crítico Adversarial y Árbitro. Máximo tres correcciones y dos rondas adversariales por defecto.
 
-Ruta:
+## Restricciones
+- HTML5, CSS3 y JavaScript Vanilla; no introducir frameworks sin autorización.
+- GitHub conserva código e historial. No usar GitHub Actions para scheduler ni despliegues operativos.
+- No tocar producción sin autorización expresa.
+- No registrar secretos, datos personales reales ni información de salud en el repositorio.
+- Persistir solicitudes antes de afirmar éxito.
+- Separar portal público, CRM y servicios internos.
+- Exigir autenticación, RBAC, CSRF, controles contra XSS e inyección SQL, auditoría y mínimo privilegio.
+- Objetivo WCAG 2.2 AA.
 
-`.github/agents/salvacion-m-agent.md`
-
-## Regla general
-
-Antes de modificar código o declarar una tarea terminada:
-
-1. leer la documentación aplicable;
-2. revisar la memoria del sistema;
-3. validar criterios de aceptación;
-4. ejecutar pruebas pertinentes;
-5. actualizar memoria si existe un cambio material.
-
-## Restricciones del proyecto
-
-- El CRM es independiente del frontend público.
-- Los formularios deben persistir datos antes de confirmar éxito.
-- No existe pasarela de pagos en el alcance actual.
-- La consulta inicial es gratuita.
-- El precio y alcance final se determinan después de la consulta.
-- No deben almacenarse secretos en Git.
-- Los cambios relevantes requieren trazabilidad.
-
-## Gobernanza técnica — 13 de octubre de 2026
-
-- GitHub (`lider11/salvacion-M`) es únicamente repositorio de código, documentación e historial. No es plataforma de ejecución, scheduler ni origen de despliegues automáticos.
-- Prohibido usar GitHub Actions para recordatorios, CI operativa, despliegues o invocación de endpoints de Sites. Las pruebas se ejecutan localmente o en el entorno QA autorizado y sus evidencias deben indicar el SHA y la versión real comprobada.
-- Sites/MCP autenticado es responsable del scheduler autónomo y de la operación del endpoint `POST /api/internal/reminders/dispatch`; no inferir activación o entrega a partir de código existente.
-- No cambiar producción, secretos, destinatarios ni realizar envíos reales sin autorización aplicable y evidencia verificable.
-- Mantener metodología Gauntlet Loop 2026: TAREA → MÉTODO → ESTÁNDAR → TERMINACIÓN; PLANIFICAR → CONSTRUIR → PROBAR → CRITICAR → CORREGIR → VERIFICAR. Separar diagnóstico `PASS`, `FAIL_REAL`, `NO_ACREDITADO`, `BLOCKED`, `NOT_RUN` de decisiones booleanas `TRUE/FALSE`.
-- G3 requiere 7/7 controles acreditados con evidencia contemporánea del entorno y ausencia de defectos críticos/altos. Sin dicha evidencia, `G3_PASS = FALSE`.
+## Verificación
+Diagnósticos: PASS, FAIL_REAL, NO_ACREDITADO, BLOCKED, NOT_RUN.
+Cada requisito se evalúa TRUE/FALSE; sin evidencia verificable, FALSE.
+G3 requiere siete criterios acreditados, pruebas y ausencia de defectos críticos o altos. De lo contrario `G3_PASS = FALSE`.
