@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Salvación M — versión monocromática</title>
+  <desc id="desc">Arco protector, cruz y mano de acompañamiento en un solo color.</desc>
+  <path d="M 349 83 C 284 38 196 42 126 91 C 59 139 35 224 58 300 C 79 369 130 407 192 420" fill="none" stroke="currentColor" stroke-width="37"/>
+  <path d="M 224 141 Q 224 132 233 132 H 274 Q 283 132 283 141 V 191 H 334 Q 343 191 343 200 V 241 Q 343 250 334 250 H 283 V 301 Q 283 310 274 310 H 233 Q 224 310 224 301 V 250 H 173 Q 164 250 164 241 V 200 Q 164 191 173 191 H 224 Z" fill="currentColor"/>
+  <path d="M 55 329 C 88 402 163 449 246 451 C 339 454 423 410 466 333 C 478 313 484 293 476 286 C 467 279 456 290 441 307 C 423 330 408 344 387 357 C 396 343 401 332 396 323 C 390 313 377 318 359 331 C 320 357 282 370 240 383 C 178 401 112 390 55 329 Z" fill="currentColor"/>
+</svg>
