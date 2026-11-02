@@ -27,3 +27,13 @@
 **Verificación pendiente:** comprobar archivos y commits en GitHub; evaluar contrastes, interfaz, QA y accesibilidad al construir el frontend.
 
 **Estado:** `ADN_DOCUMENTADO = TRUE`; `DESIGN_SPEC = TRUE`; `IMPLEMENTACION_WEB = FALSE`; `G3_PASS = FALSE`.
+
+## 2026-11-02 — Logo vectorial aprobado e incorporado
+
+**Aprobación expresa:** símbolo SVG de arco protector azul, cruz dorada y mano dorada.
+
+**Archivos incorporados en rama de reinicio:** `assets/logo-salvacion-m.svg`, `assets/logo-salvacion-m-monocromo.svg`, `docs/IDENTIDAD-GRAFICA-LOGO.md`.
+
+**Restricciones:** sin cambios a `main` o producción. No equivale a integración de frontend ni certificación WCAG. La versión principal tiene un espacio negativo blanco interior que requiere revisión sobre fondos oscuros.
+
+**Estado:** `LOGO_APROBADO=TRUE`; `FRONTEND_INTEGRADO=FALSE`; `G3_PASS=FALSE`.
