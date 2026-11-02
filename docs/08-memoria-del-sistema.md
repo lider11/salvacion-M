@@ -422,3 +422,13 @@ El responsable autorizó corregir el repositorio auditado. Se ratifica que GitHu
 - Verificar estado actual de scheduler Sites autenticado, periodicidad aceptada por la plataforma y registros autónomos reales.
 - Efectuar pruebas controladas de idempotencia con cita QA y destinatario autorizados, con evidencia D1 y del proveedor.
 - Evaluar los siete criterios G3 mediante evidencia actual y trazable; no declarar PASS por documentación o simulaciones.
+
+
+## 2 de noviembre de 2026 — HMAC Google: despliegue QA con envíos bloqueados
+
+- El responsable informó que renovó la clave. La configuración de Sites QA muestra `SM_HMAC_SECRET` registrado como secreto; su valor y su correspondencia con Apps Script no se han comprobado ni divulgado.
+- Se guardó la versión QA 33, fuente `26c30fdbddcc8073ff9b36132552ef4c8321f91b`, con despliegue `appgdep_6ae8627fdcf081919a58c0cb99c23bda` en estado `succeeded` y revisión de entorno 34. Se configuraron la URL del receptor autorizado y `QA_REMINDER_RECIPIENT_EMAIL=devergel1980@gmail.com`.
+- `SCHEDULER_ENABLED=false` y `SM_QA_SEND_ENABLED=false`; la tarea horaria `Automation_c884d755c14881919f01f90d21271e06` permanece desactivada. `scheduler_status` informó `configured=false` y el SHA de la versión QA indicada.
+- La reserva `65118e8b-9380-4cee-b5e0-83c0940e96a2` continúa en `unknown_requires_review`; la ejecución histórica y sus datos se preservaron. No se realizó un nuevo despacho ni se acreditó entrega real o ausencia de duplicados.
+- Las 98/98 pruebas locales, build y validate del candidato pasaron con simulaciones; no acreditan la correspondencia de las claves ni la entrega Gmail. El acceso de lectura al proyecto privado de Apps Script permaneció bloqueado por revisión automática en la continuación previa.
+- GitHub y Sites mantienen diferencias de fuente aún no conciliadas. Ningún criterio de G3 se considera acreditado por el despliegue aislado: `G3_PASS=FALSE`.
