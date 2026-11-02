@@ -15,3 +15,15 @@
 **Pendientes:** diseño funcional; frontend accesible; API y D1; CRM; seguridad; pruebas; Sites QA; scheduler; recordatorios e idempotencia; auditoría G3.
 
 **Estado:** `G3_PASS = FALSE`; 0/7 criterios acreditados para la nueva base. La creación del commit no equivale a despliegue.
+
+## 2026-11-02 — ADN v2.0 e identidad institucional premium
+
+**Decisión aprobada por el responsable:** adoptar la dirección visual Institucional premium (azul marino, blanco y acentos dorados discretos).
+
+**Implementación documental:** se añadieron `docs/ADN-MAESTRO-V2.md` y `docs/SISTEMA-DISENO-V2.md` con propósito, audiencias, mensajes, recorrido, tokens, componentes, reglas de accesibilidad, seguridad y criterios de aceptación.
+
+**Alcance:** solo documentación en `reinicio-2026-desde-cero`; no se modificaron `main` ni producción, ni se implementó el sitio.
+
+**Verificación pendiente:** comprobar archivos y commits en GitHub; evaluar contrastes, interfaz, QA y accesibilidad al construir el frontend.
+
+**Estado:** `ADN_DOCUMENTADO = TRUE`; `DESIGN_SPEC = TRUE`; `IMPLEMENTACION_WEB = FALSE`; `G3_PASS = FALSE`.
