@@ -37,3 +37,11 @@
 **Restricciones:** sin cambios a `main` o producción. No equivale a integración de frontend ni certificación WCAG. La versión principal tiene un espacio negativo blanco interior que requiere revisión sobre fondos oscuros.
 
 **Estado:** `LOGO_APROBADO=TRUE`; `FRONTEND_INTEGRADO=FALSE`; `G3_PASS=FALSE`.
+
+## 2026-11-08 — Primera página pública local
+
+**Cambio:** página HTML con estilos responsive, cabecera con logo, navegación móvil en JavaScript Vanilla y hero con imagen aportada por el responsable. Incluye secciones de servicios, presentación, proceso y contacto informativo; no recibe solicitudes.
+
+**Riesgos y alcance:** formulario y persistencia pendientes; la imagen es ilustrativa y no acredita prestación clínica. El borrador de privacidad, los wireframes de trabajo y el SVG sustituido quedan fuera de este commit. Sin cambios a producción ni a `main`.
+
+**Verificación:** sintaxis JavaScript comprobada con `node --check js/main.js` (PASS). Recursos locales y destinos de enlaces se verifican antes del commit. Pruebas visuales, interacción en navegador y auditoría WCAG: NOT_RUN. No se acreditan los siete criterios de G3; `G3_PASS = FALSE`.
