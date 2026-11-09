@@ -4,7 +4,7 @@
 Leer `README.md` y `docs/08-memoria-del-sistema.md`. Inspeccionar el código y documentar riesgos antes de modificar.
 
 ## Método de trabajo simplificado
-INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → DOCUMENTAR. Registrar defectos relevantes, corregirlos y repetir las pruebas afectadas. No utilizar gates G3 ni certificaciones artificiales.
+INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → DOCUMENTAR. Registrar defectos relevantes, corregirlos y repetir las pruebas afectadas. No utilizar puertas de aprobación acumulativas ni certificaciones artificiales.
 
 ## Restricciones
 - HTML5, CSS3 y JavaScript Vanilla para frontend; Node.js LTS y Express para backend. No introducir frameworks adicionales sin autorización.
