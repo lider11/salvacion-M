@@ -1,0 +1,427 @@
+{
+  "date": "2026-11-08",
+  "widths": [
+    {
+      "width": 375,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 16,
+          "y": 1014.8125,
+          "w": 343,
+          "h": 114
+        },
+        {
+          "x": 16,
+          "y": 1144.8125,
+          "w": 343,
+          "h": 114
+        },
+        {
+          "x": 16,
+          "y": 1274.8125,
+          "w": 343,
+          "h": 114
+        }
+      ],
+      "ctaHeight": 52.78125
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 16,
+          "y": 1207.515625,
+          "w": 736,
+          "h": 114
+        },
+        {
+          "x": 16,
+          "y": 1337.515625,
+          "w": 736,
+          "h": 114
+        },
+        {
+          "x": 16,
+          "y": 1467.515625,
+          "w": 736,
+          "h": 114
+        }
+      ],
+      "ctaHeight": 52.78125
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 96,
+          "y": 848.578125,
+          "w": 832,
+          "h": 114
+        },
+        {
+          "x": 96,
+          "y": 978.578125,
+          "w": 832,
+          "h": 114
+        },
+        {
+          "x": 96,
+          "y": 1108.578125,
+          "w": 832,
+          "h": 114
+        }
+      ],
+      "ctaHeight": 52.78125
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 304,
+          "y": 986.921875,
+          "w": 832,
+          "h": 114
+        },
+        {
+          "x": 304,
+          "y": 1116.921875,
+          "w": 832,
+          "h": 114
+        },
+        {
+          "x": 304,
+          "y": 1246.921875,
+          "w": 832,
+          "h": 114
+        }
+      ],
+      "ctaHeight": 52.78125
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 16,
+          "y": 1023.71875,
+          "w": 288,
+          "h": 129.171875
+        },
+        {
+          "x": 16,
+          "y": 1168.890625,
+          "w": 288,
+          "h": 132.78125
+        },
+        {
+          "x": 16,
+          "y": 1317.671875,
+          "w": 288,
+          "h": 114
+        }
+      ],
+      "ctaHeight": 78.375
+    }
+  ],
+  "errors": [],
+  "regressions": [
+    {
+      "width": 375,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#nosotros",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#nosotros",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#nosotros",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#nosotros",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#nosotros",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    }
+  ],
+  "links": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "contrast": [
+    {
+      "fg": "ffffff",
+      "bg": "102a43",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "f0c35b",
+      "bg": "102a43",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "c5d5e2",
+      "bg": "102a43",
+      "ratio": 9.754083218607454
+    },
+    {
+      "fg": "102a43",
+      "bg": "ffffff",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "405769",
+      "bg": "ffffff",
+      "ratio": 7.539691271884016
+    },
+    {
+      "fg": "102a43",
+      "bg": "f0c35b",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "086c72",
+      "bg": "eef5f8",
+      "ratio": 5.606239062807375
+    },
+    {
+      "fg": "086c72",
+      "bg": "ffffff",
+      "ratio": 6.17950468651033
+    }
+  ],
+  "html": {
+    "valid": false,
+    "messages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1222,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      }
+    ],
+    "baselineMessages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1188,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      }
+    ]
+  },
+  "css": {
+    "parseErrors": []
+  },
+  "outsideHtmlUnchanged": true,
+  "axe": {
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "impact": "serious"
+      }
+    ],
+    "passes": [
+      "aria-allowed-attr",
+      "aria-conditional-attr",
+      "aria-hidden-focus",
+      "aria-prohibited-attr",
+      "aria-valid-attr-value",
+      "aria-valid-attr",
+      "color-contrast",
+      "duplicate-id-aria",
+      "link-name",
+      "target-size"
+    ]
+  },
+  "keyboard": [
+    {
+      "text": "Solicitar orientación sobre negación de servicios",
+      "inServices": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    },
+    {
+      "text": "Solicitar orientación sobre medicamentos",
+      "inServices": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    },
+    {
+      "text": "Solicitar orientación sobre citas médicas",
+      "inServices": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    },
+    {
+      "text": "Solicitar orientación gratuita →",
+      "inServices": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  ],
+  "keyboardDestination": {
+    "hash": "#contacto",
+    "contactVisible": true
+  },
+  "localLinks": true,
+  "reducedMotion": "0s"
+}

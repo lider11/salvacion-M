@@ -1,0 +1,79 @@
+diff --git a/output/playwright/nosotros/antes.html b/index.html
+index 5fff9eb..5eda90b 100644
+--- a/output/playwright/nosotros/antes.html
++++ b/index.html
+@@ -133,6 +133,8 @@
+ 
+             <div class="container">
+ 
++                <div class="nosotros-presentacion">
++                <span class="nosotros-acento" aria-hidden="true"></span>
+                 <h2>¿Qué es Salvación M?</h2>
+ 
+                 <p>
+@@ -140,6 +142,28 @@
+                     y acompañamiento para personas que enfrentan
+                     dificultades en el sistema de salud colombiano.
+                 </p>
++                </div>
++
++                <ul class="nosotros-conceptos">
++                    <li>
++                        <span class="nosotros-icono" aria-hidden="true">
++                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m16 8-2 6-6 2 2-6 6-2Z"/></svg>
++                        </span>
++                        <div><h3>Orientación</h3><p>Información clara para comprender las alternativas disponibles ante las barreras de acceso.</p></div>
++                    </li>
++                    <li>
++                        <span class="nosotros-icono" aria-hidden="true">
++                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg>
++                        </span>
++                        <div><h3>Derechos en salud</h3><p>Un enfoque centrado en conocer tus derechos y las rutas de atención existentes.</p></div>
++                    </li>
++                    <li>
++                        <span class="nosotros-icono" aria-hidden="true">
++                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-17a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v3"/></svg>
++                        </span>
++                        <div><h3>Acompañamiento</h3><p>Escucha y apoyo para entender las dificultades que enfrentas en el sistema de salud.</p></div>
++                    </li>
++                </ul>
+ 
+             </div>
+ 
+diff --git a/output/playwright/nosotros/antes.css b/css/style.css
+index 17615cc..9587ae5 100644
+--- a/output/playwright/nosotros/antes.css
++++ b/css/style.css
+@@ -62,7 +62,7 @@ p { margin-top: 0; }
+ .hero p { max-width: 65ch; font-size: clamp(1rem, 1.6vw, 1.2rem); margin-bottom: 1.75rem; }
+ .btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.35rem; border-radius: .55rem; background: #fff; color: var(--navy); text-decoration: none; font-weight: 750; }
+ .btn-primary:hover { background: #e6f2f7; }
+-#nosotros, #contacto { background: var(--soft); }
++#contacto { background: var(--soft); }
+ #nosotros p, #contacto p { max-width: 70ch; }
+ #proceso ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding-left: 1.5rem; }
+ #proceso li { padding: .75rem .5rem; font-weight: 600; }
+@@ -158,3 +158,23 @@ p { margin-top: 0; }
+ @media (prefers-reduced-motion: no-preference) {
+   #servicios .servicio-enlace, #servicios .servicios-cta { transition: background-color 160ms ease; }
+ }
++
++/* SM-FRONT-NOSOTROS-003 — presentación institucional. */
++#nosotros { background: #102a43; color: #fff; }
++#nosotros > .container { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(2rem, 5vw, 4rem); }
++#nosotros .nosotros-presentacion { min-width: 0; }
++#nosotros .nosotros-acento { display: block; width: 3rem; height: 4px; margin-bottom: 1.5rem; border-radius: 2px; background: #f0c35b; }
++#nosotros h2 { color: #fff; margin-bottom: 1.5rem; }
++#nosotros .nosotros-presentacion p { margin-bottom: 0; color: #e0eaf1; font-size: clamp(1.125rem, 1.7vw, 1.375rem); line-height: 1.75; }
++#nosotros .nosotros-conceptos { min-width: 0; margin: 0; padding: clamp(1.25rem, 3vw, 2rem); list-style: none; border: 1px solid #dce7ec; border-radius: 1.25rem; background: #fff; box-shadow: 0 12px 32px rgb(0 0 0 / 12%); }
++#nosotros .nosotros-conceptos li { display: flex; align-items: flex-start; gap: 1rem; padding-block: 1.25rem; }
++#nosotros .nosotros-conceptos li:first-child { padding-top: 0; }
++#nosotros .nosotros-conceptos li:last-child { padding-bottom: 0; }
++#nosotros .nosotros-conceptos li + li { border-top: 1px solid #dce7ec; }
++#nosotros .nosotros-conceptos li > div { min-width: 0; overflow-wrap: anywhere; }
++#nosotros .nosotros-icono { display: flex; align-items: center; justify-content: center; flex: 0 0 48px; height: 48px; border-radius: .75rem; background: #eef5f8; color: #086c72; }
++#nosotros h3 { margin-bottom: .5rem; color: #102a43; font-size: 1.125rem; }
++#nosotros .nosotros-conceptos p { margin-bottom: 0; color: #405769; font-size: 1rem; }
++@media (max-width: 900px) {
++  #nosotros > .container { grid-template-columns: minmax(0, 1fr); }
++}

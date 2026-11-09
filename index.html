@@ -94,42 +94,38 @@
         </section>
 
         <!-- SERVICIOS -->
-        <section id="servicios">
-
+        <section id="servicios" aria-labelledby="servicios-titulo">
             <div class="container">
-
-                <h2>Nuestros servicios</h2>
-
+                <header class="servicios-encabezado">
+                    <p class="servicios-etiqueta">TE AYUDAMOS A ENCONTRAR EL CAMINO</p>
+                    <h2 id="servicios-titulo">¿Qué dificultad estás enfrentando?</h2>
+                    <p class="servicios-descripcion">Conoce las alternativas disponibles para tu situación</p>
+                </header>
                 <div class="servicios-grid">
-
                     <article class="servicio">
-                        <h3>Negación de servicios</h3>
-                        <p>
-                            Orientación ante barreras de acceso
-                            a tratamientos y procedimientos.
-                        </p>
+                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre negación de servicios">
+                            <span class="servicio-icono"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="M12 8v8m-4-4h8"/></svg></span>
+                            <div class="servicio-texto"><h3>Negación de servicios</h3><p>Acceso a tratamientos y procedimientos.</p></div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
                     </article>
-
                     <article class="servicio">
-                        <h3>Medicamentos</h3>
-                        <p>
-                            Información sobre alternativas ante
-                            retrasos o falta de entrega.
-                        </p>
+                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre medicamentos">
+                            <span class="servicio-icono"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 5-4 4a6 6 0 0 0 8 8l4-4a6 6 0 0 0-8-8Z"/><path d="m7 7 10 10"/></svg></span>
+                            <div class="servicio-texto"><h3>Medicamentos</h3><p>Entrega de medicamentos pendientes.</p></div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
                     </article>
-
                     <article class="servicio">
-                        <h3>Citas médicas</h3>
-                        <p>
-                            Orientación ante demoras en citas,
-                            especialistas y autorizaciones.
-                        </p>
+                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre citas médicas">
+                            <span class="servicio-icono"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h3"/></svg></span>
+                            <div class="servicio-texto"><h3>Citas médicas</h3><p>Demoras en citas y autorizaciones.</p></div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
                     </article>
-
                 </div>
-
+                <a class="servicios-cta" href="#contacto">Solicitar orientación gratuita <span aria-hidden="true">→</span></a>
             </div>
-
         </section>
 
         <!-- NOSOTROS -->
@@ -137,6 +133,8 @@
 
             <div class="container">
 
+                <div class="nosotros-presentacion">
+                <span class="nosotros-acento" aria-hidden="true"></span>
                 <h2>¿Qué es Salvación M?</h2>
 
                 <p>
@@ -144,6 +142,28 @@
                     y acompañamiento para personas que enfrentan
                     dificultades en el sistema de salud colombiano.
                 </p>
+                </div>
+
+                <ul class="nosotros-conceptos">
+                    <li>
+                        <span class="nosotros-icono" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="9"/><path d="m16 8-2 6-6 2 2-6 6-2Z"/></svg>
+                        </span>
+                        <div><h3>Orientación</h3><p>Información clara para comprender las alternativas disponibles ante las barreras de acceso.</p></div>
+                    </li>
+                    <li>
+                        <span class="nosotros-icono" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg>
+                        </span>
+                        <div><h3>Derechos en salud</h3><p>Un enfoque centrado en conocer tus derechos y las rutas de atención existentes.</p></div>
+                    </li>
+                    <li>
+                        <span class="nosotros-icono" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-17a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v3"/></svg>
+                        </span>
+                        <div><h3>Acompañamiento</h3><p>Escucha y apoyo para entender las dificultades que enfrentas en el sistema de salud.</p></div>
+                    </li>
+                </ul>
 
             </div>
 
@@ -156,11 +176,33 @@
 
                 <h2>¿Cómo funciona?</h2>
 
-                <ol>
-                    <li>Cuéntanos tu situación.</li>
-                    <li>Revisamos tu solicitud.</li>
-                    <li>Te explicamos las alternativas.</li>
+                <ol class="proceso-etapas">
+                    <li>
+                        <span class="proceso-numero" aria-hidden="true">01</span>
+                        <div class="proceso-contenido">
+                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11a8 8 0 0 1-8 8H7l-5 3 2-6a8 8 0 0 1 7-13h2a8 8 0 0 1 8 8Z"/><path d="M8 9h8m-8 4h5"/></svg>
+                            <h3>Cuéntanos tu situación.</h3>
+                            <p>Explícanos la dificultad que enfrentas en tu atención en salud.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="proceso-numero" aria-hidden="true">02</span>
+                        <div class="proceso-contenido">
+                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m7 9 1 1 2-3m2 2h5m-10 7 1 1 2-3m2 2h5"/></svg>
+                            <h3>Revisamos tu solicitud.</h3>
+                            <p>Analizamos la información y las alternativas disponibles.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="proceso-numero" aria-hidden="true">03</span>
+                        <div class="proceso-contenido">
+                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v18M4 5h13l4 4-4 4H4V5Zm13 8v6H5l-3-3 3-3"/></svg>
+                            <h3>Te explicamos las alternativas.</h3>
+                            <p>Conoce las opciones y los siguientes pasos que puedes seguir.</p>
+                        </div>
+                    </li>
                 </ol>
+                <a class="proceso-cta" href="#contacto">Solicitar orientación gratuita <span aria-hidden="true">→</span></a>
 
             </div>
 

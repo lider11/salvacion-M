@@ -1,0 +1,98 @@
+diff --git a/output/playwright/proceso/antes.html b/index.html
+index 5eda90b..fa6fcc8 100644
+--- a/output/playwright/proceso/antes.html
++++ b/index.html
+@@ -176,11 +176,33 @@
+ 
+                 <h2>¿Cómo funciona?</h2>
+ 
+-                <ol>
+-                    <li>Cuéntanos tu situación.</li>
+-                    <li>Revisamos tu solicitud.</li>
+-                    <li>Te explicamos las alternativas.</li>
++                <ol class="proceso-etapas">
++                    <li>
++                        <span class="proceso-numero" aria-hidden="true">01</span>
++                        <div class="proceso-contenido">
++                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11a8 8 0 0 1-8 8H7l-5 3 2-6a8 8 0 0 1 7-13h2a8 8 0 0 1 8 8Z"/><path d="M8 9h8m-8 4h5"/></svg>
++                            <h3>Cuéntanos tu situación.</h3>
++                            <p>Explícanos la dificultad que enfrentas en tu atención en salud.</p>
++                        </div>
++                    </li>
++                    <li>
++                        <span class="proceso-numero" aria-hidden="true">02</span>
++                        <div class="proceso-contenido">
++                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m7 9 1 1 2-3m2 2h5m-10 7 1 1 2-3m2 2h5"/></svg>
++                            <h3>Revisamos tu solicitud.</h3>
++                            <p>Analizamos la información y las alternativas disponibles.</p>
++                        </div>
++                    </li>
++                    <li>
++                        <span class="proceso-numero" aria-hidden="true">03</span>
++                        <div class="proceso-contenido">
++                            <svg class="proceso-icono" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v18M4 5h13l4 4-4 4H4V5Zm13 8v6H5l-3-3 3-3"/></svg>
++                            <h3>Te explicamos las alternativas.</h3>
++                            <p>Conoce las opciones y los siguientes pasos que puedes seguir.</p>
++                        </div>
++                    </li>
+                 </ol>
++                <a class="proceso-cta" href="#contacto">Solicitar orientación gratuita <span aria-hidden="true">→</span></a>
+ 
+             </div>
+ 
+diff --git a/output/playwright/proceso/antes.css b/css/style.css
+index 9587ae5..cd7a683 100644
+--- a/output/playwright/proceso/antes.css
++++ b/css/style.css
+@@ -64,8 +64,6 @@ p { margin-top: 0; }
+ .btn-primary:hover { background: #e6f2f7; }
+ #contacto { background: var(--soft); }
+ #nosotros p, #contacto p { max-width: 70ch; }
+-#proceso ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding-left: 1.5rem; }
+-#proceso li { padding: .75rem .5rem; font-weight: 600; }
+ .site-footer { background: var(--navy-dark); color: #fff; padding-block: 2rem; }
+ .site-footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; }
+ .site-footer p { margin: 0; max-width: 55ch; }
+@@ -85,7 +83,6 @@ p { margin-top: 0; }
+   .site-header nav ul { flex-direction: column; align-items: stretch; gap: .1rem; }
+   .site-header nav a { display: flex; padding-inline: .75rem; font-size: .93rem; }
+   .site-header nav a:hover { background: var(--navy-dark); }
+-  #proceso ol { grid-template-columns: 1fr; }
+   main section { padding-block: 3rem; }
+ }
+ /* Movimiento opcional: el contenido permanece visible sin animaciones. */
+@@ -178,3 +175,34 @@ p { margin-top: 0; }
+ @media (max-width: 900px) {
+   #nosotros > .container { grid-template-columns: minmax(0, 1fr); }
+ }
++
++/* SM-FRONT-PROCESO-001 — línea de tiempo semántica sin JavaScript. */
++#proceso { background: #fff; }
++#proceso h2 { text-align: center; margin-bottom: 3rem; }
++#proceso .proceso-etapas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: decimal inside; }
++#proceso .proceso-etapas > li { position: relative; display: flex; flex-direction: column; align-items: center; min-width: 0; padding: 0 1.25rem; text-align: center; }
++#proceso .proceso-etapas > li::marker { font-size: 0; }
++#proceso .proceso-etapas > li:not(:last-child)::after { content: ""; position: absolute; z-index: 0; top: 31px; left: 50%; width: 100%; height: 2px; background: #086c72; }
++#proceso .proceso-numero { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; margin: 0 auto 1.5rem; border: 4px solid #fff; border-radius: 50%; background: #086c72; color: #fff; font-size: 1.25rem; font-weight: 800; }
++#proceso .proceso-contenido { position: relative; min-width: 0; overflow-wrap: anywhere; }
++#proceso .proceso-icono { display: block; margin: 0 auto 1rem; color: #086c72; }
++#proceso h3 { color: #102a43; font-size: 1.2rem; }
++#proceso .proceso-contenido p { margin: 0; color: #405769; font-weight: 400; }
++#proceso .proceso-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem; width: fit-content; max-width: 100%; min-height: 48px; margin: 2.5rem auto 0; padding: .85rem 1.35rem; border-radius: .55rem; background: #102a43; color: #fff; text-align: center; text-decoration: none; font-weight: 750; overflow-wrap: anywhere; }
++#proceso .proceso-cta:hover { background: #086c72; }
++#proceso .proceso-cta:focus-visible { outline: 3px solid #086c72; outline-offset: 4px; }
++@media (max-width: 1023px) {
++  #proceso .proceso-etapas { grid-template-columns: minmax(0, 1fr); }
++  #proceso .proceso-etapas > li { display: grid; align-items: start; grid-template-columns: 64px minmax(0, 1fr); gap: 1.25rem; padding: 0 0 2rem; text-align: left; }
++  #proceso .proceso-etapas > li:last-child { padding-bottom: 0; }
++  #proceso .proceso-etapas > li:not(:last-child)::after { top: 32px; left: 31px; width: 2px; height: 100%; }
++  #proceso .proceso-numero { margin: 0; }
++  #proceso .proceso-icono { margin: .5rem 0 1rem; }
++}
++@media (max-width: 374px) {
++  #proceso .proceso-etapas > li { gap: .75rem; }
++  #proceso .proceso-cta { width: 100%; }
++}
++@media (prefers-reduced-motion: no-preference) {
++  #proceso .proceso-cta { transition: background-color 160ms ease; }
++}

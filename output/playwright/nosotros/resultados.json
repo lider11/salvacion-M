@@ -1,0 +1,387 @@
+{
+  "date": "2026-11-08",
+  "widths": [
+    {
+      "width": 375,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 37,
+          "y": 1833.234375,
+          "w": 301,
+          "h": 151.96875
+        },
+        {
+          "x": 37,
+          "y": 1985.203125,
+          "w": 301,
+          "h": 147.375
+        },
+        {
+          "x": 37,
+          "y": 2132.578125,
+          "w": 301,
+          "h": 127.375
+        }
+      ],
+      "columns": "343px"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 40.03125,
+          "y": 1972.359375,
+          "w": 687.9375,
+          "h": 100.78125
+        },
+        {
+          "x": 40.03125,
+          "y": 2073.140625,
+          "w": 687.9375,
+          "h": 96.1875
+        },
+        {
+          "x": 40.03125,
+          "y": 2169.328125,
+          "w": 687.9375,
+          "h": 76.1875
+        }
+      ],
+      "columns": "736px"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 569.3125,
+          "y": 1461.953125,
+          "w": 406.96875,
+          "h": 126.375
+        },
+        {
+          "x": 569.3125,
+          "y": 1588.328125,
+          "w": 406.96875,
+          "h": 121.78125
+        },
+        {
+          "x": 569.3125,
+          "y": 1710.109375,
+          "w": 406.96875,
+          "h": 101.78125
+        }
+      ],
+      "columns": "470.406px 470.406px"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 785,
+          "y": 1651.484375,
+          "w": 478,
+          "h": 100.78125
+        },
+        {
+          "x": 785,
+          "y": 1752.265625,
+          "w": 478,
+          "h": 121.78125
+        },
+        {
+          "x": 785,
+          "y": 1874.046875,
+          "w": 478,
+          "h": 101.78125
+        }
+      ],
+      "columns": "544px 544px"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 37,
+          "y": 1901.6875,
+          "w": 246,
+          "h": 177.5625
+        },
+        {
+          "x": 37,
+          "y": 2079.25,
+          "w": 246,
+          "h": 172.96875
+        },
+        {
+          "x": 37,
+          "y": 2252.21875,
+          "w": 246,
+          "h": 152.96875
+        }
+      ],
+      "columns": "288px"
+    }
+  ],
+  "errors": [],
+  "regressions": [
+    {
+      "width": 375,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#servicios",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 375,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#servicios",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 768,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#servicios",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1024,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#servicios",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 1440,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": ".site-header",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#inicio",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#servicios",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#proceso",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": "#contacto",
+      "computedStylesIdentical": true
+    },
+    {
+      "width": 320,
+      "selector": ".site-footer",
+      "computedStylesIdentical": true
+    }
+  ],
+  "links": [],
+  "contrast": [
+    {
+      "fg": "ffffff",
+      "bg": "102a43",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "f0c35b",
+      "bg": "102a43",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "e0eaf1",
+      "bg": "102a43",
+      "ratio": 11.998295777274466
+    },
+    {
+      "fg": "102a43",
+      "bg": "ffffff",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "405769",
+      "bg": "ffffff",
+      "ratio": 7.539691271884016
+    },
+    {
+      "fg": "102a43",
+      "bg": "f0c35b",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "086c72",
+      "bg": "eef5f8",
+      "ratio": 5.606239062807375
+    },
+    {
+      "fg": "086c72",
+      "bg": "ffffff",
+      "ratio": 6.17950468651033
+    }
+  ],
+  "html": {
+    "valid": false,
+    "messages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1222,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      }
+    ],
+    "baselineMessages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1222,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      }
+    ]
+  },
+  "css": {
+    "parseErrors": []
+  },
+  "outsideHtmlUnchanged": true,
+  "axe": {
+    "violations": [],
+    "incomplete": [],
+    "passes": [
+      "aria-hidden-focus",
+      "color-contrast",
+      "list",
+      "listitem"
+    ]
+  },
+  "originalText": "¿Qué es Salvación M?\n\nSalvación M es una iniciativa de orientación y acompañamiento para personas que enfrentan dificultades en el sistema de salud colombiano.",
+  "keyboard": {
+    "hash": "#nosotros",
+    "sectionVisible": true,
+    "interactiveElements": 0
+  },
+  "localLinks": true,
+  "originalHeadingAndParagraphVerbatim": true
+}
