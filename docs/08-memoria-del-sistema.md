@@ -45,3 +45,13 @@
 **Riesgos y alcance:** formulario y persistencia pendientes; la imagen es ilustrativa y no acredita prestación clínica. El borrador de privacidad, los wireframes de trabajo y el SVG sustituido quedan fuera de este commit. Sin cambios a producción ni a `main`.
 
 **Verificación:** sintaxis JavaScript comprobada con `node --check js/main.js` (PASS). Recursos locales y destinos de enlaces se verifican antes del commit. Pruebas visuales, interacción en navegador y auditoría WCAG: NOT_RUN. No se acreditan los siete criterios de G3; `G3_PASS = FALSE`.
+
+## 2026-11-08 — Decisión Node.js + Express y simplificación de calidad
+
+**Decisión del responsable:** abandonar Sites como runtime y adoptar Node.js LTS + Express para la API, el CRM, las solicitudes, las citas y los recordatorios. Conservar frontend HTML5/CSS3/Vanilla JS y GitHub solo para fuente e historial. Base de datos y hosting sujetos a inventario y selección antes de migración.
+
+**Decisión de gobierno:** retirar G3 y la condición G3_PASS del proceso futuro. La calidad se comprobará por módulo con pruebas técnicas y evidencia, sin gates globales. Las menciones antiguas a G3 de esta memoria se conservan solo como registro histórico de decisiones anteriores, no como mandato vigente.
+
+**Archivos nuevos:** `docs/backend/01-arquitectura-node-express.md`, `docs/backend/02-api-datos-seguridad.md`, `docs/backend/03-operacion-pruebas-y-roadmap.md`. Actualizados README, AGENTS, arquitectura inicial y ADN maestro.
+
+**Estado:** arquitectura documentada; backend no implementado, despliegue no acreditado, producción sin cambios.
