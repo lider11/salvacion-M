@@ -25,7 +25,7 @@ El proceso Node.js debe ejecutarse en infraestructura con reloj y política de r
 
 ## Método simplificado
 INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → CORREGIR → DOCUMENTAR.
-Usar estados `IMPLEMENTADO`, `VERIFICADO`, `PENDIENTE` y `BLOQUEADO` por funcionalidad. No utilizar G3 ni gates acumulativos. Nunca equiparar un commit con una prueba o con un despliegue.
+Usar estados `IMPLEMENTADO`, `VERIFICADO`, `PENDIENTE` y `BLOQUEADO` por funcionalidad. No utilizar puertas de aprobación acumulativas. Nunca equiparar un commit con una prueba o con un despliegue.
 
 ## Qué no se ha realizado
 No se ha instalado Node/Express, seleccionado hosting, migrado datos, iniciado servidor ni probado los endpoints por el hecho de crear estos documentos.
