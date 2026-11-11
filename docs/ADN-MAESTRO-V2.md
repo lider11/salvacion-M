@@ -38,7 +38,7 @@ Las fichas describirán alcance y límites de cada servicio. Evitar afirmar que 
 7. Privacidad y términos: textos jurídicos sujetos a revisión antes de producción.
 
 ## 6. Flujo del usuario
-Visita → identifica necesidad → comprende condiciones → envía solicitud → API valida y persiste en D1 → confirma recepción con identificador → CRM independiente recibe/consulta solicitud → seguimiento y eventual cita. Nunca mostrar éxito por el mero envío del navegador ni simular persistencia.
+Visita → identifica necesidad → comprende condiciones → envía solicitud → API valida y persiste → confirma recepción con identificador → CRM independiente recibe/consulta solicitud → seguimiento y eventual cita. Nunca mostrar éxito por el mero envío del navegador ni simular persistencia.
 
 ## 7. Voz y microcopy
 **Usar:** “Te orientamos sobre las opciones disponibles”; “Cuéntanos brevemente qué necesitas”; “Recibimos tu solicitud”.
@@ -48,19 +48,18 @@ En errores: indicar qué ocurrió, cómo corregirlo y si la solicitud fue recibi
 ## 8. Confianza, ética y datos
 Minimizar datos, evitar pedir historia clínica en el primer contacto salvo justificación y controles adecuados; informar responsable, finalidad, derechos y canales de atención conforme a normativa colombiana aplicable. Consentimiento no preseleccionado cuando sea exigible. No mostrar testimonios, cifras de éxito ni sellos sin autorización y evidencia. El sitio no sustituye atención médica de urgencia.
 
-## 9. Arquitectura técnica obligatoria
-HTML5, CSS3, JavaScript Vanilla, D1/SQLite, Sites y MCP. CRM administrativo separado del portal. GitHub es exclusivamente repositorio de código e historial, no scheduler ni despliegue. No usar GitHub Actions para recordatorios. No tocar producción sin autorización expresa.
+## 9. Arquitectura técnica
+HTML5, CSS3 y JavaScript Vanilla en el portal. Backend previsto: Node.js LTS + Express. Persistencia por definir al implementar. CRM separado del portal. GitHub solo como repositorio de código e historial, no scheduler ni despliegue. No usar GitHub Actions para recordatorios. No tocar producción sin autorización expresa.
 
 ## 10. Indicadores de experiencia propuestos
 Comprensión de propuesta de valor; tasa de inicio y finalización de formulario; errores de validación; recepción persistida; accesibilidad móvil y teclado; tiempo de respuesta del proceso. Son objetivos de medición, no métricas obtenidas.
 
-## 11. Criterios de aceptación
-- Identidad, mensajes, límites y CTA consistentes entre páginas.
-- Formularios con etiquetas, errores asociados y confirmación solo tras persistencia.
-- Separación verificable de portal, API y CRM.
+## 11. Criterios prácticos
+- Identidad, mensajes, límites y CTA coherentes.
+- Formularios con etiquetas y errores claros; confirmar recepción solo tras persistir.
+- Portal, API y CRM separados cuando existan.
 - Textos legales revisados antes de publicar.
-- Pruebas WCAG 2.2 AA y seguridad en entorno QA.
-- Sin evidencia real, diagnóstico NO_ACREDITADO y decisión FALSE.
+- Probar accesibilidad y seguridad en lo que se entregue, sin gates globales.
 
 ## 12. Estado
-Este ADN está formalizado documentalmente. No acredita implementación, despliegue ni G3. `G3_PASS = FALSE`.
+ADN vigente como guía de producto y marca. No acredita por sí solo implementación ni despliegue.
