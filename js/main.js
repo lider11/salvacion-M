@@ -119,6 +119,8 @@
   };
   const submitButton = form.querySelector('button[type="submit"]');
   const endpoint = '/api/v1/requests';
+  // Habilitar solo con el manejador JS activo: evita GET nativo con datos sensibles en la URL.
+  if (submitButton) submitButton.disabled = false;
 
   function setStatus(type, message) {
     status.className = `form-status${type ? ` is-${type}` : ''}`;
@@ -208,23 +210,44 @@
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        const unavailable = response.status === 404 || response.status === 501 || response.status === 502 || response.status === 503;
+        setStatus(
+          'error',
+          unavailable
+            ? 'El servicio de envío aún no está disponible. No pudimos confirmar la recepción; conservamos lo que escribiste para que puedas reintentar más tarde.'
+            : 'No pudimos confirmar la recepción de tu solicitud. Conservamos lo que escribiste; intenta de nuevo en unos minutos.'
+        );
+        return;
       }
 
-      const data = await response.json().catch(() => ({}));
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {
+        setStatus(
+          'error',
+          'El servidor respondió, pero no pudimos confirmar un identificador. Conservamos lo que escribiste; no afirmamos que la solicitud haya quedado registrada.'
+        );
+        return;
+      }
+
       const id = data.id || data.requestId;
       if (!id) {
-        throw new Error('Respuesta sin identificador');
+        setStatus(
+          'error',
+          'El servidor respondió sin identificador. Conservamos lo que escribiste; no afirmamos que la solicitud haya quedado registrada.'
+        );
+        return;
       }
 
       setStatus('success', `Recibimos tu solicitud. Identificador: ${id}.`);
       form.reset();
       clearErrors();
     } catch {
-      // Sin API real no hay persistencia: nunca fingir éxito.
+      // Fallo de red u otro error antes de una confirmación fiable.
       setStatus(
         'error',
-        'No pudimos guardar tu solicitud: el servicio aún no está disponible. Tu información no fue enviada ni almacenada.'
+        'No pudimos confirmar la recepción de tu solicitud. Conservamos lo que escribiste; intenta de nuevo cuando haya conexión o el servicio esté disponible.'
       );
     } finally {
       submitButton.disabled = false;

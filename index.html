@@ -170,7 +170,7 @@
 
                 <div id="formulario-estado" class="form-status" role="status" aria-live="polite"></div>
 
-                <form id="solicitud-form" class="solicitud-form" novalidate>
+                <form id="solicitud-form" class="solicitud-form" method="post" action="#" novalidate>
                     <div class="form-field">
                         <label for="nombre">Nombre</label>
                         <input id="nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required
@@ -230,10 +230,16 @@
 
                     <p class="form-note">
                         Al enviar, intentaremos guardar tu solicitud de forma segura.
-                        Si el servicio no está disponible, te lo diremos con claridad y no simularemos un envío exitoso.
+                        Solo confirmaremos la recepción cuando el servidor devuelva un identificador.
                     </p>
 
-                    <button type="submit" class="btn-primary btn-submit">
+                    <noscript>
+                        <p class="form-status is-error">
+                            El envío requiere JavaScript. Con el navegador actual no podemos recibir tu solicitud de forma segura.
+                        </p>
+                    </noscript>
+
+                    <button type="submit" class="btn-primary btn-submit" disabled>
                         Enviar solicitud
                     </button>
                 </form>
