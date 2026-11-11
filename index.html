@@ -20,27 +20,21 @@
 
 <body>
 
-    <!-- Accesibilidad -->
     <a href="#contenido" class="skip-link">
         Saltar al contenido
     </a>
 
-    <!-- CABECERA -->
     <header class="site-header">
-
         <div class="container">
-
             <a href="#inicio" class="logo">
                 <span class="logo-mark">
                     <figure>
                         <img src="./assets/logo-salvacion-m.svg" alt="" width="60" height="60">
                     </figure>
-
                 </span>
                 <span>Salvación M</span>
             </a>
 
-            <!-- NAVEGACIÓN -->
             <button class="menu-toggle" type="button" aria-controls="primary-navigation"
                 aria-expanded="false" aria-label="Abrir menú" hidden>
                 <span class="menu-toggle-icon" aria-hidden="true"></span>
@@ -51,159 +45,215 @@
                     <li><a href="#servicios">Servicios</a></li>
                     <li><a href="#nosotros">Nosotros</a></li>
                     <li><a href="#proceso">Cómo funciona</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#transparencia">Transparencia</a></li>
+                    <li><a href="#contacto">Solicitar</a></li>
                 </ul>
             </nav>
-
         </div>
-
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main id="contenido">
 
-        <!-- INICIO -->
         <section id="inicio" class="hero">
-
             <div class="container hero-layout">
-
                 <div class="hero-copy">
-                <h1>
-                    <span class="hero-color-loop">Orientación</span> clara para defender
-                    tu acceso a la <span class="hero-color-loop">salud</span>
-                </h1>
-
-                <p>
-                    Te acompañamos a comprender tus derechos
-                    y las alternativas disponibles frente
-                    a las dificultades de atención en salud.
-                </p>
-
-                <a href="#contacto" class="btn-primary">
-                    Solicitar consulta gratuita
-                </a>
+                    <h1>
+                        <span class="hero-color-loop">Orientación</span> clara para defender
+                        tu acceso a la <span class="hero-color-loop">salud</span>
+                    </h1>
+                    <p>
+                        Cuando enfrentas demoras, negaciones, dificultades con medicamentos
+                        o barreras de atención, te ayudamos a comprender tu situación
+                        y conocer los pasos que puedes seguir.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#contacto" class="btn-primary">
+                            Solicitar consulta gratuita
+                        </a>
+                    </div>
                 </div>
-
                 <figure class="hero-visual">
-                    <img src="./assets/hero-acompanamiento.png" alt="Una familia conversa con una profesional de salud junto a un documento sobre derechos en salud."
+                    <img src="./assets/hero-acompanamiento.png"
+                        alt="Una familia conversa con una profesional de salud junto a un documento sobre derechos en salud."
                         width="1536" height="1024" fetchpriority="high" decoding="async">
                 </figure>
-
             </div>
-
         </section>
 
-        <!-- SERVICIOS -->
-        <section id="servicios">
-
+        <section id="servicios" aria-labelledby="servicios-titulo">
             <div class="container">
-
-                <h2>Nuestros servicios</h2>
-
+                <h2 id="servicios-titulo">¿En qué podemos orientarte?</h2>
+                <p class="section-lead">
+                    Información clara sobre barreras frecuentes. No garantizamos un resultado
+                    ni sustituimos una decisión médica, administrativa o judicial.
+                </p>
                 <div class="servicios-grid">
-
                     <article class="servicio">
                         <h3>Negación de servicios</h3>
-                        <p>
-                            Orientación ante barreras de acceso
-                            a tratamientos y procedimientos.
-                        </p>
+                        <p>Orientación ante barreras de acceso a tratamientos y procedimientos.</p>
                     </article>
-
                     <article class="servicio">
                         <h3>Medicamentos</h3>
-                        <p>
-                            Información sobre alternativas ante
-                            retrasos o falta de entrega.
-                        </p>
+                        <p>Alternativas ante retrasos o falta de entrega de medicamentos.</p>
                     </article>
-
                     <article class="servicio">
-                        <h3>Citas médicas</h3>
-                        <p>
-                            Orientación ante demoras en citas,
-                            especialistas y autorizaciones.
-                        </p>
+                        <h3>Citas y autorizaciones</h3>
+                        <p>Orientación ante demoras en citas, especialistas y autorizaciones.</p>
                     </article>
-
+                    <article class="servicio">
+                        <h3>Incapacidades y prestaciones</h3>
+                        <p>Información para comprender rutas relacionadas con incapacidades y prestaciones.</p>
+                    </article>
+                    <article class="servicio">
+                        <h3>Dificultades con EPS o IPS</h3>
+                        <p>Acompañamiento para entender opciones frente a barreras con tu EPS o IPS.</p>
+                    </article>
+                    <article class="servicio">
+                        <h3>Rutas de reclamación</h3>
+                        <p>Orientación sobre alternativas y canales de reclamación disponibles.</p>
+                    </article>
                 </div>
-
             </div>
-
         </section>
 
-        <!-- NOSOTROS -->
-        <section id="nosotros">
-
+        <section id="nosotros" aria-labelledby="nosotros-titulo">
             <div class="container">
-
-                <h2>¿Qué es Salvación M?</h2>
-
+                <h2 id="nosotros-titulo">¿Qué es Salvación M?</h2>
                 <p>
-                    Salvación M es una iniciativa de orientación
-                    y acompañamiento para personas que enfrentan
-                    dificultades en el sistema de salud colombiano.
+                    Salvación M es una iniciativa colombiana de orientación y acompañamiento
+                    para personas y familias que encuentran barreras en el sistema de salud.
+                    Explicamos opciones con lenguaje comprensible, con respeto y confidencialidad.
                 </p>
-
             </div>
-
         </section>
 
-        <!-- PROCESO -->
-        <section id="proceso">
-
+        <section id="proceso" aria-labelledby="proceso-titulo">
             <div class="container">
-
-                <h2>¿Cómo funciona?</h2>
-
-                <ol>
-                    <li>Cuéntanos tu situación.</li>
-                    <li>Revisamos tu solicitud.</li>
-                    <li>Te explicamos las alternativas.</li>
+                <h2 id="proceso-titulo">¿Cómo funciona?</h2>
+                <ol class="proceso-lista">
+                    <li>
+                        <h3>Cuéntanos tu situación</h3>
+                        <p>Describe brevemente la dificultad que enfrentas en tu atención en salud.</p>
+                    </li>
+                    <li>
+                        <h3>Revisamos tu solicitud</h3>
+                        <p>Analizamos la información y las alternativas disponibles.</p>
+                    </li>
+                    <li>
+                        <h3>Te explicamos las opciones</h3>
+                        <p>Te orientamos sobre los pasos que puedes seguir, sin prometer un resultado.</p>
+                    </li>
                 </ol>
-
             </div>
-
         </section>
 
-        <!-- CONTACTO -->
-        <section id="contacto">
-
+        <section id="transparencia" aria-labelledby="transparencia-titulo">
             <div class="container">
+                <h2 id="transparencia-titulo">Transparencia y alcance</h2>
+                <ul class="transparencia-lista">
+                    <li>La consulta inicial es gratuita.</li>
+                    <li>El alcance y el precio de eventuales servicios posteriores se informan antes de contratarlos.</li>
+                    <li>No hay pasarela de pagos en esta etapa.</li>
+                    <li>La orientación no sustituye la atención médica de urgencia.</li>
+                    <li>Pedimos solo los datos necesarios para contactarte y comprender tu solicitud.</li>
+                </ul>
+            </div>
+        </section>
 
+        <section id="contacto" aria-labelledby="contacto-titulo">
+            <div class="container">
                 <h2 id="contacto-titulo" tabindex="-1">Solicita orientación</h2>
-
-                <p>
-                    La consulta inicial es gratuita.
-                    Próximamente estará disponible el
-                    formulario seguro de solicitudes.
+                <p class="section-lead">
+                    La consulta inicial es gratuita. Completa el formulario con datos mínimos.
+                    Solo confirmaremos la recepción cuando la solicitud quede guardada en el servidor.
                 </p>
 
-                <!-- Aquí integraremos el formulario -->
+                <div id="formulario-estado" class="form-status" role="status" aria-live="polite"></div>
 
+                <form id="solicitud-form" class="solicitud-form" novalidate>
+                    <div class="form-field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required
+                            aria-describedby="nombre-ayuda nombre-error">
+                        <p id="nombre-ayuda" class="field-help">Cómo prefieres que te llamemos.</p>
+                        <p id="nombre-error" class="field-error" hidden></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="correo">Correo electrónico</label>
+                        <input id="correo" name="correo" type="email" autocomplete="email" maxlength="120" required
+                            aria-describedby="correo-ayuda correo-error">
+                        <p id="correo-ayuda" class="field-help">Lo usaremos solo para responder tu solicitud.</p>
+                        <p id="correo-error" class="field-error" hidden></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="telefono">Teléfono <span class="optional">(opcional)</span></label>
+                        <input id="telefono" name="telefono" type="tel" autocomplete="tel" maxlength="30"
+                            aria-describedby="telefono-ayuda telefono-error">
+                        <p id="telefono-ayuda" class="field-help">Si prefieres que te contactemos por llamada o mensaje.</p>
+                        <p id="telefono-error" class="field-error" hidden></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="tipo">Tipo de situación</label>
+                        <select id="tipo" name="tipo" required aria-describedby="tipo-error">
+                            <option value="">Selecciona una opción</option>
+                            <option value="negacion">Negación de servicios</option>
+                            <option value="medicamentos">Medicamentos</option>
+                            <option value="citas">Citas y autorizaciones</option>
+                            <option value="incapacidades">Incapacidades y prestaciones</option>
+                            <option value="eps-ips">Dificultades con EPS o IPS</option>
+                            <option value="reclamacion">Rutas de reclamación</option>
+                            <option value="otro">Otra situación</option>
+                        </select>
+                        <p id="tipo-error" class="field-error" hidden></p>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="mensaje">Cuéntanos brevemente qué necesitas</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" maxlength="1000" required
+                            aria-describedby="mensaje-ayuda mensaje-error"></textarea>
+                        <p id="mensaje-ayuda" class="field-help">Evita enviar historia clínica completa o datos sensibles innecesarios.</p>
+                        <p id="mensaje-error" class="field-error" hidden></p>
+                    </div>
+
+                    <div class="form-field form-field-checkbox">
+                        <input id="consentimiento" name="consentimiento" type="checkbox" value="si" required
+                            aria-describedby="consentimiento-error">
+                        <label for="consentimiento">
+                            Autorizo el tratamiento de mis datos para gestionar esta solicitud de orientación,
+                            conforme al <a href="./privacidad.html">aviso de privacidad</a>.
+                        </label>
+                        <p id="consentimiento-error" class="field-error" hidden></p>
+                    </div>
+
+                    <p class="form-note">
+                        Al enviar, intentaremos guardar tu solicitud de forma segura.
+                        Si el servicio no está disponible, te lo diremos con claridad y no simularemos un envío exitoso.
+                    </p>
+
+                    <button type="submit" class="btn-primary btn-submit">
+                        Enviar solicitud
+                    </button>
+                </form>
             </div>
-
         </section>
 
     </main>
 
-    <!-- PIE DE PÁGINA -->
     <footer class="site-footer">
-
         <div class="container">
-
-            <p>
-                &copy; 2026 Salvación M.
-                Todos los derechos reservados.
-            </p>
-
-            <p>
-                La orientación ofrecida no sustituye
-                la atención médica de urgencia.
-            </p>
-
+            <div class="footer-copy">
+                <p>&copy; 2026 Salvación M. Todos los derechos reservados.</p>
+                <p>La orientación ofrecida no sustituye la atención médica de urgencia.</p>
+            </div>
+            <nav class="footer-nav" aria-label="Enlaces del pie">
+                <a href="./privacidad.html">Privacidad</a>
+                <a href="#transparencia">Transparencia</a>
+                <a href="#contacto">Solicitar orientación</a>
+            </nav>
         </div>
-
     </footer>
 
 </body>

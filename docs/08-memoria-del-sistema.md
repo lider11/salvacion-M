@@ -1,5 +1,15 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-11 — Portal: contenido ADN y formulario sin fake-success
+
+**Cambio:** ampliar servicios (6), sección de transparencia, aviso de privacidad borrador (`privacidad.html`) y formulario accesible en `#contacto`.
+
+**Regla de producto:** el envío intenta `POST /api/v1/requests`; si no hay API o no hay identificador, se muestra error claro y no se simula éxito. Consentimiento no preseleccionado.
+
+**Verificación prevista:** `node --check js/main.js`; prueba manual de validación y mensaje de no disponibilidad.
+
+**Estado:** UI de solicitud lista; persistencia pendiente; texto de privacidad sujeto a revisión jurídica; producción sin cambios.
+
 ## 2026-11-11 — Unificación de rama y docs (salida del SDD complejo)
 
 **Decisión:** consolidar la línea canónica en `main`. Abandonar el enfoque SDD extenso (especificaciones por módulo, gates globales tipo G3, artefactos de verificación acumulativos) que generó complejidad sin acelerar el producto.

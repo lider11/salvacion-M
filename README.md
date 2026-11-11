@@ -8,8 +8,8 @@ Línea canónica: rama `main` (y PRs hacia ella).
 
 | Pieza | Estado |
 |---|---|
-| Landing pública (HTML/CSS/JS) | En progreso — hero, servicios, nosotros, proceso, contacto informativo |
-| Formulario de solicitudes | Pendiente |
+| Landing pública (HTML/CSS/JS) | En progreso — hero, 6 servicios, nosotros, proceso, transparencia, privacidad borrador |
+| Formulario de solicitudes | UI lista; no confirma éxito sin API/persistencia |
 | Backend API | Pendiente (Node.js + Express cuando se implemente) |
 | CRM | Pendiente |
 | Producción | Sin cambios sin autorización expresa |
