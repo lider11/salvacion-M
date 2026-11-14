@@ -70,24 +70,34 @@ p { margin-top: 0; }
 .btn-primary:hover { background: #e6f2f7; }
 .btn-primary:disabled { opacity: .65; cursor: not-allowed; }
 
-/* Servicios (avance local) */
+/* Servicios — propuesta A: rejilla 2×3 en escritorio */
 #servicios { background: var(--navy); }
-#servicios > .container { max-width: 52rem; }
-#servicios .servicios-encabezado { margin-bottom: 2rem; }
+#servicios > .container { max-width: 64rem; }
+#servicios .servicios-encabezado { margin-bottom: 2rem; max-width: 40rem; }
 #servicios .servicios-etiqueta { margin-bottom: 1rem; color: var(--gold-bright); font-size: .78rem; font-weight: 750; letter-spacing: .12em; }
 #servicios h2 { max-width: 22ch; margin-bottom: 1rem; color: #fff; font-size: clamp(1.9rem, 4vw, 3rem); }
 #servicios .servicios-descripcion { margin-bottom: 0; color: #c5d5e2; font-size: 1.0625rem; }
-#servicios .servicios-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
-#servicios .servicio { min-width: 0; border: 1px solid #dce7ec; border-radius: 1rem; background: #fff; }
-#servicios .servicio-enlace { display: flex; align-items: center; gap: 1.25rem; min-height: 96px; padding: 1.15rem 1.35rem; border-radius: inherit; color: var(--navy); text-decoration: none; }
-#servicios .servicio-icono { display: flex; align-items: center; justify-content: center; flex: 0 0 56px; height: 56px; border-radius: .85rem; background: #eef5f8; color: var(--teal); }
+#servicios .servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+#servicios .servicio { min-width: 0; height: 100%; border: 1px solid #dce7ec; border-radius: 1rem; background: #fff; }
+#servicios .servicio-enlace {
+  display: flex; align-items: center; gap: 1rem; height: 100%;
+  min-height: 104px; padding: 1.1rem 1.2rem; border-radius: inherit;
+  color: var(--navy); text-decoration: none;
+}
+#servicios .servicio-icono { display: flex; align-items: center; justify-content: center; flex: 0 0 52px; height: 52px; border-radius: .85rem; background: #eef5f8; color: var(--teal); }
 #servicios .servicio-texto { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-#servicios h3 { margin-bottom: .35rem; color: var(--navy); }
-#servicios .servicio p { margin-bottom: 0; color: #405769; }
-#servicios .servicio-flecha { flex: 0 0 auto; color: var(--teal); font-size: 1.5rem; }
+#servicios h3 { margin-bottom: .35rem; color: var(--navy); font-size: 1.05rem; }
+#servicios .servicio p { margin-bottom: 0; color: #405769; font-size: .95rem; }
+#servicios .servicio-flecha { flex: 0 0 auto; color: var(--teal); font-size: 1.4rem; }
 #servicios .servicios-cta { display: flex; align-items: center; justify-content: center; gap: 1rem; width: fit-content; max-width: 100%; min-height: 52px; margin: 2rem auto 0; padding: .85rem 1.5rem; border-radius: .7rem; background: var(--gold-bright); color: var(--navy); text-align: center; text-decoration: none; font-weight: 750; }
 #servicios .servicio-enlace:hover { background: #f4f9fb; }
 #servicios .servicios-cta:hover { background: #ffda85; }
+#servicios .servicio-enlace:focus-visible { outline: 3px solid var(--teal); outline-offset: -4px; }
 
 /* Nosotros */
 #nosotros { background: var(--navy); color: #fff; }
@@ -221,7 +231,8 @@ p { margin-top: 0; }
   .site-header nav ul { flex-direction: column; align-items: stretch; gap: .1rem; }
   .site-header nav a { display: flex; padding-inline: .75rem; font-size: .93rem; }
   .site-header nav a:hover { background: var(--navy-dark); }
-  #servicios .servicio-enlace { gap: .75rem; padding: 1rem; }
+  #servicios .servicios-grid { grid-template-columns: minmax(0, 1fr); }
+  #servicios .servicio-enlace { gap: .75rem; padding: 1rem; min-height: 96px; }
   #servicios .servicio-icono { flex-basis: 48px; height: 48px; }
   #servicios .servicios-cta, #proceso .proceso-cta { width: 100%; }
   main section { padding-block: 3rem; }

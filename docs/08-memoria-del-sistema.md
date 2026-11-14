@@ -1,5 +1,11 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-14 — Servicios en rejilla 2×3 (propuesta A)
+
+**Cambio:** la sección de dificultades deja la columna única; en escritorio/tablet usa 2 columnas × 3 filas; en móvil permanece 1 columna.
+
+**Estado:** solo CSS; sin cambio de copy ni de destinos de enlace.
+
 ## 2026-11-14 — Integración de avances locales (Visual Studio)
 
 **Origen:** archivos aportados por el responsable (`index.html`, `privacidad.html`, etc.).
