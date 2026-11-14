@@ -111,6 +111,7 @@
   const errorList = errorBox?.querySelector('ul');
   const reviewButton = form.querySelector('.contacto-revisar');
   const submitButton = form.querySelector('.contacto-enviar');
+  const contactTitle = document.getElementById('contacto-titulo');
 
   const fields = {
     nombre: document.getElementById('contacto-nombre'),
@@ -141,6 +142,28 @@
       .forEach((id) => setFieldError(id, ''));
     if (errorBox) errorBox.hidden = true;
     if (errorList) errorList.innerHTML = '';
+  }
+
+  function showStatus(type, message) {
+    if (!status) return;
+    status.hidden = false;
+    status.className = `contacto-estado${type ? ` is-${type}` : ''}`;
+    status.textContent = message;
+  }
+
+  function selectServicio(value) {
+    if (!value) return;
+    const radio = form.querySelector(`input[name="servicio"][value="${CSS.escape(value)}"]`);
+    if (radio) {
+      radio.checked = true;
+      radio.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  function goToContact() {
+    const section = document.getElementById('contacto');
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    contactTitle?.focus({ preventScroll: true });
   }
 
   function validate() {
@@ -209,33 +232,39 @@
     return { ok: issues.length === 0, firstInvalid };
   }
 
-  function showStatus(type, message) {
-    if (!status) return;
-    status.className = `contacto-estado${type ? ` is-${type}` : ''}`;
-    status.textContent = message;
-  }
+  document.querySelectorAll('.servicio-enlace[data-servicio]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      selectServicio(link.getAttribute('data-servicio'));
+      if (window.location.hash !== '#contacto') window.location.hash = 'contacto';
+      goToContact();
+    });
+  });
 
   reviewButton?.addEventListener('click', () => {
     const result = validate();
     if (!result.ok) {
-      showStatus('error', 'Hay campos por corregir. No se envió ninguna solicitud.');
+      showStatus('error', 'Hay campos por corregir. Aún no se envió ninguna solicitud.');
       result.firstInvalid?.focus();
-      errorBox?.focus();
       return;
     }
     showStatus(
       'ok',
-      'Los campos están completos. El envío permanece deshabilitado hasta que exista persistencia segura en el servidor.'
+      'Los datos están listos. El envío se habilitará cuando exista persistencia segura en el servidor.'
     );
+    reviewButton.focus();
   });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    // method=dialog + botón deshabilitado: defensa en profundidad.
     showStatus(
       'error',
-      'El envío no está disponible todavía. Usa “Revisar campos sin enviar”. No se almacenó ninguna solicitud.'
+      'El envío aún no está disponible. Usa “Validar datos”. No se almacenó ninguna solicitud.'
     );
-    if (submitButton) submitButton.disabled = true;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.hidden = true;
+    }
   });
 })();

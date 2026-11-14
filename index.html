@@ -83,42 +83,42 @@
                 </header>
                 <div class="servicios-grid">
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre negación de servicios">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="negacion" aria-label="Solicitar orientación sobre negación de servicios">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z"/><path d="M12 8v8m-4-4h8"/></svg></span>
                             <div class="servicio-texto"><h3>Negación de servicios</h3><p>Acceso a tratamientos y procedimientos.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre medicamentos">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="medicamentos" aria-label="Solicitar orientación sobre medicamentos">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m9 5-4 4a6 6 0 0 0 8 8l4-4a6 6 0 0 0-8-8Z"/><path d="m7 7 10 10"/></svg></span>
                             <div class="servicio-texto"><h3>Medicamentos</h3><p>Retrasos o falta de entrega de medicamentos.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre citas y autorizaciones">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="citas" aria-label="Solicitar orientación sobre citas y autorizaciones">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h3"/></svg></span>
                             <div class="servicio-texto"><h3>Citas y autorizaciones</h3><p>Demoras en citas, especialistas y autorizaciones.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre incapacidades y prestaciones">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="incapacidades" aria-label="Solicitar orientación sobre incapacidades y prestaciones">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 3h8v4H8z"/><path d="M6 7h12v14H6z"/><path d="M9 12h6m-6 4h4"/></svg></span>
                             <div class="servicio-texto"><h3>Incapacidades y prestaciones</h3><p>Rutas relacionadas con incapacidades y prestaciones.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre dificultades con EPS o IPS">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="eps-ips" aria-label="Solicitar orientación sobre dificultades con EPS o IPS">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-8h6v8"/></svg></span>
                             <div class="servicio-texto"><h3>Dificultades con EPS o IPS</h3><p>Barreras con tu EPS o IPS y opciones disponibles.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto" aria-label="Solicitar orientación sobre rutas de reclamación">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="reclamacion" aria-label="Solicitar orientación sobre rutas de reclamación">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 4h16v16H4z"/><path d="M8 8h8m-8 4h8m-8 4h5"/></svg></span>
                             <div class="servicio-texto"><h3>Rutas de reclamación</h3><p>Canales y alternativas de reclamación existentes.</p></div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
@@ -209,11 +209,15 @@
             <div class="container">
                 <h2 id="contacto-titulo" tabindex="-1">Solicita orientación</h2>
                 <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
-                <p class="contacto-aviso" id="contacto-privacidad">No incluyas historias clínicas, diagnósticos ni documentos médicos en esta solicitud inicial.</p>
-                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Envío aún no disponible.</strong> Puedes revisar la interfaz y validar los campos. Solo confirmaremos recepción cuando exista API con persistencia real. Usa datos de prueba; no envíes información sensible real.</p>
+                <p class="contacto-bloqueo" id="contacto-disponibilidad" role="status">
+                    <strong>Puedes preparar tu solicitud ahora.</strong>
+                    El envío seguro se habilitará cuando exista persistencia en el servidor.
+                    No incluyas historias clínicas ni datos médicos sensibles.
+                    <a href="./privacidad.html">Ver aviso de privacidad</a> (borrador).
+                </p>
 
-                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad contacto-privacidad" novalidate autocomplete="off">
-                    <p class="contacto-requeridos">Los campos marcados con <span aria-hidden="true">*</span> son obligatorios.</p>
+                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad" novalidate autocomplete="off">
+                    <p class="contacto-requeridos">Los campos con <span aria-hidden="true">*</span> son obligatorios.</p>
                     <div id="contacto-errores" class="contacto-errores" tabindex="-1" hidden>
                         <p><strong>Revisa los campos indicados:</strong></p>
                         <ul></ul>
@@ -223,20 +227,20 @@
                         <legend>Datos de contacto</legend>
                         <div class="contacto-campos">
                             <div class="contacto-campo">
-                                <label for="contacto-nombre">Nombre completo <span class="req">(obligatorio) *</span></label>
+                                <label for="contacto-nombre">Nombre completo <span class="req" aria-hidden="true">*</span></label>
                                 <input id="contacto-nombre" name="nombre" type="text" required minlength="3" maxlength="100" aria-describedby="contacto-nombre-ayuda contacto-nombre-error">
                                 <small id="contacto-nombre-ayuda">Entre 3 y 100 caracteres.</small>
                                 <p class="contacto-error" id="contacto-nombre-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
-                                <label for="contacto-email">Correo electrónico <span class="req">(obligatorio) *</span></label>
+                                <label for="contacto-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
                                 <input id="contacto-email" name="email" type="email" required maxlength="254" aria-describedby="contacto-email-error">
                                 <p class="contacto-error" id="contacto-email-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
                                 <label for="contacto-telefono">Teléfono <span class="optional">(opcional)</span></label>
                                 <input id="contacto-telefono" name="telefono" type="tel" maxlength="25" aria-describedby="contacto-telefono-ayuda contacto-telefono-error">
-                                <small id="contacto-telefono-ayuda">Entre 7 y 15 dígitos; puedes usar +, espacios, paréntesis y guiones.</small>
+                                <small id="contacto-telefono-ayuda">7 a 15 dígitos; puedes usar +, espacios o guiones.</small>
                                 <p class="contacto-error" id="contacto-telefono-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
@@ -248,56 +252,58 @@
                     </fieldset>
 
                     <fieldset class="contacto-servicios" aria-describedby="contacto-servicio-error">
-                        <legend>Servicio solicitado <span class="req">(obligatorio) *</span></legend>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="negacion" required>
-                            <span><strong>Negación de servicios</strong><span>Barreras de acceso a tratamientos y procedimientos.</span></span>
-                        </label>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="medicamentos" required>
-                            <span><strong>Medicamentos</strong><span>Retrasos o falta de entrega.</span></span>
-                        </label>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="citas" required>
-                            <span><strong>Citas y autorizaciones</strong><span>Demoras en citas y autorizaciones.</span></span>
-                        </label>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="incapacidades" required>
-                            <span><strong>Incapacidades y prestaciones</strong><span>Orientación sobre rutas relacionadas.</span></span>
-                        </label>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="eps-ips" required>
-                            <span><strong>EPS o IPS</strong><span>Dificultades con tu EPS o IPS.</span></span>
-                        </label>
-                        <label class="contacto-opcion">
-                            <input type="radio" name="servicio" value="reclamacion" required>
-                            <span><strong>Rutas de reclamación</strong><span>Canales y alternativas disponibles.</span></span>
-                        </label>
+                        <legend>Servicio solicitado <span class="req" aria-hidden="true">*</span></legend>
+                        <div class="contacto-servicios-grid">
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="negacion" required>
+                                <span><strong>Negación de servicios</strong></span>
+                            </label>
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="medicamentos" required>
+                                <span><strong>Medicamentos</strong></span>
+                            </label>
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="citas" required>
+                                <span><strong>Citas y autorizaciones</strong></span>
+                            </label>
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="incapacidades" required>
+                                <span><strong>Incapacidades y prestaciones</strong></span>
+                            </label>
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="eps-ips" required>
+                                <span><strong>EPS o IPS</strong></span>
+                            </label>
+                            <label class="contacto-opcion">
+                                <input type="radio" name="servicio" value="reclamacion" required>
+                                <span><strong>Rutas de reclamación</strong></span>
+                            </label>
+                        </div>
                         <p class="contacto-error" id="contacto-servicio-error" hidden></p>
                     </fieldset>
 
                     <div class="contacto-campo">
-                        <label for="contacto-descripcion">Describe brevemente tu situación <span class="req">(obligatorio) *</span></label>
+                        <label for="contacto-descripcion">Describe brevemente tu situación <span class="req" aria-hidden="true">*</span></label>
                         <textarea id="contacto-descripcion" name="descripcion" rows="5" required minlength="20" maxlength="1000" aria-describedby="contacto-descripcion-ayuda contacto-descripcion-error"></textarea>
-                        <small id="contacto-descripcion-ayuda">Explica qué ocurrió sin incluir información médica sensible. Entre 20 y 1000 caracteres.</small>
+                        <small id="contacto-descripcion-ayuda">Sin información médica sensible. Entre 20 y 1000 caracteres.</small>
                         <p class="contacto-error" id="contacto-descripcion-error" hidden></p>
                     </div>
 
                     <div class="contacto-autorizacion">
                         <label>
                             <input id="contacto-consentimiento" name="consentimiento" type="checkbox" required aria-describedby="contacto-politica-estado">
-                            <span>He leído el <a href="./privacidad.html">aviso de privacidad</a> (borrador) y autorizo el tratamiento de mis datos para gestionar esta solicitud.</span>
+                            <span>He leído el <a href="./privacidad.html">aviso de privacidad</a> y autorizo el tratamiento de mis datos para esta solicitud.</span>
                         </label>
-                        <p id="contacto-politica-estado">El aviso de privacidad es un borrador sujeto a revisión jurídica. El envío real permanece deshabilitado hasta que exista persistencia segura.</p>
+                        <p id="contacto-politica-estado">Documento en borrador, sujeto a revisión jurídica.</p>
                         <p class="contacto-error" id="contacto-consentimiento-error" hidden></p>
                     </div>
 
                     <div class="contacto-acciones">
-                        <button class="contacto-revisar" type="button">Revisar campos sin enviar</button>
-                        <button class="contacto-enviar" type="submit" disabled aria-describedby="contacto-disponibilidad">Enviar solicitud de orientación</button>
+                        <button class="contacto-revisar" type="button">Validar datos</button>
+                        <button class="contacto-enviar" type="submit" disabled hidden aria-describedby="contacto-disponibilidad">Enviar solicitud</button>
                     </div>
-                    <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true">No se ha enviado ninguna solicitud.</p>
-                    <noscript><p class="form-status is-error">La revisión local de campos requiere JavaScript. El envío permanece deshabilitado.</p></noscript>
+                    <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true" hidden></p>
+                    <noscript><p class="form-status is-error">La validación local requiere JavaScript. El envío permanece deshabilitado.</p></noscript>
                 </form>
             </div>
         </section>
