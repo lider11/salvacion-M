@@ -306,6 +306,19 @@ p { margin-top: 0; }
 .footer-links ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .35rem; }
 .footer-links a, .footer-nav a { text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; font-weight: 600; }
 .footer-links a:hover, .footer-nav a:hover { text-decoration: underline; }
+.footer-social { margin-top: 1.25rem; }
+.footer-social ul {
+  display: flex; flex-wrap: wrap; gap: .55rem; margin: 0; padding: 0; list-style: none;
+}
+.footer-social a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: .55rem; color: #fff; text-decoration: none;
+}
+.footer-social a:hover,
+.footer-social a:focus-visible {
+  color: var(--navy-dark); background: var(--gold-bright); border-color: var(--gold-bright);
+}
 .footer-contact address { font-style: normal; }
 .footer-contact-label { font-weight: 700; color: var(--gold-bright); }
 .footer-disclaimer { max-width: 70ch; margin: 0 0 1rem; color: #d5e0e8; }
@@ -357,6 +370,7 @@ p { margin-top: 0; }
   .menu-toggle-icon::before, .menu-toggle-icon::after { transition: top 180ms ease, transform 180ms ease; }
   .site-header nav a { transition: color 160ms ease, background-color 160ms ease; }
   .btn-primary, #servicios .servicio-enlace, #servicios .servicios-cta, #proceso .proceso-cta { transition: background-color 160ms ease, transform 160ms ease; }
+  .footer-social a { transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .menu-toggle:hover { background: var(--navy-dark); border-color: #fff; }
