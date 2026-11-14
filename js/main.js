@@ -13,7 +13,6 @@
   }
 
   function syncViewport() {
-    // Move focus before hiding the currently focused control or link.
     if (mobile.matches && navigation.contains(document.activeElement)) {
       toggle.hidden = false;
       toggle.focus();
@@ -61,7 +60,6 @@
   consultationLink.addEventListener('click', async (event) => {
     if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
 
-    // Show the feedback before navigating away from the button.
     event.preventDefault();
     const currentActivation = ++activation;
     buttonEffect?.cancel();
@@ -76,7 +74,7 @@
       try {
         await buttonEffect.finished;
       } catch {
-        // A repeated click or preference change can cancel this animation.
+        // cancelación por clic repetido o prefers-reduced-motion
       }
     }
 
@@ -105,152 +103,139 @@
 })();
 
 (() => {
-  const form = document.getElementById('solicitud-form');
-  const status = document.getElementById('formulario-estado');
-  if (!form || !status) return;
+  const form = document.getElementById('orientacion-form');
+  if (!form) return;
+
+  const status = document.getElementById('contacto-estado');
+  const errorBox = document.getElementById('contacto-errores');
+  const errorList = errorBox?.querySelector('ul');
+  const reviewButton = form.querySelector('.contacto-revisar');
+  const submitButton = form.querySelector('.contacto-enviar');
 
   const fields = {
-    nombre: form.elements.namedItem('nombre'),
-    correo: form.elements.namedItem('correo'),
-    telefono: form.elements.namedItem('telefono'),
-    tipo: form.elements.namedItem('tipo'),
-    mensaje: form.elements.namedItem('mensaje'),
-    consentimiento: form.elements.namedItem('consentimiento')
+    nombre: document.getElementById('contacto-nombre'),
+    email: document.getElementById('contacto-email'),
+    telefono: document.getElementById('contacto-telefono'),
+    ciudad: document.getElementById('contacto-ciudad'),
+    descripcion: document.getElementById('contacto-descripcion'),
+    consentimiento: document.getElementById('contacto-consentimiento')
   };
-  const submitButton = form.querySelector('button[type="submit"]');
-  const endpoint = '/api/v1/requests';
-  // Habilitar solo con el manejador JS activo: evita GET nativo con datos sensibles en la URL.
-  if (submitButton) submitButton.disabled = false;
 
-  function setStatus(type, message) {
-    status.className = `form-status${type ? ` is-${type}` : ''}`;
-    status.textContent = message;
-  }
-
-  function setFieldError(name, message) {
-    const field = fields[name];
-    const error = document.getElementById(`${name}-error`);
-    if (!field || !error) return;
+  function setFieldError(id, message) {
+    const error = document.getElementById(`${id}-error`);
+    const control = document.getElementById(id) || form.querySelector(`input[name="${id}"]`);
+    if (!error) return;
     if (message) {
       error.hidden = false;
       error.textContent = message;
-      field.setAttribute('aria-invalid', 'true');
+      if (control) control.setAttribute('aria-invalid', 'true');
     } else {
       error.hidden = true;
       error.textContent = '';
-      field.removeAttribute('aria-invalid');
+      if (control) control.removeAttribute('aria-invalid');
     }
   }
 
   function clearErrors() {
-    Object.keys(fields).forEach((name) => setFieldError(name, ''));
+    ['contacto-nombre', 'contacto-email', 'contacto-telefono', 'contacto-ciudad', 'contacto-descripcion', 'contacto-servicio', 'contacto-consentimiento']
+      .forEach((id) => setFieldError(id, ''));
+    if (errorBox) errorBox.hidden = true;
+    if (errorList) errorList.innerHTML = '';
   }
 
   function validate() {
     clearErrors();
+    const issues = [];
     let firstInvalid = null;
 
-    const nombre = String(fields.nombre.value || '').trim();
-    const correo = String(fields.correo.value || '').trim();
-    const telefono = String(fields.telefono.value || '').trim();
-    const tipo = String(fields.tipo.value || '');
-    const mensaje = String(fields.mensaje.value || '').trim();
-    const consentimiento = fields.consentimiento.checked;
+    const nombre = String(fields.nombre?.value || '').trim();
+    const email = String(fields.email?.value || '').trim();
+    const telefono = String(fields.telefono?.value || '').trim();
+    const ciudad = String(fields.ciudad?.value || '').trim();
+    const descripcion = String(fields.descripcion?.value || '').trim();
+    const servicio = form.querySelector('input[name="servicio"]:checked');
+    const consentimiento = Boolean(fields.consentimiento?.checked);
 
-    if (nombre.length < 2) {
-      setFieldError('nombre', 'Escribe tu nombre (mínimo 2 caracteres).');
+    if (nombre.length < 3) {
+      setFieldError('contacto-nombre', 'Escribe tu nombre completo (mínimo 3 caracteres).');
+      issues.push('Nombre completo');
       firstInvalid ??= fields.nombre;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
-      setFieldError('correo', 'Escribe un correo válido.');
-      firstInvalid ??= fields.correo;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFieldError('contacto-email', 'Escribe un correo electrónico válido.');
+      issues.push('Correo electrónico');
+      firstInvalid ??= fields.email;
     }
 
-    if (telefono && telefono.replace(/\D/g, '').length < 7) {
-      setFieldError('telefono', 'Si indicas teléfono, usa al menos 7 dígitos.');
-      firstInvalid ??= fields.telefono;
+    if (telefono) {
+      const digits = telefono.replace(/\D/g, '');
+      if (digits.length < 7 || digits.length > 15) {
+        setFieldError('contacto-telefono', 'Si indicas teléfono, usa entre 7 y 15 dígitos.');
+        issues.push('Teléfono');
+        firstInvalid ??= fields.telefono;
+      }
     }
 
-    if (!tipo) {
-      setFieldError('tipo', 'Selecciona el tipo de situación.');
-      firstInvalid ??= fields.tipo;
+    if (ciudad && ciudad.length < 2) {
+      setFieldError('contacto-ciudad', 'Si indicas ciudad, escribe al menos 2 caracteres.');
+      issues.push('Ciudad');
+      firstInvalid ??= fields.ciudad;
     }
 
-    if (mensaje.length < 20) {
-      setFieldError('mensaje', 'Cuéntanos un poco más (mínimo 20 caracteres).');
-      firstInvalid ??= fields.mensaje;
+    if (!servicio) {
+      setFieldError('contacto-servicio', 'Selecciona el servicio solicitado.');
+      issues.push('Servicio solicitado');
+      firstInvalid ??= form.querySelector('input[name="servicio"]');
+    }
+
+    if (descripcion.length < 20) {
+      setFieldError('contacto-descripcion', 'Describe un poco más tu situación (mínimo 20 caracteres).');
+      issues.push('Descripción');
+      firstInvalid ??= fields.descripcion;
     }
 
     if (!consentimiento) {
-      setFieldError('consentimiento', 'Debes autorizar el tratamiento de datos para enviar la solicitud.');
+      setFieldError('contacto-consentimiento', 'Debes aceptar el aviso de privacidad para continuar.');
+      issues.push('Autorización de datos');
       firstInvalid ??= fields.consentimiento;
     }
 
-    return { ok: !firstInvalid, firstInvalid, payload: { nombre, correo, telefono, tipo, mensaje, consentimiento: true } };
+    if (issues.length && errorBox && errorList) {
+      errorList.innerHTML = issues.map((item) => `<li>${item}</li>`).join('');
+      errorBox.hidden = false;
+    }
+
+    return { ok: issues.length === 0, firstInvalid };
   }
 
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  function showStatus(type, message) {
+    if (!status) return;
+    status.className = `contacto-estado${type ? ` is-${type}` : ''}`;
+    status.textContent = message;
+  }
+
+  reviewButton?.addEventListener('click', () => {
     const result = validate();
     if (!result.ok) {
-      setStatus('error', 'Revisa los campos marcados. Tu solicitud aún no se envió.');
+      showStatus('error', 'Hay campos por corregir. No se envió ninguna solicitud.');
       result.firstInvalid?.focus();
+      errorBox?.focus();
       return;
     }
+    showStatus(
+      'ok',
+      'Los campos están completos. El envío permanece deshabilitado hasta que exista persistencia segura en el servidor.'
+    );
+  });
 
-    submitButton.disabled = true;
-    setStatus('pending', 'Intentando guardar tu solicitud…');
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(result.payload)
-      });
-
-      if (!response.ok) {
-        const unavailable = response.status === 404 || response.status === 501 || response.status === 502 || response.status === 503;
-        setStatus(
-          'error',
-          unavailable
-            ? 'El servicio de envío aún no está disponible. No pudimos confirmar la recepción; conservamos lo que escribiste para que puedas reintentar más tarde.'
-            : 'No pudimos confirmar la recepción de tu solicitud. Conservamos lo que escribiste; intenta de nuevo en unos minutos.'
-        );
-        return;
-      }
-
-      let data = {};
-      try {
-        data = await response.json();
-      } catch {
-        setStatus(
-          'error',
-          'El servidor respondió, pero no pudimos confirmar un identificador. Conservamos lo que escribiste; no afirmamos que la solicitud haya quedado registrada.'
-        );
-        return;
-      }
-
-      const id = data.id || data.requestId;
-      if (!id) {
-        setStatus(
-          'error',
-          'El servidor respondió sin identificador. Conservamos lo que escribiste; no afirmamos que la solicitud haya quedado registrada.'
-        );
-        return;
-      }
-
-      setStatus('success', `Recibimos tu solicitud. Identificador: ${id}.`);
-      form.reset();
-      clearErrors();
-    } catch {
-      // Fallo de red u otro error antes de una confirmación fiable.
-      setStatus(
-        'error',
-        'No pudimos confirmar la recepción de tu solicitud. Conservamos lo que escribiste; intenta de nuevo cuando haya conexión o el servicio esté disponible.'
-      );
-    } finally {
-      submitButton.disabled = false;
-    }
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    // method=dialog + botón deshabilitado: defensa en profundidad.
+    showStatus(
+      'error',
+      'El envío no está disponible todavía. Usa “Revisar campos sin enviar”. No se almacenó ninguna solicitud.'
+    );
+    if (submitButton) submitButton.disabled = true;
   });
 })();
