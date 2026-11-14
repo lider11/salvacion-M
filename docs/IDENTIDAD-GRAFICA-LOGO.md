@@ -23,4 +23,4 @@ Arco azul: protección y confianza. Cruz dorada: referencia a salud y orientaci�
 3. Se puede renderizar sin JS ni recursos externos.
 4. Integración real, contraste y visualización móvil deben verificarse posteriormente en QA.
 
-**Estado:** `LOGO_APROBADO=TRUE`, `LOGO_EN_REPOSITORIO=TRUE` una vez verificado el commit; `INTEGRACION_FRONTEND=FALSE`; `G3_PASS=FALSE`.
+**Estado:** logo aprobado, en repositorio e integrado en la landing. Revisar contraste sobre fondos no blancos antes de publicar.

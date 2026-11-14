@@ -13,3 +13,4 @@ Thumbs.db
 
 test-results/
 package-lock.json
+.tmp/

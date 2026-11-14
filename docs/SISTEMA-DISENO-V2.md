@@ -59,5 +59,5 @@ No mostrar información sensible en URL, logs o analítica. Formulario y CRM req
 - Pruebas de flujo y errores del formulario contra API real en QA.
 - Evidencias por SHA, capturas y resultados fechados.
 
-## 12. Estado de verificación
-`DESIGN_SPEC = TRUE` (documento). `VISUAL_IMPLEMENTATION = FALSE`. `WCAG_2_2_AA_VERIFIED = FALSE`. `G3_PASS = FALSE`.
+## 12. Estado
+Especificación visual vigente como guía. La landing actual aplica parte de la dirección (navy, logo, tipografía de sistema) y aún no cubre todos los componentes ni una auditoría WCAG formal.

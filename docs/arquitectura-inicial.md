@@ -1,19 +1,25 @@
-# Arquitectura inicial — versión desde cero
+# Arquitectura — Salvación M
 
-## Superficies previstas
-1. **Sitio público:** información y formulario accesible.
-2. **API:** validación, persistencia y controles de abuso.
-3. **CRM administrativo:** acceso separado, autenticación, RBAC y auditoría.
-4. **Citas y recordatorios:** scheduler autónomo autenticado en Sites, no GitHub Actions.
-5. **D1/SQLite:** almacenamiento y trazabilidad.
+Documento corto y vigente. Sustituye el SDD largo de backend como referencia operativa.
 
-## Orden de construcción
-1. Contratos y criterios de aceptación.
-2. HTML/CSS/JavaScript Vanilla del sitio público.
-3. API y persistencia verificable.
-4. CRM y seguridad.
-5. Citas, scheduler y notificaciones.
-6. QA adversarial, accesibilidad y G3.
+## Superficies
+
+1. **Portal público** — información y, cuando exista, formulario accesible (HTML/CSS/JS).
+2. **API** — validación, persistencia y límites de abuso (Node.js + Express).
+3. **CRM** — interfaz separada, autenticación, roles y auditoría.
+4. **Citas / recordatorios** — jobs Node.js con registro e idempotencia; no GitHub Actions.
+5. **Base de datos** — elegir al implementar (SQLite o PostgreSQL).
+
+## Orden práctico
+
+1. Completar y estabilizar el portal público.
+2. Formulario + API con persistencia real (éxito solo tras guardar).
+3. CRM mínimo para revisar solicitudes.
+4. Citas y recordatorios si hacen falta.
+5. Pruebas de lo construido (incluyendo accesibilidad en flujos reales).
 
 ## Límites actuales
-Este documento es diseño, no implementación. No existe evidencia nueva de despliegue, persistencia, autenticación ni entregas.
+
+- Hay landing local; no hay formulario ni backend en código.
+- Este documento no acredita despliegue ni operación.
+- Producción no se modifica sin autorización expresa.
