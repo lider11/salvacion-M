@@ -166,6 +166,11 @@
     contactTitle?.focus({ preventScroll: true });
   }
 
+  function addIssue(issues, label, targetId, control) {
+    issues.push({ label, targetId });
+    return control;
+  }
+
   function validate() {
     clearErrors();
     const issues = [];
@@ -181,56 +186,69 @@
 
     if (nombre.length < 3) {
       setFieldError('contacto-nombre', 'Escribe tu nombre completo (mínimo 3 caracteres).');
-      issues.push('Nombre completo');
-      firstInvalid ??= fields.nombre;
+      const control = addIssue(issues, 'Nombre completo', 'contacto-nombre', fields.nombre);
+      firstInvalid ??= control;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFieldError('contacto-email', 'Escribe un correo electrónico válido.');
-      issues.push('Correo electrónico');
-      firstInvalid ??= fields.email;
+      const control = addIssue(issues, 'Correo electrónico', 'contacto-email', fields.email);
+      firstInvalid ??= control;
     }
 
     if (telefono) {
       const digits = telefono.replace(/\D/g, '');
       if (digits.length < 7 || digits.length > 15) {
         setFieldError('contacto-telefono', 'Si indicas teléfono, usa entre 7 y 15 dígitos.');
-        issues.push('Teléfono');
-        firstInvalid ??= fields.telefono;
+        const control = addIssue(issues, 'Teléfono', 'contacto-telefono', fields.telefono);
+        firstInvalid ??= control;
       }
     }
 
     if (ciudad && ciudad.length < 2) {
       setFieldError('contacto-ciudad', 'Si indicas ciudad, escribe al menos 2 caracteres.');
-      issues.push('Ciudad');
-      firstInvalid ??= fields.ciudad;
+      const control = addIssue(issues, 'Ciudad', 'contacto-ciudad', fields.ciudad);
+      firstInvalid ??= control;
     }
 
     if (!servicio) {
-      setFieldError('contacto-servicio', 'Selecciona el servicio solicitado.');
-      issues.push('Servicio solicitado');
-      firstInvalid ??= form.querySelector('input[name="servicio"]');
+      setFieldError('contacto-servicio', 'Elige la dificultad que mejor describe tu caso.');
+      const firstServicio = form.querySelector('#contacto-servicio-negacion') || form.querySelector('input[name="servicio"]');
+      const control = addIssue(issues, 'Dificultad que enfrentas', 'contacto-servicio-negacion', firstServicio);
+      firstInvalid ??= control;
     }
 
     if (descripcion.length < 20) {
-      setFieldError('contacto-descripcion', 'Describe un poco más tu situación (mínimo 20 caracteres).');
-      issues.push('Descripción');
-      firstInvalid ??= fields.descripcion;
+      setFieldError('contacto-descripcion', 'Cuéntanos un poco más (mínimo 20 caracteres), sin datos clínicos.');
+      const control = addIssue(issues, 'Descripción', 'contacto-descripcion', fields.descripcion);
+      firstInvalid ??= control;
     }
 
     if (!consentimiento) {
-      setFieldError('contacto-consentimiento', 'Debes aceptar el aviso de privacidad para continuar.');
-      issues.push('Autorización de datos');
-      firstInvalid ??= fields.consentimiento;
+      setFieldError('contacto-consentimiento', 'Marca la casilla si aceptas el aviso de privacidad.');
+      const control = addIssue(issues, 'Autorización de datos', 'contacto-consentimiento', fields.consentimiento);
+      firstInvalid ??= control;
     }
 
     if (issues.length && errorBox && errorList) {
-      errorList.innerHTML = issues.map((item) => `<li>${item}</li>`).join('');
+      errorList.innerHTML = issues.map((item) => (
+        `<li><a href="#${item.targetId}">${item.label}</a></li>`
+      )).join('');
       errorBox.hidden = false;
     }
 
     return { ok: issues.length === 0, firstInvalid };
   }
+
+  errorList?.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || !errorList.contains(link)) return;
+    const id = link.getAttribute('href')?.slice(1);
+    const control = id ? document.getElementById(id) : null;
+    if (!control) return;
+    event.preventDefault();
+    control.focus();
+  });
 
   document.querySelectorAll('.servicio-enlace[data-servicio]').forEach((link) => {
     link.addEventListener('click', (event) => {
@@ -245,13 +263,13 @@
   reviewButton?.addEventListener('click', () => {
     const result = validate();
     if (!result.ok) {
-      showStatus('error', 'Hay campos por corregir. Aún no se envió ninguna solicitud.');
-      result.firstInvalid?.focus();
+      showStatus('error', 'Hay campos por corregir. No enviamos nada todavía.');
+      (errorBox?.hidden === false ? errorBox : result.firstInvalid)?.focus();
       return;
     }
     showStatus(
       'ok',
-      'Los datos están listos. El envío se habilitará cuando exista persistencia segura en el servidor.'
+      'Tus datos están listos para cuando abramos el envío en línea. Mientras tanto puedes escribirnos o llamarnos con la información que preparaste.'
     );
     reviewButton.focus();
   });
@@ -260,7 +278,7 @@
     event.preventDefault();
     showStatus(
       'error',
-      'El envío aún no está disponible. Usa “Validar datos”. No se almacenó ninguna solicitud.'
+      'El envío en línea aún no está disponible. Usa “Revisar mi solicitud” o contáctanos por teléfono o correo. No guardamos ninguna solicitud desde este formulario.'
     );
     if (submitButton) {
       submitButton.disabled = true;

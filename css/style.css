@@ -157,12 +157,15 @@ p { margin-top: 0; }
 .contacto-error { margin: 0; color: var(--danger); font-size: .92rem; font-weight: 600; }
 .contacto-servicios-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
 .contacto-opcion {
-  display: grid; grid-template-columns: auto 1fr; gap: .65rem; align-items: center;
+  display: grid; grid-template-columns: auto 1fr; gap: .65rem; align-items: start;
   min-height: 48px; margin: 0; padding: .7rem .8rem; border: 1px solid var(--line);
   border-radius: .55rem; background: #fafcfd; cursor: pointer;
 }
 .contacto-opcion:has(input:checked) { border-color: var(--teal); background: #eef8f8; }
-.contacto-opcion input { width: 1.15rem; height: 1.15rem; margin: 0; }
+.contacto-opcion input { width: 1.15rem; height: 1.15rem; margin: .15rem 0 0; }
+.contacto-opcion span { display: grid; gap: .2rem; min-width: 0; }
+.contacto-opcion small { color: #405769; font-size: .9rem; line-height: 1.35; }
+.contacto-errores a { color: var(--danger); font-weight: 700; }
 .contacto-autorizacion { display: grid; gap: .55rem; }
 .contacto-autorizacion label { display: grid; grid-template-columns: auto 1fr; gap: .75rem; align-items: start; font-weight: 500; }
 .contacto-autorizacion input { margin-top: .2rem; width: 1.2rem; height: 1.2rem; }

@@ -207,19 +207,24 @@
 
         <section id="contacto" aria-labelledby="contacto-titulo">
             <div class="container">
-                <h2 id="contacto-titulo" tabindex="-1">Solicita orientación</h2>
-                <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
+                <h2 id="contacto-titulo" tabindex="-1">Prepara tu solicitud</h2>
+                <p class="contacto-intro">Cuéntanos qué te está pasando. La consulta inicial es gratuita; aún no recibimos envíos en línea, pero puedes dejarlo listo y contactarnos por teléfono o correo.</p>
                 <p class="contacto-bloqueo" id="contacto-disponibilidad" role="status">
-                    <strong>Puedes preparar tu solicitud ahora.</strong>
-                    El envío seguro se habilitará cuando exista persistencia en el servidor.
-                    No incluyas historias clínicas ni datos médicos sensibles.
-                    <a href="./privacidad.html">Ver aviso de privacidad</a> (borrador).
+                    <strong>Estamos contigo en este paso.</strong>
+                    Por ahora puedes revisar tus datos aquí; el envío en línea se abrirá pronto.
+                    Mientras tanto escríbenos a
+                    <a href="mailto:info@salvacionm.com">info@salvacionm.com</a>
+                    o llámanos al
+                    <a href="tel:+573004218699">+57&nbsp;300&nbsp;421&nbsp;8699</a>.
+                    Evita historias clínicas u otros datos médicos sensibles.
+                    <a href="./privacidad.html">Lee el aviso de privacidad</a>
+                    (aún en revisión jurídica).
                 </p>
 
-                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad" novalidate autocomplete="off">
+                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad" novalidate>
                     <p class="contacto-requeridos">Los campos con <span aria-hidden="true">*</span> son obligatorios.</p>
                     <div id="contacto-errores" class="contacto-errores" tabindex="-1" hidden>
-                        <p><strong>Revisa los campos indicados:</strong></p>
+                        <p><strong>Revisa estos campos para continuar:</strong></p>
                         <ul></ul>
                     </div>
 
@@ -228,55 +233,56 @@
                         <div class="contacto-campos">
                             <div class="contacto-campo">
                                 <label for="contacto-nombre">Nombre completo <span class="req" aria-hidden="true">*</span></label>
-                                <input id="contacto-nombre" name="nombre" type="text" required minlength="3" maxlength="100" aria-describedby="contacto-nombre-ayuda contacto-nombre-error">
-                                <small id="contacto-nombre-ayuda">Entre 3 y 100 caracteres.</small>
+                                <input id="contacto-nombre" name="nombre" type="text" required minlength="3" maxlength="100" autocomplete="name" aria-describedby="contacto-nombre-ayuda contacto-nombre-error">
+                                <small id="contacto-nombre-ayuda">Como aparece en tu documento (3 a 100 caracteres).</small>
                                 <p class="contacto-error" id="contacto-nombre-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
                                 <label for="contacto-email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
-                                <input id="contacto-email" name="email" type="email" required maxlength="254" aria-describedby="contacto-email-error">
+                                <input id="contacto-email" name="email" type="email" required maxlength="254" autocomplete="email" aria-describedby="contacto-email-ayuda contacto-email-error">
+                                <small id="contacto-email-ayuda">Te escribiremos a este correo cuando podamos recibir solicitudes.</small>
                                 <p class="contacto-error" id="contacto-email-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
                                 <label for="contacto-telefono">Teléfono <span class="optional">(opcional)</span></label>
-                                <input id="contacto-telefono" name="telefono" type="tel" maxlength="25" aria-describedby="contacto-telefono-ayuda contacto-telefono-error">
-                                <small id="contacto-telefono-ayuda">7 a 15 dígitos; puedes usar +, espacios o guiones.</small>
+                                <input id="contacto-telefono" name="telefono" type="tel" maxlength="25" autocomplete="tel" aria-describedby="contacto-telefono-ayuda contacto-telefono-error">
+                                <small id="contacto-telefono-ayuda">Si lo dejas, usa 7 a 15 dígitos; puedes incluir +, espacios o guiones.</small>
                                 <p class="contacto-error" id="contacto-telefono-error" hidden></p>
                             </div>
                             <div class="contacto-campo">
                                 <label for="contacto-ciudad">Ciudad o municipio <span class="optional">(opcional)</span></label>
-                                <input id="contacto-ciudad" name="ciudad" type="text" maxlength="100" aria-describedby="contacto-ciudad-error">
+                                <input id="contacto-ciudad" name="ciudad" type="text" maxlength="100" autocomplete="address-level2" aria-describedby="contacto-ciudad-error">
                                 <p class="contacto-error" id="contacto-ciudad-error" hidden></p>
                             </div>
                         </div>
                     </fieldset>
 
                     <fieldset class="contacto-servicios" aria-describedby="contacto-servicio-error">
-                        <legend>Servicio solicitado <span class="req" aria-hidden="true">*</span></legend>
+                        <legend>¿Qué dificultad enfrentas? <span class="req" aria-hidden="true">*</span></legend>
                         <div class="contacto-servicios-grid">
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="negacion" required>
-                                <span><strong>Negación de servicios</strong></span>
+                                <input id="contacto-servicio-negacion" type="radio" name="servicio" value="negacion" required>
+                                <span><strong>Negación de servicios</strong><small>Te niegan un tratamiento o procedimiento.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="medicamentos" required>
-                                <span><strong>Medicamentos</strong></span>
+                                <input id="contacto-servicio-medicamentos" type="radio" name="servicio" value="medicamentos" required>
+                                <span><strong>Medicamentos</strong><small>Retraso o falta de entrega de medicamentos.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="citas" required>
-                                <span><strong>Citas y autorizaciones</strong></span>
+                                <input id="contacto-servicio-citas" type="radio" name="servicio" value="citas" required>
+                                <span><strong>Citas y autorizaciones</strong><small>Demoras con citas, especialistas o autorizaciones.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="incapacidades" required>
-                                <span><strong>Incapacidades y prestaciones</strong></span>
+                                <input id="contacto-servicio-incapacidades" type="radio" name="servicio" value="incapacidades" required>
+                                <span><strong>Incapacidades y prestaciones</strong><small>Dudas sobre incapacidades u otras prestaciones.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="eps-ips" required>
-                                <span><strong>EPS o IPS</strong></span>
+                                <input id="contacto-servicio-eps-ips" type="radio" name="servicio" value="eps-ips" required>
+                                <span><strong>Dificultades con EPS o IPS</strong><small>Barreras con tu entidad o centro de atención.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input type="radio" name="servicio" value="reclamacion" required>
-                                <span><strong>Rutas de reclamación</strong></span>
+                                <input id="contacto-servicio-reclamacion" type="radio" name="servicio" value="reclamacion" required>
+                                <span><strong>Rutas de reclamación</strong><small>Quieres saber qué canales o alternativas existen.</small></span>
                             </label>
                         </div>
                         <p class="contacto-error" id="contacto-servicio-error" hidden></p>
@@ -285,7 +291,7 @@
                     <div class="contacto-campo">
                         <label for="contacto-descripcion">Describe brevemente tu situación <span class="req" aria-hidden="true">*</span></label>
                         <textarea id="contacto-descripcion" name="descripcion" rows="5" required minlength="20" maxlength="1000" aria-describedby="contacto-descripcion-ayuda contacto-descripcion-error"></textarea>
-                        <small id="contacto-descripcion-ayuda">Sin información médica sensible. Entre 20 y 1000 caracteres.</small>
+                        <small id="contacto-descripcion-ayuda">Cuenta el problema en palabras simples, sin datos clínicos. Entre 20 y 1000 caracteres.</small>
                         <p class="contacto-error" id="contacto-descripcion-error" hidden></p>
                     </div>
 
@@ -294,16 +300,16 @@
                             <input id="contacto-consentimiento" name="consentimiento" type="checkbox" required aria-describedby="contacto-politica-estado">
                             <span>He leído el <a href="./privacidad.html">aviso de privacidad</a> y autorizo el tratamiento de mis datos para esta solicitud.</span>
                         </label>
-                        <p id="contacto-politica-estado">Documento en borrador, sujeto a revisión jurídica.</p>
+                        <p id="contacto-politica-estado">El aviso sigue en revisión jurídica; puedes leerlo antes de autorizar.</p>
                         <p class="contacto-error" id="contacto-consentimiento-error" hidden></p>
                     </div>
 
                     <div class="contacto-acciones">
-                        <button class="contacto-revisar" type="button">Validar datos</button>
+                        <button class="contacto-revisar" type="button">Revisar mi solicitud</button>
                         <button class="contacto-enviar" type="submit" disabled hidden aria-describedby="contacto-disponibilidad">Enviar solicitud</button>
                     </div>
                     <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true" hidden></p>
-                    <noscript><p class="form-status is-error">La validación local requiere JavaScript. El envío permanece deshabilitado.</p></noscript>
+                    <noscript><p class="form-status is-error">Para revisar tus datos necesitas JavaScript. El envío en línea sigue deshabilitado; puedes escribirnos o llamarnos.</p></noscript>
                 </form>
             </div>
         </section>
