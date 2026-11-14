@@ -47,6 +47,44 @@
 })();
 
 (() => {
+  const section = document.querySelector('[data-hero-parallax]');
+  const media = section?.querySelector('.hero-parallax-media');
+  if (!section || !media) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let ticking = false;
+
+  function updateParallax() {
+    ticking = false;
+    if (reduceMotion.matches) {
+      section.style.setProperty('--parallax-y', '0px');
+      section.style.setProperty('--parallax-veil', '0.96');
+      return;
+    }
+
+    const rect = section.getBoundingClientRect();
+    const travel = Math.max(rect.height - window.innerHeight, 1);
+    const progress = Math.min(1, Math.max(0, -rect.top / travel));
+    const shift = (progress - 0.5) * Math.min(120, window.innerHeight * 0.14);
+    const veil = 0.94 - progress * 0.22;
+
+    section.style.setProperty('--parallax-y', `${shift.toFixed(1)}px`);
+    section.style.setProperty('--parallax-veil', veil.toFixed(3));
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateParallax);
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+  reduceMotion.addEventListener('change', requestUpdate);
+  updateParallax();
+})();
+
+(() => {
   const consultationLink = document.querySelector('.hero .btn-primary[href="#contacto"]');
   const contactTitle = document.getElementById('contacto-titulo');
   const contactContent = contactTitle?.closest('.container');

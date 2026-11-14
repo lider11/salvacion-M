@@ -70,6 +70,73 @@ p { margin-top: 0; }
 .btn-primary:hover { background: #e6f2f7; }
 .btn-primary:disabled { opacity: .65; cursor: not-allowed; }
 
+/* Hero parallax: escena vivida de fondo; el hero actual permanece sticky */
+.hero-parallax {
+  --parallax-y: 0px;
+  --parallax-veil: 0.92;
+  padding-block: 0;
+  min-height: 165vh;
+  background: transparent;
+}
+.hero-parallax-stage {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-parallax-media,
+.hero-parallax-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hero-parallax-media {
+  inset: -14% 0;
+  z-index: 0;
+}
+.hero-parallax-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate3d(0, var(--parallax-y), 0) scale(1.1);
+  will-change: transform;
+}
+.hero-parallax-veil {
+  z-index: 1;
+  background: linear-gradient(135deg, rgb(16 42 67 / 94%), rgb(20 91 130 / 82%));
+  opacity: var(--parallax-veil);
+}
+.hero-parallax .hero-layout {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+.hero-parallax .hero-visual img {
+  box-shadow: 0 18px 40px rgb(9 28 45 / 28%);
+}
+@media (max-width: 900px) {
+  .hero-parallax { min-height: 145vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-parallax {
+    --parallax-y: 0px;
+    --parallax-veil: 0.96;
+    min-height: 0;
+  }
+  .hero-parallax-stage { position: relative; min-height: 0; }
+  .hero-parallax-media img {
+    transform: none;
+    will-change: auto;
+  }
+}
+
 /* Servicios — propuesta A: rejilla 2×3 en escritorio */
 #servicios { background: var(--navy); }
 #servicios > .container { max-width: 64rem; }
