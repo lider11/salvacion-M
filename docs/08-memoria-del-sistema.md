@@ -1,5 +1,17 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-14 — Integración de avances locales (Visual Studio)
+
+**Origen:** archivos aportados por el responsable (`index.html`, `privacidad.html`, etc.).
+
+**Se incorporó:** rediseño de servicios/nosotros/proceso, formulario preview-safe (`method="dialog"`, envío deshabilitado, “Revisar campos”), aviso de privacidad ampliado, footer con canales de contacto.
+
+**Se conservó de la línea canónica:** docs simplificados (sin G3/SDD), 6 servicios del ADN, sección, contraste de nav y regla de no fake-success.
+
+**No se incorporó:** `README`/`AGENTS` antiguos con Gauntlet/G3; `package-lock.json` sin `package.json` (tooling pendiente de decisión explícita).
+
+**Estado:** UI enriquecida; envío real pendiente de API.
+
 ## 2026-11-11 — Portal: contenido ADN y formulario sin fake-success
 
 **Cambio:** ampliar servicios (6), sección de transparencia, aviso de privacidad borrador (`privacidad.html`) y formulario accesible en `#contacto`.
