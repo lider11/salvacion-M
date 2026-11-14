@@ -70,11 +70,15 @@ p { margin-top: 0; }
 .btn-primary:hover { background: #e6f2f7; }
 .btn-primary:disabled { opacity: .65; cursor: not-allowed; }
 
-/* Hero intro breve (≤300ms) → fade al hero settled; skip disponible */
+/* Hero intro: dissolve cinematográfico lento (crossfade + Ken Burns suave) */
 .hero-parallax {
   --hero-veil: 0.28;
   --hero-content: 0;
   --hero-media: 1;
+  --hero-media-scale: 1;
+  --hero-media-blur: 0px;
+  --hero-fade-ms: 2600ms;
+  --hero-ease: cubic-bezier(0.33, 0.1, 0.25, 1);
   padding-block: 0;
   background: transparent;
 }
@@ -98,7 +102,14 @@ p { margin-top: 0; }
   z-index: 0;
   overflow: hidden;
   opacity: var(--hero-media);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: blur(var(--hero-media-blur));
+  transform: scale(var(--hero-media-scale));
+  transform-origin: center center;
+  will-change: opacity, transform, filter;
+  transition:
+    opacity var(--hero-fade-ms) var(--hero-ease),
+    transform var(--hero-fade-ms) var(--hero-ease),
+    filter var(--hero-fade-ms) var(--hero-ease);
 }
 .hero-parallax-media > img {
   display: block;
@@ -110,7 +121,7 @@ p { margin-top: 0; }
   z-index: 1;
   background: linear-gradient(135deg, rgb(16 42 67 / 96%), rgb(20 91 130 / 88%));
   opacity: var(--hero-veil);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity var(--hero-fade-ms) var(--hero-ease);
 }
 .hero-parallax .hero-layout {
   position: relative;
@@ -119,7 +130,10 @@ p { margin-top: 0; }
   margin-inline: auto;
   padding-block: clamp(3.5rem, 7vw, 6rem);
   opacity: var(--hero-content);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(calc((1 - var(--hero-content)) * 12px));
+  transition:
+    opacity 2.2s var(--hero-ease) 0.35s,
+    transform 2.2s var(--hero-ease) 0.35s;
 }
 .hero-skip {
   position: absolute;
@@ -146,21 +160,30 @@ p { margin-top: 0; }
   --hero-veil: 1;
   --hero-content: 1;
   --hero-media: 0;
+  --hero-media-scale: 1.06;
+  --hero-media-blur: 6px;
 }
 .hero-parallax.is-settled .hero-parallax-media,
 .hero-parallax.is-settled .hero-skip {
   display: none;
+}
+.hero-parallax.is-settled .hero-layout {
+  transform: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-parallax {
     --hero-veil: 1;
     --hero-content: 1;
     --hero-media: 0;
+    --hero-media-scale: 1;
+    --hero-media-blur: 0px;
   }
   .hero-parallax-media,
   .hero-parallax-veil,
   .hero-parallax .hero-layout {
     transition: none;
+    transform: none;
+    filter: none;
   }
   .hero-parallax-media,
   .hero-skip {

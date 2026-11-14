@@ -53,8 +53,9 @@
   const skipButton = section?.querySelector('[data-hero-skip]');
   if (!section || !media || !photo) return;
 
-  const HOLD_MS = 300;
-  const FADE_MS = 700;
+  // Dissolve cinematográfico: hold breve + crossfade lento (sin shatter).
+  const HOLD_MS = 400;
+  const FADE_MS = 2600;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let holdTimer = 0;
   let fadeTimer = 0;
@@ -76,7 +77,6 @@
   function beginReveal() {
     if (settled) return;
     section.classList.add('is-revealing');
-    if (skipButton) skipButton.hidden = true;
     fadeTimer = window.setTimeout(settle, FADE_MS);
   }
 
