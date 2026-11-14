@@ -41,7 +41,7 @@ Portal público de orientación → formulario de solicitud → (previsto) API q
 ## Evidence on Hand
 
 - Logo SVG aprobado e integrado.
-- Imagen hero ilustrativa: `assets/hero-acompanamiento.png` (no acredita prestación clínica).
+- Imagen hero ilustrativa: `assets/hero-acompanamiento.jpg` (orientación civil; no acredita prestación clínica ni litigio).
 - Borrador de aviso de privacidad: `privacidad.html`.
 - Ausencias que el trabajo futuro no debe fabricar: testimonios, cifras de éxito, sellos, clientes o benchmarks no autorizados.
 

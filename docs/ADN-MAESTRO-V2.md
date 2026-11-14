@@ -9,8 +9,8 @@ Salvación M es una plataforma colombiana de orientación y acompañamiento para
 **Valores:** dignidad, claridad, confidencialidad, empatía, responsabilidad, trazabilidad y protección de derechos.
 
 ## 2. Propuesta de valor
-**Titular principal:** Orientación clara para defender tu acceso a la salud.
-**Texto de apoyo:** Cuando enfrentas demoras, negaciones, dificultades con medicamentos o barreras de atención, te ayudamos a comprender tu situación y conocer los pasos que puedes seguir.
+**Titular principal:** Orientación clara para comprender tu acceso a la salud.
+**Texto de apoyo:** Cuando enfrentas demoras, negaciones, dificultades con medicamentos o barreras de atención, te ayudamos a entender tu situación y conocer los pasos que puedes seguir.
 **CTA primario:** Solicitar consulta gratuita.
 **CTA secundario:** Hablar por WhatsApp.
 **Transparencia:** La consulta inicial es gratuita. El alcance y precio de eventuales servicios posteriores se informan antes de su contratación. No existe pasarela de pagos en el alcance inicial.
