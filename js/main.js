@@ -50,49 +50,34 @@
   const section = document.querySelector('[data-hero-parallax]');
   const media = section?.querySelector('.hero-parallax-media');
   const photo = media?.querySelector('img');
+  const skipButton = section?.querySelector('[data-hero-skip]');
   if (!section || !media || !photo) return;
 
-  const HOLD_MS = 1000;
-  const DISINTEGRATE_MS = 2800;
-  const COLS = 8;
-  const ROWS = 5;
+  const HOLD_MS = 300;
+  const FADE_MS = 700;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let holdTimer = 0;
+  let fadeTimer = 0;
+  let settled = false;
 
   function settle() {
+    if (settled) return;
+    settled = true;
+    window.clearTimeout(holdTimer);
+    window.clearTimeout(fadeTimer);
     section.classList.add('is-revealing', 'is-settled');
     media.replaceChildren();
+    if (skipButton) {
+      skipButton.hidden = true;
+      skipButton.setAttribute('aria-hidden', 'true');
+    }
   }
 
-  function disintegrate() {
-    const src = photo.currentSrc || photo.src;
-    photo.hidden = true;
+  function beginReveal() {
+    if (settled) return;
     section.classList.add('is-revealing');
-
-    const fragment = document.createDocumentFragment();
-    for (let row = 0; row < ROWS; row += 1) {
-      for (let col = 0; col < COLS; col += 1) {
-        const shard = document.createElement('span');
-        const dx = ((Math.random() - 0.5) * 36).toFixed(1);
-        const dy = ((Math.random() - 0.4) * 28).toFixed(1);
-        const rot = ((Math.random() - 0.5) * 8).toFixed(1);
-        shard.className = 'hero-shard';
-        shard.style.width = `${100 / COLS}%`;
-        shard.style.height = `${100 / ROWS}%`;
-        shard.style.left = `${(col * 100) / COLS}%`;
-        shard.style.top = `${(row * 100) / ROWS}%`;
-        shard.style.backgroundImage = `url("${src}")`;
-        shard.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
-        shard.style.backgroundPosition = `${(col / (COLS - 1)) * 100}% ${(row / (ROWS - 1)) * 100}%`;
-        shard.style.setProperty('--dx', `${dx}px`);
-        shard.style.setProperty('--dy', `${dy}px`);
-        shard.style.setProperty('--rot', `${rot}deg`);
-        shard.style.animationDelay = `${Math.floor(Math.random() * 520)}ms`;
-        fragment.appendChild(shard);
-      }
-    }
-    media.appendChild(fragment);
-
-    window.setTimeout(settle, DISINTEGRATE_MS + 520);
+    if (skipButton) skipButton.hidden = true;
+    fadeTimer = window.setTimeout(settle, FADE_MS);
   }
 
   function start() {
@@ -100,10 +85,19 @@
       settle();
       return;
     }
-    const begin = () => window.setTimeout(disintegrate, HOLD_MS);
-    if (photo.complete) begin();
-    else photo.addEventListener('load', begin, { once: true });
+
+    const arm = () => {
+      holdTimer = window.setTimeout(beginReveal, HOLD_MS);
+    };
+
+    if (photo.complete) arm();
+    else photo.addEventListener('load', arm, { once: true });
   }
+
+  skipButton?.addEventListener('click', () => {
+    settle();
+    section.querySelector('.hero-actions .btn-primary')?.focus({ preventScroll: true });
+  });
 
   start();
 })();

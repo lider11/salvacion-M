@@ -8,10 +8,13 @@ p1_count: 2
 target_identity: "file:/workspace/index.html#inicio"
 timestamp: 2026-11-14T07-31-02Z
 slug: index-html-inicio
+closed: true
+remediated_at: 2026-11-14T07-35-00Z
+commands_applied: distill, harden, quieter, clarify, polish
 ---
 Method: dual-agent (A: bc-fae135cc-72f4-55ef-9497-8e65d3626c27 · B: bc-3c9196d7-95ab-527f-8fa2-8fafdc75b58c)
 
-#### Design Health Score
+#### Design Health Score (pre-fix)
 
 | # | Heuristic | Score | Key Issue |
 |---|-----------|-------|-----------|
@@ -27,45 +30,18 @@ Method: dual-agent (A: bc-fae135cc-72f4-55ef-9497-8e65d3626c27 · B: bc-3c9196d7
 | 10 | Help and Documentation | n/a | Persuade; ayuda vive después |
 | **Total** | | **14/28** | **Acceptable (~50%)** |
 
-#### Design Specificity Verdict
+#### Remediation (usuario: 1b + 2b + 3c, todos seguidos)
 
-**LLM:** Settled hero es Salvación M (navy, gold, CTA único). Diluido por prólogo cinematográfico ~4.5s y ciclo de color gold→mint→white.
+- **distill:** hold ≤300ms; fade ~700ms; sin shatter/shards.
+- **harden:** control «Saltar intro» (`data-hero-skip`); reduced-motion → settle inmediato.
+- **quieter:** oro estático (`.hero-accent` / `--gold-bright`); sin color-loop.
+- **clarify:** H1 «comprender» (no «defender»); imagen acompañamiento sin bata/mazo; alt reescrito.
+- **polish:** sin box-shadow en `.hero-visual img`; media intro con fade de opacidad.
 
-**Deterministic scan:** detect exit 2, 12 hallazgos; pocos atribuibles al hero. Overlay: straggler en párrafo del hero (FP probable) + dark-glow en sombra de `.hero-visual img` (sombra intencional; detector la marca).
+#### Priority Issues (histórico)
 
-**Visual overlays:** Injection OK; overlays en viewport del hero (straggler + glow).
-
-#### Overall Impression
-
-El hero settled es calmado y alineado al producto; la puerta de entrada (intro + shatter) genera ansiedad y atrasa la promesa. Mayor oportunidad: default al hero usable, motion opcional/suave.
-
-#### What's Working
-
-- Copy settled alineado (barreras, pasos, consulta gratuita, sin garantía falsa).
-- `prefers-reduced-motion` salta al hero final.
-- Un CTA primario; tipografía de sistema; stack móvil usable.
-
-#### Priority Issues
-
-1. **[P0] Intro cinematográfica obliga a esperar** (~1.7s legible / ~4.5s settled). Suggested: `/impeccable distill`
-2. **[P0] Sin skip** (solo reduced-motion). Suggested: `/impeccable harden`
-3. **[P1] Color-loop mint/blanco** rompe One Accent. Suggested: `/impeccable quieter`
-4. **[P1] Imagen final clínica + mazo** vs orientación sin garantía. Suggested: `/impeccable clarify`
-5. **[P2] Box-shadow + espectáculo vs Flat-By-Default.** Suggested: `/impeccable polish`
-
-#### Persona Red Flags
-
-- Cuidador en crisis: 4s de shatter antes de saber que es orientación gratuita.
-- Bata + mazo + familia feliz → expectativas clínicas/legales.
-- Farmacia inicial puede mal-categorizar el sitio.
-
-#### Minor Observations
-
-- Marca vive en header; hero stripped es algo genérico advocacy.
-- “Defender” inclina a litigio vs orientación serena.
-- Contenido en DOM a opacity 0 (AT sí; visual no).
-
-#### Questions to Consider
-
-- Si la Sala es calma, ¿qué trabajo hace un shatter de 40 piezas?
-- ¿Un cuidador que esperó 40 min en EPS espera 4s más por la metáfora?
+1. **[P0] Intro cinematográfica** → distill (hold 300ms + fade)
+2. **[P0] Sin skip** → harden (botón Saltar intro)
+3. **[P1] Color-loop** → quieter (oro estático)
+4. **[P1] Imagen clínica/legal** → clarify (nueva imagen + copy)
+5. **[P2] Box-shadow** → polish (plano)
