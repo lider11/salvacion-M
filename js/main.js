@@ -58,18 +58,26 @@
     ticking = false;
     if (reduceMotion.matches) {
       section.style.setProperty('--parallax-y', '0px');
-      section.style.setProperty('--parallax-veil', '0.96');
+      section.style.setProperty('--hero-photo', '0');
+      section.style.setProperty('--hero-veil', '1');
+      section.style.setProperty('--hero-content', '1');
       return;
     }
 
     const rect = section.getBoundingClientRect();
     const travel = Math.max(rect.height - window.innerHeight, 1);
     const progress = Math.min(1, Math.max(0, -rect.top / travel));
-    const shift = (progress - 0.5) * Math.min(120, window.innerHeight * 0.14);
-    const veil = 0.94 - progress * 0.22;
+    // Ease mid-scroll so the photo reads first, then yields to the hero.
+    const eased = progress * progress * (3 - 2 * progress);
+    const shift = (progress - 0.5) * Math.min(100, window.innerHeight * 0.12);
+    const photo = Math.max(0, 1 - eased * 1.15);
+    const veil = 0.22 + eased * 0.78;
+    const content = 0.12 + eased * 0.88;
 
     section.style.setProperty('--parallax-y', `${shift.toFixed(1)}px`);
-    section.style.setProperty('--parallax-veil', veil.toFixed(3));
+    section.style.setProperty('--hero-photo', photo.toFixed(3));
+    section.style.setProperty('--hero-veil', veil.toFixed(3));
+    section.style.setProperty('--hero-content', content.toFixed(3));
   }
 
   function requestUpdate() {
