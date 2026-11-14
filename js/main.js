@@ -103,7 +103,7 @@
     const city = fields.ciudad.value.trim();
     show('ciudad', city && (city.length > 100 || !textCharacters.test(city) || !/\p{L}/u.test(city))
       ? 'Ciudad o municipio: escribe hasta 100 caracteres con letras, espacios, apóstrofos o guiones.' : '', [fields.ciudad]);
-    show('servicio', radios.some(radio => radio.checked) ? '' : 'Servicio solicitado: selecciona una de las tres opciones.', radios);
+    show('servicio', radios.some(radio => radio.checked) ? '' : 'Servicio solicitado: selecciona una de las seis opciones.', radios);
     const description = fields.descripcion.value.trim();
     show('descripcion', description.length < 20 || description.length > 1000
       ? 'Descripción: escribe entre 20 y 1000 caracteres, sin información médica sensible.' : '', [fields.descripcion]);
@@ -243,7 +243,7 @@
 
 (() => {
   const form = document.getElementById('orientacion-form');
-  if (!form) return;
+  if (!form || form.dataset.previewOnly === 'true') return;
 
   const status = document.getElementById('contacto-estado');
   const errorBox = document.getElementById('contacto-errores');

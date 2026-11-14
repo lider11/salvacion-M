@@ -1,5 +1,13 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-14 — Recuperación de la composición visual
+
+**Causa:** la conciliación dejó variantes duplicadas del formulario y secciones HTML básicas sin el marcado y los estilos del diseño trabajado.
+
+**Corrección:** se recuperaron Servicios, Nosotros y Proceso desde el respaldo local; se conservó el hero vigente y un solo formulario de vista previa con seis categorías, envío bloqueado y aviso de privacidad.
+
+**Verificación:** HTML y CSS sin errores de validación; Playwright en 320, 375, 768, 1024 y 1440 px sin overflow; zoom 200 % a 375 px sin overflow global; axe sin violaciones en Contacto. No se desplegó.
+
 ## 2026-11-14 — UX formulario P0
 
 **Cambio:** un solo aviso de sistema; CTA primario “Validar datos”; Enviar oculto/deshabilitado; labels con `*` simple; datos y servicios en rejilla 2 columnas; preselección de servicio desde tarjetas; estado oculto hasta interactuar; un solo foco al primer error.
@@ -41,6 +49,7 @@
 **Decisión:** consolidar la línea canónica en `main`. Abandonar el enfoque SDD extenso (especificaciones por módulo, gates globales tipo G3, artefactos de verificación acumulativos) que generó complejidad sin acelerar el producto.
 
 **Qué se conserva del reinicio:**
+
 - Frontend HTML5 / CSS3 / JavaScript Vanilla.
 - Backend previsto Node.js LTS + Express (cuando se implemente).
 - Retiro de G3 / `G3_PASS` como mandato.
@@ -48,6 +57,7 @@
 - GitHub solo como fuente e historial; no tocar producción sin autorización.
 
 **Qué no se incorpora ahora:**
+
 - Los tres documentos largos `docs/backend/*` de `reinicio-2026-desde-cero` (quedan históricos en esa rama).
 - El rediseño y el andamiaje SDD/Playwright de `trabajo-proceso-001` (revisión futura, sin arrastrar burocracia).
 
