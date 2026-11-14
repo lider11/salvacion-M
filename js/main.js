@@ -46,6 +46,89 @@
   syncViewport();
 })();
 
+// Vista previa de Contacto: solo validación local, sin contrato de envío aprobado.
+(() => {
+  const form = document.getElementById('orientacion-form');
+  if (!form) return;
+  const review = form.querySelector('.contacto-revisar');
+  const summary = document.getElementById('contacto-errores');
+  const list = summary.querySelector('ul');
+  const status = document.getElementById('contacto-estado');
+  const fields = {
+    nombre: document.getElementById('contacto-nombre'),
+    email: document.getElementById('contacto-email'),
+    telefono: document.getElementById('contacto-telefono'),
+    ciudad: document.getElementById('contacto-ciudad'),
+    descripcion: document.getElementById('contacto-descripcion')
+  };
+  const radios = [...form.querySelectorAll('input[name="servicio"]')];
+  const textCharacters = /^[\p{L}\p{M} .’'\-]+$/u;
+  let reviewing = false;
+  let reviewed = false;
+
+  function validate(focusSummary = false) {
+    list.replaceChildren();
+    let errors = 0;
+    function show(key, message, controls) {
+      const error = document.getElementById(`contacto-${key}-error`);
+      error.textContent = message;
+      error.hidden = !message;
+      controls.forEach(control => {
+        if (message) control.setAttribute('aria-invalid', 'true');
+        else control.removeAttribute('aria-invalid');
+      });
+      if (!message) return;
+      errors += 1;
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${controls[0].id}`;
+      link.textContent = message;
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        controls[0].focus();
+      });
+      item.append(link);
+      list.append(item);
+    }
+    const name = fields.nombre.value.trim();
+    show('nombre', name.length < 3 || name.length > 100 || !textCharacters.test(name) || !/\p{L}/u.test(name)
+      ? 'Nombre completo: escribe entre 3 y 100 caracteres con letras, espacios, apóstrofos o guiones.' : '', [fields.nombre]);
+    const email = fields.email.value.trim();
+    show('email', !email || email.length > 254 || fields.email.validity.typeMismatch
+      ? 'Correo electrónico: escribe una dirección válida de hasta 254 caracteres.' : '', [fields.email]);
+    const phone = fields.telefono.value.trim();
+    const digits = phone.replace(/\D/g, '');
+    show('telefono', phone && (phone.length > 25 || !/^\+?[\d ()\-]+$/.test(phone) || digits.length < 7 || digits.length > 15)
+      ? 'Teléfono: usa entre 7 y 15 dígitos y solo + inicial, espacios, paréntesis o guiones.' : '', [fields.telefono]);
+    const city = fields.ciudad.value.trim();
+    show('ciudad', city && (city.length > 100 || !textCharacters.test(city) || !/\p{L}/u.test(city))
+      ? 'Ciudad o municipio: escribe hasta 100 caracteres con letras, espacios, apóstrofos o guiones.' : '', [fields.ciudad]);
+    show('servicio', radios.some(radio => radio.checked) ? '' : 'Servicio solicitado: selecciona una de las tres opciones.', radios);
+    const description = fields.descripcion.value.trim();
+    show('descripcion', description.length < 20 || description.length > 1000
+      ? 'Descripción: escribe entre 20 y 1000 caracteres, sin información médica sensible.' : '', [fields.descripcion]);
+    summary.hidden = errors === 0;
+    status.textContent = errors
+      ? 'Hay campos por corregir. No se ha enviado ninguna solicitud.'
+      : 'Los campos revisados cumplen las reglas locales. El envío sigue bloqueado: la política y la recepción segura están pendientes de verificación. No se ha enviado ninguna solicitud.';
+    if (focusSummary && errors) summary.focus();
+  }
+
+  review.hidden = false;
+  review.addEventListener('click', () => {
+    if (reviewing) return;
+    reviewing = true;
+    reviewed = true;
+    try { validate(true); } finally { reviewing = false; }
+  });
+  form.addEventListener('input', () => { if (reviewed) validate(); });
+  form.addEventListener('change', () => { if (reviewed) validate(); });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    status.textContent = 'Envío bloqueado. La recepción segura y la política de datos no están verificadas. No se ha enviado ninguna solicitud.';
+  });
+})();
+
 (() => {
   const section = document.querySelector('[data-hero-parallax]');
   const media = section?.querySelector('.hero-parallax-media');

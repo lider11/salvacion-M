@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="460" viewBox="0 0 560 460">
+  <title>Una conversación de orientación</title>
+  <desc>Dos personas sentadas frente a frente, con un documento sobre una mesa, en un espacio tranquilo.</desc>
+  <rect width="560" height="460" rx="24" fill="#eef5f8"/>
+  <circle cx="290" cy="215" r="160" fill="#dce9ef"/>
+  <rect x="370" y="44" width="136" height="128" rx="12" fill="#fff"/>
+  <path d="M438 44v128M370 108h136" stroke="#dce9ef" stroke-width="8"/>
+  <path d="M67 408h426" stroke="#b8cbd5" stroke-width="3" stroke-linecap="round"/>
+  <!-- La conversación es el foco; no representa atención clínica. -->
+  <path d="M198 68h121a16 16 0 0 1 16 16v48a16 16 0 0 1-16 16h-64l-26 22v-22h-31a16 16 0 0 1-16-16V84a16 16 0 0 1 16-16" fill="#fff"/>
+  <path d="M208 96h99M208 116h68" stroke="#086c72" stroke-width="6" stroke-linecap="round"/>
+  <!-- Persona a la izquierda -->
+  <rect x="82" y="255" width="92" height="104" rx="20" fill="#b8cbd5"/>
+  <path d="M115 326l-7 80m47-80 30 80" stroke="#102a43" stroke-width="22" stroke-linecap="round"/>
+  <path d="M96 281v-52c0-34 19-51 44-51s46 17 46 51v52" fill="#086c72"/>
+  <circle cx="141" cy="146" r="31" fill="#c88c67"/>
+  <path d="M111 145c-8-36 13-49 35-44 24-2 35 21 25 46l-10-22-31-4-19 24" fill="#102a43"/>
+  <path d="M165 221l31 35 48-10" fill="none" stroke="#c88c67" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Persona a la derecha -->
+  <rect x="386" y="255" width="92" height="104" rx="20" fill="#b8cbd5"/>
+  <path d="M404 326l-29 80m63-80 10 80" stroke="#102a43" stroke-width="22" stroke-linecap="round"/>
+  <path d="M374 281v-52c0-34 19-51 44-51s46 17 46 51v52" fill="#b48424"/>
+  <circle cx="418" cy="146" r="31" fill="#dfad88"/>
+  <path d="M387 143c-5-35 12-46 32-45 25-2 40 19 30 48l-13-25-34 3-15 19" fill="#405769"/>
+  <path d="M390 221l-27 35-47-10" fill="none" stroke="#dfad88" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Mesa y documento compartido -->
+  <path d="M239 279l-10 126m94-126 10 126" stroke="#405769" stroke-width="10" stroke-linecap="round"/>
+  <rect x="193" y="268" width="176" height="16" rx="8" fill="#102a43"/>
+  <path d="M253 238h58l10 30h-78z" fill="#fff"/>
+  <path d="M263 248h36m-33 9h28" stroke="#b8cbd5" stroke-width="3" stroke-linecap="round"/>
+</svg>

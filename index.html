@@ -148,6 +148,7 @@
 
         <section id="contacto" aria-labelledby="contacto-titulo">
             <div class="container">
+<<<<<<< Updated upstream
                 <h2 id="contacto-titulo" tabindex="-1">Prepara tu solicitud</h2>
                 <p class="contacto-intro">Cuéntanos qué te está pasando. La consulta inicial es gratuita; aún no
                     recibimos envíos en línea, pero puedes dejarlo listo y contactarnos por teléfono o correo.</p>
@@ -171,6 +172,84 @@
                         <p><strong>Revisa estos campos para continuar:</strong></p>
                         <ul></ul>
                     </div>
+=======
+
+                <h2 id="contacto-titulo" tabindex="-1">Solicita orientación</h2>
+
+                <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
+                <p class="contacto-aviso" id="contacto-privacidad">No incluyas historias clínicas, diagnósticos ni documentos médicos en esta solicitud inicial.</p>
+                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Vista previa: envío no disponible.</strong> La recepción segura y la política de tratamiento de datos están pendientes de verificación. Para probar esta interfaz, utiliza solo datos ficticios. No envíes datos personales reales.</p>
+
+                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad contacto-privacidad" novalidate autocomplete="off">
+                    <p>Los campos marcados con <span aria-hidden="true">*</span> «obligatorio» son necesarios.</p>
+                    <div id="contacto-errores" class="contacto-errores" tabindex="-1" hidden>
+                        <p><strong>Revisa los campos indicados:</strong></p>
+                        <ul></ul>
+                    </div>
+                    <fieldset class="contacto-datos">
+                        <legend>Datos de contacto</legend>
+                        <div class="contacto-campos">
+                            <div class="contacto-campo">
+                                <label for="contacto-nombre">Nombre completo <span>(obligatorio) *</span></label>
+                                <input id="contacto-nombre" type="text" required minlength="3" maxlength="100" aria-describedby="contacto-nombre-ayuda contacto-nombre-error">
+                                <small id="contacto-nombre-ayuda">Entre 3 y 100 caracteres. Usa letras, espacios, apóstrofos o guiones.</small>
+                                <p class="contacto-error" id="contacto-nombre-error" hidden></p>
+                            </div>
+                            <div class="contacto-campo">
+                                <label for="contacto-email">Correo electrónico <span>(obligatorio) *</span></label>
+                                <input id="contacto-email" type="email" required maxlength="254" aria-describedby="contacto-email-error">
+                                <p class="contacto-error" id="contacto-email-error" hidden></p>
+                            </div>
+                            <div class="contacto-campo">
+                                <label for="contacto-telefono">Teléfono <span>(opcional)</span></label>
+                                <input id="contacto-telefono" type="tel" maxlength="25" aria-describedby="contacto-telefono-ayuda contacto-telefono-error">
+                                <small id="contacto-telefono-ayuda">Entre 7 y 15 dígitos; puedes usar +, espacios, paréntesis y guiones.</small>
+                                <p class="contacto-error" id="contacto-telefono-error" hidden></p>
+                            </div>
+                            <div class="contacto-campo">
+                                <label for="contacto-ciudad">Ciudad o municipio <span>(opcional)</span></label>
+                                <input id="contacto-ciudad" type="text" maxlength="100" aria-describedby="contacto-ciudad-error">
+                                <p class="contacto-error" id="contacto-ciudad-error" hidden></p>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="contacto-servicios" aria-describedby="contacto-servicio-error">
+                        <legend>Servicio solicitado (obligatorio) *</legend>
+                        <label class="contacto-opcion">
+                            <input id="contacto-servicio-negacion" type="radio" name="servicio" value="Negación de servicios" required>
+                            <span><strong>Negación de servicios</strong><span>Orientación ante barreras de acceso a tratamientos y procedimientos.</span></span>
+                        </label>
+                        <label class="contacto-opcion">
+                            <input id="contacto-servicio-medicamentos" type="radio" name="servicio" value="Medicamentos" required>
+                            <span><strong>Medicamentos</strong><span>Orientación ante retrasos o falta de entrega.</span></span>
+                        </label>
+                        <label class="contacto-opcion">
+                            <input id="contacto-servicio-citas" type="radio" name="servicio" value="Citas médicas" required>
+                            <span><strong>Citas médicas</strong><span>Orientación ante demoras en citas, especialistas y autorizaciones.</span></span>
+                        </label>
+                        <p class="contacto-error" id="contacto-servicio-error" hidden></p>
+                    </fieldset>
+                    <div class="contacto-campo">
+                        <label for="contacto-descripcion">Describe brevemente tu situación <span>(obligatorio) *</span></label>
+                        <textarea id="contacto-descripcion" rows="5" required minlength="20" maxlength="1000" aria-describedby="contacto-descripcion-ayuda contacto-descripcion-error"></textarea>
+                        <small id="contacto-descripcion-ayuda">Explica qué ocurrió, sin incluir información médica sensible. Entre 20 y 1000 caracteres.</small>
+                        <p class="contacto-error" id="contacto-descripcion-error" hidden></p>
+                    </div>
+                    <div class="contacto-autorizacion">
+                        <label>
+                            <input id="contacto-consentimiento" type="checkbox" required disabled aria-describedby="contacto-politica-estado">
+                            <span>He leído la política de tratamiento de datos personales y autorizo el tratamiento de mis datos para gestionar esta solicitud.</span>
+                        </label>
+                        <p id="contacto-politica-estado">Autorización no disponible: la política vigente y su enlace están pendientes de aprobación. Esta vista previa no registra consentimiento.</p>
+                    </div>
+                    <div class="contacto-acciones">
+                        <button class="contacto-revisar" type="button" hidden>Revisar campos sin enviar</button>
+                        <button class="contacto-enviar" type="submit" disabled aria-describedby="contacto-disponibilidad">Enviar solicitud de orientación</button>
+                    </div>
+                    <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true">No se ha enviado ninguna solicitud.</p>
+                    <noscript><p>La revisión local de campos requiere JavaScript. El envío permanece deshabilitado.</p></noscript>
+                </form>
+>>>>>>> Stashed changes
 
                     <fieldset class="contacto-datos">
                         <legend>Datos de contacto</legend>
@@ -305,9 +384,12 @@
                         <h2 id="footer-brand-title">Salvación M</h2>
                     </div>
                     <p>Orientación y acompañamiento frente a dificultades de acceso al sistema de salud colombiano.</p>
+<<<<<<< Updated upstream
                     <nav class="footer-social" data-social-links aria-label="Redes sociales">
                         <ul></ul>
                     </nav>
+=======
+>>>>>>> Stashed changes
                 </section>
 
                 <nav class="footer-links" aria-labelledby="footer-links-title">
@@ -318,29 +400,46 @@
                         <li><a href="#nosotros">Nosotros</a></li>
                         <li><a href="#proceso">Cómo funciona</a></li>
                         <li><a href="#contacto">Contacto</a></li>
+<<<<<<< Updated upstream
                         <li><a href="./privacidad.html">Privacidad</a></li>
+=======
+>>>>>>> Stashed changes
                     </ul>
                 </nav>
 
                 <section class="footer-contact" aria-labelledby="footer-contact-title">
                     <h2 id="footer-contact-title">Contáctanos</h2>
                     <address>
+<<<<<<< Updated upstream
                         <p><span class="footer-contact-label">Dirección</span><br>Carrera 44B No. 53B-35, Barranquilla,
                             Atlántico, Colombia.</p>
                         <p><span class="footer-contact-label">Teléfono</span><br><a
                                 href="tel:+573004218699">+57&nbsp;300&nbsp;421&nbsp;8699</a></p>
                         <p><span class="footer-contact-label">Correo electrónico</span><br><a
                                 href="mailto:info@salvacionm.com">info@salvacionm.com</a></p>
+=======
+                        <p><span class="footer-contact-label">Dirección</span><br>Carrera 44B No. 53B-35, Barranquilla, Atlántico, Colombia.</p>
+                        <p><span class="footer-contact-label">Teléfono</span><br><a href="tel:+573004218699">+57&nbsp;300&nbsp;421&nbsp;8699</a></p>
+                        <p><span class="footer-contact-label">Correo electrónico</span><br><a href="mailto:info@salvacionm.com">info@salvacionm.com</a></p>
+>>>>>>> Stashed changes
                     </address>
                 </section>
             </div>
 
+<<<<<<< Updated upstream
             <p class="footer-disclaimer">La orientación ofrecida no sustituye la atención médica de urgencia. En una
                 emergencia, acude a los servicios de urgencias.</p>
             <div class="footer-bottom">
                 <p>&copy; 2026 Salvación M. Todos los derechos reservados.</p>
                 <p class="footer-legal"><a href="./privacidad.html">Aviso de privacidad</a> (borrador sujeto a
                     aprobación jurídica).</p>
+=======
+            <p class="footer-disclaimer">La orientación ofrecida no sustituye la atención médica de urgencia. En una emergencia, acude a los servicios de urgencias.</p>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Salvación M. Todos los derechos reservados.</p>
+                <p class="footer-legal">Política de tratamiento de datos personales y aviso de privacidad: enlaces pendientes de aprobación.</p>
+>>>>>>> Stashed changes
             </div>
         </div>
     </footer>
