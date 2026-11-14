@@ -1,5 +1,9 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-14 — UX formulario P0
+
+**Cambio:** un solo aviso de sistema; CTA primario “Validar datos”; Enviar oculto/deshabilitado; labels con `*` simple; datos y servicios en rejilla 2 columnas; preselección de servicio desde tarjetas; estado oculto hasta interactuar; un solo foco al primer error.
+
 ## 2026-11-14 — Retiro de sección Transparencia y alcance
 
 **Cambio:** se elimina `#transparencia` del portal y sus enlaces en nav/pie. Los mensajes de gratuidad y límites siguen en contacto/footer según aplique.
