@@ -1,24 +1,23 @@
-# AGENTS.md — Salvación M (reinicio)
+# AGENTS.md — Salvación M
 
 ## Antes de implementar
-Leer `README.md` y `docs/08-memoria-del-sistema.md`. Inspeccionar el código y documentar riesgos antes de modificar.
+Leer `README.md` y `docs/08-memoria-del-sistema.md`. Revisar el código afectado y anotar riesgos breves antes de cambiar.
 
-## Método Gauntlet Loop 2026
-TAREA → MÉTODO → ESTÁNDAR → TERMINACIÓN.
-PLANIFICAR → CONSTRUIR → PROBAR → CRITICAR → CORREGIR → VERIFICAR.
-Roles lógicos: Constructor, Crítico Adversarial y Árbitro. Máximo tres correcciones y dos rondas adversariales por defecto.
+## Método
+INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → DOCUMENTAR.
+
+Corregir defectos relevantes y volver a probar lo afectado. Preferir entregas pequeñas. No usar puertas de aprobación acumulativas, certificaciones artificiales ni SDD extensos que bloqueen el avance.
 
 ## Restricciones
-- HTML5, CSS3 y JavaScript Vanilla; no introducir frameworks sin autorización.
-- GitHub conserva código e historial. No usar GitHub Actions para scheduler ni despliegues operativos.
+- Frontend: HTML5, CSS3 y JavaScript Vanilla. No introducir frameworks sin autorización.
+- Backend previsto: Node.js LTS + Express. No frameworks adicionales sin autorización.
+- GitHub solo para código, docs e historial. No usar GitHub Actions como scheduler ni despliegue operativo.
 - No tocar producción sin autorización expresa.
 - No registrar secretos, datos personales reales ni información de salud en el repositorio.
 - Persistir solicitudes antes de afirmar éxito.
 - Separar portal público, CRM y servicios internos.
-- Exigir autenticación, RBAC, CSRF, controles contra XSS e inyección SQL, auditoría y mínimo privilegio.
-- Objetivo WCAG 2.2 AA.
+- Autenticación, RBAC, CSRF, controles contra XSS e inyección SQL, auditoría y mínimo privilegio cuando exista backend.
+- Objetivo de accesibilidad: WCAG 2.2 AA.
 
 ## Verificación
-Diagnósticos: PASS, FAIL_REAL, NO_ACREDITADO, BLOCKED, NOT_RUN.
-Cada requisito se evalúa TRUE/FALSE; sin evidencia verificable, FALSE.
-G3 requiere siete criterios acreditados, pruebas y ausencia de defectos críticos o altos. De lo contrario `G3_PASS = FALSE`.
+Por entrega: qué cambió, qué se probó, resultado, riesgos y SHA. Sin prueba real: indicar NO VERIFICADO. La calidad se acredita por funcionalidad, no por un gate global.

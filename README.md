@@ -1,25 +1,39 @@
-# Salvación M — Reinicio 2026
+# Salvación M
 
-Nueva base del proyecto en la rama `reinicio-2026-desde-cero`.
+Portal de orientación para personas que enfrentan barreras de acceso al sistema de salud colombiano.
 
-## Objetivo
-Portal público de orientación para usuarios del sistema de salud colombiano, formulario de solicitudes, CRM administrativo independiente y gestión posterior de citas y recordatorios.
+## Estado actual
 
-## Alcance de este commit
-Solo estructura y documentación. No hay frontend funcional, API, CRM, base de datos, scheduler ni despliegue.
+Línea canónica: rama `main` (y PRs hacia ella).
 
-## Arquitectura aprobada
-- HTML5 semántico, CSS3 responsive y JavaScript Vanilla.
-- D1/SQLite para persistencia y auditoría cuando se implemente.
-- Sites/MCP para entornos, ejecución y scheduler autenticado.
-- GitHub únicamente para código fuente, documentación e historial; nunca como scheduler o despliegue automático.
-- CRM separado del sitio público.
-- Consulta inicial gratuita; no se incluye pasarela de pagos.
+| Pieza | Estado |
+|---|---|
+| Landing pública (HTML/CSS/JS) | En progreso — hero, servicios, nosotros, proceso, contacto informativo |
+| Formulario de solicitudes | Pendiente |
+| Backend API | Pendiente (Node.js + Express cuando se implemente) |
+| CRM | Pendiente |
+| Producción | Sin cambios sin autorización expresa |
 
-## Seguridad y calidad
-Privacidad colombiana, autenticación, RBAC, CSRF, validación, accesibilidad WCAG 2.2 AA y Gauntlet Loop 2026. Ningún control se considera aprobado sin evidencia.
+No hay gate global tipo G3. Cada entrega se verifica por lo que realmente se construyó y se probó.
 
-## Estado
-`REINICIO_DOCUMENTAL`. `G3_PASS = FALSE`. Ninguna funcionalidad ni ejecución real acreditada.
+## Stack
 
-La rama `main` conserva el historial previo. No modificar producción sin autorización expresa.
+- Frontend: HTML5, CSS3, JavaScript Vanilla
+- Backend previsto: Node.js LTS + Express (API REST modular)
+- Persistencia: por definir al implementar (SQLite o PostgreSQL)
+- GitHub: solo código, documentación e historial — no scheduler ni despliegue operativo
+
+## Cómo trabajar
+
+1. Leer este README y `docs/08-memoria-del-sistema.md`
+2. Cambiar una cosa a la vez, probarla, documentar el resultado
+3. No afirmar éxito de una solicitud hasta persistirla de verdad
+4. No tocar producción sin autorización expresa
+
+Detalle de arquitectura: `docs/arquitectura-inicial.md`.  
+Marca y diseño: `docs/ADN-MAESTRO-V2.md`, `docs/SISTEMA-DISENO-V2.md`.
+
+## Ramas históricas
+
+- `reinicio-2026-desde-cero`: experimentó SDD/backend largo; decisiones útiles (Express, retiro de G3) se consolidan aquí; el resto queda histórico.
+- `trabajo-proceso-001`: rediseño UI experimental con artefactos SDD/Playwright; no forma parte de la línea canónica hasta una integración deliberada y simple.
