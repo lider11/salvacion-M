@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T02:52:08Z",
+  "title": "Design System: Salvación M",
+  "extensions": {
+    "colorMeta": {
+      "navy": {
+        "role": "primary",
+        "displayName": "Azul Marino",
+        "canonical": "#102A43",
+        "tonalRamp": ["oklch(15% 0.040 240)", "oklch(25% 0.040 240)", "oklch(35% 0.040 240)", "oklch(45% 0.040 240)", "oklch(55% 0.040 240)", "oklch(65% 0.040 240)", "oklch(80% 0.040 240)", "oklch(95% 0.040 240)"]
+      },
+      "navy-dark": {
+        "role": "primary",
+        "displayName": "Azul Marino Oscuro",
+        "canonical": "#091C2D",
+        "tonalRamp": ["oklch(15% 0.030 240)", "oklch(25% 0.030 240)", "oklch(35% 0.030 240)", "oklch(45% 0.030 240)", "oklch(55% 0.030 240)", "oklch(65% 0.030 240)", "oklch(80% 0.030 240)", "oklch(95% 0.030 240)"]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Azul Medio",
+        "canonical": "#145B82",
+        "tonalRamp": ["oklch(15% 0.080 220)", "oklch(25% 0.080 220)", "oklch(35% 0.080 220)", "oklch(45% 0.080 220)", "oklch(55% 0.080 220)", "oklch(65% 0.080 220)", "oklch(80% 0.080 220)", "oklch(95% 0.080 220)"]
+      },
+      "teal": {
+        "role": "secondary",
+        "displayName": "Teal Guía",
+        "canonical": "#086C72",
+        "tonalRamp": ["oklch(15% 0.070 195)", "oklch(25% 0.070 195)", "oklch(35% 0.070 195)", "oklch(45% 0.070 195)", "oklch(55% 0.070 195)", "oklch(65% 0.070 195)", "oklch(80% 0.070 195)", "oklch(95% 0.070 195)"]
+      },
+      "gold": {
+        "role": "tertiary",
+        "displayName": "Oro Discreto",
+        "canonical": "#926B28",
+        "tonalRamp": ["oklch(15% 0.080 75)", "oklch(25% 0.080 75)", "oklch(35% 0.080 75)", "oklch(45% 0.080 75)", "oklch(55% 0.080 75)", "oklch(65% 0.080 75)", "oklch(80% 0.080 75)", "oklch(95% 0.080 75)"]
+      },
+      "gold-bright": {
+        "role": "tertiary",
+        "displayName": "Oro Claro",
+        "canonical": "#F0C35B",
+        "tonalRamp": ["oklch(15% 0.120 80)", "oklch(25% 0.120 80)", "oklch(35% 0.120 80)", "oklch(45% 0.120 80)", "oklch(55% 0.120 80)", "oklch(65% 0.120 80)", "oklch(80% 0.120 80)", "oklch(95% 0.120 80)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#243342",
+        "tonalRamp": ["oklch(15% 0.020 220)", "oklch(25% 0.020 220)", "oklch(35% 0.020 220)", "oklch(45% 0.020 220)", "oklch(55% 0.020 220)", "oklch(65% 0.020 220)", "oklch(80% 0.020 220)", "oklch(95% 0.020 220)"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Texto Atenuado",
+        "canonical": "#526171",
+        "tonalRamp": ["oklch(15% 0.020 220)", "oklch(25% 0.020 220)", "oklch(35% 0.020 220)", "oklch(45% 0.020 220)", "oklch(55% 0.020 220)", "oklch(65% 0.020 220)", "oklch(80% 0.020 220)", "oklch(95% 0.020 220)"]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Marfil Suave",
+        "canonical": "#FAF8F4",
+        "tonalRamp": ["oklch(15% 0.010 80)", "oklch(25% 0.010 80)", "oklch(35% 0.010 80)", "oklch(45% 0.010 80)", "oklch(55% 0.010 80)", "oklch(65% 0.010 80)", "oklch(80% 0.010 80)", "oklch(95% 0.010 80)"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Línea",
+        "canonical": "#D8DEE5",
+        "tonalRamp": ["oklch(15% 0.010 220)", "oklch(25% 0.010 220)", "oklch(35% 0.010 220)", "oklch(45% 0.010 220)", "oklch(55% 0.010 220)", "oklch(65% 0.010 220)", "oklch(80% 0.010 220)", "oklch(95% 0.010 220)"]
+      },
+      "focus": {
+        "role": "neutral",
+        "displayName": "Foco",
+        "canonical": "#1B65A5",
+        "tonalRamp": ["oklch(15% 0.100 230)", "oklch(25% 0.100 230)", "oklch(35% 0.100 230)", "oklch(45% 0.100 230)", "oklch(55% 0.100 230)", "oklch(65% 0.100 230)", "oklch(80% 0.100 230)", "oklch(95% 0.100 230)"]
+      },
+      "danger": {
+        "role": "neutral",
+        "displayName": "Peligro",
+        "canonical": "#8B1E1E",
+        "tonalRamp": ["oklch(15% 0.100 25)", "oklch(25% 0.100 25)", "oklch(35% 0.100 25)", "oklch(45% 0.100 25)", "oklch(55% 0.100 25)", "oklch(65% 0.100 25)", "oklch(80% 0.100 25)", "oklch(95% 0.100 25)"]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Blanco",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["oklch(15% 0.000 0)", "oklch(25% 0.000 0)", "oklch(35% 0.000 0)", "oklch(45% 0.000 0)", "oklch(55% 0.000 0)", "oklch(65% 0.000 0)", "oklch(80% 0.000 0)", "oklch(95% 0.000 0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero h1 only; max ~18ch." },
+      "headline": { "displayName": "Headline", "purpose": "Section h2." },
+      "title": { "displayName": "Title", "purpose": "Card and step h3." },
+      "body": { "displayName": "Body", "purpose": "Paragraphs; 65–70ch preferred." },
+      "label": { "displayName": "Label", "purpose": "Section eyebrow labels with wide tracking." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-standard", "value": "160ms ease", "purpose": "Default color/background transitions when motion is allowed." },
+      { "name": "ease-menu", "value": "180ms ease-out", "purpose": "Mobile nav enter animation." },
+      { "name": "hero-color-cycle", "value": "8s ease-in-out infinite", "purpose": "Hero accent word color loop; disabled under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "600px" },
+      { "name": "tablet", "value": "900px" },
+      { "name": "proceso-stack", "value": "1023px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Hero)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA hero: blanco sobre navy, texto navy.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Solicitar consulta gratuita</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0.85rem 1.35rem; border: 0; border-radius: 0.55rem; background: #fff; color: #102A43; font: inherit; font-weight: 750; cursor: pointer; transition: background-color 160ms ease, transform 160ms ease; } .ds-btn-primary:hover { background: #E6F2F7; transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 3px solid #1B65A5; outline-offset: 3px; }"
+    },
+    {
+      "name": "Navy Button",
+      "kind": "button",
+      "refersTo": "button-navy",
+      "description": "Acción primaria en superficies claras (Validar datos).",
+      "html": "<button class=\"ds-btn-navy\" type=\"button\">Validar datos</button>",
+      "css": ".ds-btn-navy { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0.85rem 1.35rem; border: 0; border-radius: 0.55rem; background: #102A43; color: #fff; font: inherit; font-weight: 750; cursor: pointer; } .ds-btn-navy:hover { background: #091C2D; } .ds-btn-navy:focus-visible { outline: 3px solid #1B65A5; outline-offset: 3px; }"
+    },
+    {
+      "name": "Gold CTA",
+      "kind": "button",
+      "refersTo": "button-gold",
+      "description": "CTA de servicios: oro claro sobre navy.",
+      "html": "<a class=\"ds-btn-gold\" href=\"#contacto\">Solicitar orientación gratuita</a>",
+      "css": ".ds-btn-gold { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0.85rem 1.5rem; border-radius: 0.7rem; background: #F0C35B; color: #102A43; text-decoration: none; font-weight: 750; } .ds-btn-gold:hover { background: #FFDA85; } .ds-btn-gold:focus-visible { outline: 3px solid #086C72; outline-offset: 3px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Campo de formulario 48px con borde línea.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-label\">Nombre completo</span><input class=\"ds-input\" type=\"text\" placeholder=\"Tu nombre\"></label>",
+      "css": ".ds-field { display: grid; gap: 0.35rem; font-family: system-ui, sans-serif; } .ds-label { font-weight: 650; color: #102A43; } .ds-input { width: 100%; min-height: 48px; padding: 0.7rem 0.85rem; border: 1px solid #D8DEE5; border-radius: 0.5rem; background: #fff; color: #243342; font: inherit; } .ds-input:focus-visible { outline: 3px solid #1B65A5; outline-offset: 3px; }"
+    },
+    {
+      "name": "Header Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Enlace de navegación sobre navy.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Principal\"><a class=\"ds-nav-link\" href=\"#servicios\">Servicios</a></nav>",
+      "css": ".ds-nav { background: #102A43; padding: 0.75rem 1rem; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0.35rem 0.1rem; color: #fff; text-decoration: none; font-weight: 600; font-family: system-ui, sans-serif; } .ds-nav-link:hover, .ds-nav-link:focus-visible { color: #FFDA85; text-decoration: underline; text-underline-offset: 5px; }"
+    },
+    {
+      "name": "Servicio Card",
+      "kind": "card",
+      "refersTo": "servicio-card",
+      "description": "Fila de dificultad con icono teal y flecha.",
+      "html": "<a class=\"ds-servicio\" href=\"#contacto\"><span class=\"ds-servicio-icon\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"><path d=\"M12 3 4 6v6c0 5 8 9 8 9s8-4 8-9V6l-8-3Z\"/></svg></span><span class=\"ds-servicio-text\"><strong>Negación de servicios</strong><small>Acceso a tratamientos y procedimientos.</small></span><span class=\"ds-servicio-arrow\" aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-servicio { display: flex; align-items: center; gap: 1rem; min-height: 104px; padding: 1.1rem 1.2rem; border: 1px solid #dce7ec; border-radius: 1rem; background: #fff; color: #102A43; text-decoration: none; font-family: system-ui, sans-serif; } .ds-servicio:hover { background: #f4f9fb; } .ds-servicio:focus-visible { outline: 3px solid #086C72; outline-offset: -4px; } .ds-servicio-icon { display: flex; align-items: center; justify-content: center; flex: 0 0 52px; height: 52px; border-radius: 0.85rem; background: #eef5f8; color: #086C72; } .ds-servicio-text { display: grid; gap: 0.25rem; flex: 1; } .ds-servicio-text strong { font-size: 1.05rem; } .ds-servicio-text small { color: #405769; font-size: 0.95rem; } .ds-servicio-arrow { color: #086C72; font-size: 1.4rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La Sala de Orientación",
+    "overview": "El sistema visual es un espacio calmado donde la persona entiende el siguiente paso. Predomina el azul marino institucional sobre blanco y marfil, con teal como guía secundaria y oro solo como acento discreto. La densidad es aireada: secciones amplias, tipografía de sistema legible y controles con área táctil generosa (≥44–48px).\n\nLa personalidad es profesional, serena y limpia. Rechaza dramatismo clínico, look gubernamental frío, estética “startup purple/glow” y urgencias visuales artificiales. El color no es el único portador de significado: tipografía, jerarquía y copy deben sostener la claridad.",
+    "keyCharacteristics": [
+      "Navy dominante + blanco/marfil; oro y teal como acentos raros",
+      "Sans de sistema, escala fluida con clamp()",
+      "Plano por defecto: profundidad tonal, no sombras",
+      "Componentes refinados y contenidos; bordes suaves, CTA explícitos",
+      "Mobile-first; contenedor ~72rem; lectura ~65–70ch"
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "El oro claro aparece en ≤10% de cualquier vista; su rareza marca jerarquía, no decoración.", "section": "colors" },
+      { "name": "The Meaning Not Color Alone Rule", "body": "Éxito, error y advertencia combinan color + texto; nunca solo el tinte.", "section": "colors" },
+      { "name": "The System Stack Rule", "body": "No introducir hojas de fuente hospedadas; la pila de sistema es normativa.", "section": "typography" },
+      { "name": "The One H1 Rule", "body": "Un solo h1 representativo por página.", "section": "typography" },
+      { "name": "The Content Breakpoint Rule", "body": "Adaptar por contenido (grids que colapsan), no por device labels.", "section": "layout" },
+      { "name": "The Flat-By-Default Rule", "body": "Superficies en reposo sin sombra. El movimiento sutil (translateY en hover del CTA) es estado, no elevación estructural.", "section": "elevation" },
+      { "name": "The Soft Institution Rule", "body": "Esquinas redondeadas moderadas; nunca “pill” como lenguaje dominante salvo círculos de paso.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do usar Azul Marino como ancla de marca en header, hero y secciones de confianza.",
+      "Do reservar Oro Claro para acentos y CTAs secundarios de alta prioridad visual.",
+      "Do mantener áreas táctiles ≥44px (preferible 48px en botones/campos).",
+      "Do respetar prefers-reduced-motion (sin ciclo de color ni translate en hover).",
+      "Do documentar estados de formulario con color + texto."
+    ],
+    "donts": [
+      "Don't añadir sombras genéricas o glows; el sistema es flat-by-default.",
+      "Don't introducir tipografías remotas ni stacks Inter/Roboto como marca.",
+      "Don't usar púrpura, neón o dramatismo clínico en fotografía o UI.",
+      "Don't fabricar testimonios, sellos o cifras de éxito en la interfaz.",
+      "Don't simular éxito de envío con estilos “ok” sin persistencia real."
+    ]
+  }
+}
