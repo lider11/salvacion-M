@@ -1,5 +1,9 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-14 — Retiro de sección Transparencia y alcance
+
+**Cambio:** se elimina `#transparencia` del portal y sus enlaces en nav/pie. Los mensajes de gratuidad y límites siguen en contacto/footer según aplique.
+
 ## 2026-11-14 — Servicios en rejilla 2×3 (propuesta A)
 
 **Cambio:** la sección de dificultades deja la columna única; en escritorio/tablet usa 2 columnas × 3 filas; en móvil permanece 1 columna.

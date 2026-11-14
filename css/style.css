@@ -129,10 +129,6 @@ p { margin-top: 0; }
 #proceso .proceso-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem; width: fit-content; max-width: 100%; min-height: 48px; margin: 2.5rem auto 0; padding: .85rem 1.35rem; border-radius: .55rem; background: var(--navy); color: #fff; text-align: center; text-decoration: none; font-weight: 750; }
 #proceso .proceso-cta:hover { background: var(--teal); }
 
-#transparencia { background: var(--soft); }
-.transparencia-lista { max-width: 70ch; margin: 0; padding-left: 1.2rem; }
-.transparencia-lista li { margin-bottom: .65rem; }
-
 /* Contacto / formulario preview-safe */
 #contacto { background: var(--soft); }
 .contacto-intro { font-size: 1.1rem; max-width: 65ch; }
