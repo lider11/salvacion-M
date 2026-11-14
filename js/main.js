@@ -49,47 +49,63 @@
 (() => {
   const section = document.querySelector('[data-hero-parallax]');
   const media = section?.querySelector('.hero-parallax-media');
-  if (!section || !media) return;
+  const photo = media?.querySelector('img');
+  if (!section || !media || !photo) return;
 
+  const HOLD_MS = 1000;
+  const DISINTEGRATE_MS = 1000;
+  const COLS = 8;
+  const ROWS = 5;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let ticking = false;
 
-  function updateParallax() {
-    ticking = false;
+  function settle() {
+    section.classList.add('is-revealing', 'is-settled');
+    media.replaceChildren();
+  }
+
+  function disintegrate() {
+    const src = photo.currentSrc || photo.src;
+    photo.hidden = true;
+    section.classList.add('is-revealing');
+
+    const fragment = document.createDocumentFragment();
+    for (let row = 0; row < ROWS; row += 1) {
+      for (let col = 0; col < COLS; col += 1) {
+        const shard = document.createElement('span');
+        const dx = ((Math.random() - 0.5) * 140).toFixed(1);
+        const dy = ((Math.random() - 0.35) * 110).toFixed(1);
+        const rot = ((Math.random() - 0.5) * 36).toFixed(1);
+        shard.className = 'hero-shard';
+        shard.style.width = `${100 / COLS}%`;
+        shard.style.height = `${100 / ROWS}%`;
+        shard.style.left = `${(col * 100) / COLS}%`;
+        shard.style.top = `${(row * 100) / ROWS}%`;
+        shard.style.backgroundImage = `url("${src}")`;
+        shard.style.backgroundSize = `${COLS * 100}% ${ROWS * 100}%`;
+        shard.style.backgroundPosition = `${(col / (COLS - 1)) * 100}% ${(row / (ROWS - 1)) * 100}%`;
+        shard.style.setProperty('--dx', `${dx}px`);
+        shard.style.setProperty('--dy', `${dy}px`);
+        shard.style.setProperty('--rot', `${rot}deg`);
+        shard.style.animationDelay = `${Math.floor(Math.random() * 160)}ms`;
+        fragment.appendChild(shard);
+      }
+    }
+    media.appendChild(fragment);
+
+    window.setTimeout(settle, DISINTEGRATE_MS + 180);
+  }
+
+  function start() {
     if (reduceMotion.matches) {
-      section.style.setProperty('--parallax-y', '0px');
-      section.style.setProperty('--hero-photo', '0');
-      section.style.setProperty('--hero-veil', '1');
-      section.style.setProperty('--hero-content', '1');
+      settle();
       return;
     }
-
-    const rect = section.getBoundingClientRect();
-    const travel = Math.max(rect.height - window.innerHeight, 1);
-    const progress = Math.min(1, Math.max(0, -rect.top / travel));
-    // Ease mid-scroll so the photo reads first, then yields to the hero.
-    const eased = progress * progress * (3 - 2 * progress);
-    const shift = (progress - 0.5) * Math.min(100, window.innerHeight * 0.12);
-    const photo = Math.max(0, 1 - eased * 1.15);
-    const veil = 0.22 + eased * 0.78;
-    const content = 0.12 + eased * 0.88;
-
-    section.style.setProperty('--parallax-y', `${shift.toFixed(1)}px`);
-    section.style.setProperty('--hero-photo', photo.toFixed(3));
-    section.style.setProperty('--hero-veil', veil.toFixed(3));
-    section.style.setProperty('--hero-content', content.toFixed(3));
+    const begin = () => window.setTimeout(disintegrate, HOLD_MS);
+    if (photo.complete) begin();
+    else photo.addEventListener('load', begin, { once: true });
   }
 
-  function requestUpdate() {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(updateParallax);
-  }
-
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate);
-  reduceMotion.addEventListener('change', requestUpdate);
-  updateParallax();
+  start();
 })();
 
 (() => {

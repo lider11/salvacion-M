@@ -70,23 +70,19 @@ p { margin-top: 0; }
 .btn-primary:hover { background: #e6f2f7; }
 .btn-primary:disabled { opacity: .65; cursor: not-allowed; }
 
-/* Hero scroll: foto de fondo aparece → se desvanece; queda el hero actual */
+/* Hero intro: 1s foto inicial → desintegración → hero con segunda imagen */
 .hero-parallax {
-  --parallax-y: 0px;
-  --hero-photo: 1;
-  --hero-veil: 0.28;
-  --hero-content: 0.18;
+  --hero-veil: 0.22;
+  --hero-content: 0;
   padding-block: 0;
-  min-height: 170vh;
   background: transparent;
 }
 .hero-parallax-stage {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 0;
   display: grid;
   align-items: center;
-  min-height: 100svh;
+  min-height: min(100svh, 52rem);
   overflow: hidden;
   isolation: isolate;
   background: linear-gradient(135deg, var(--navy), var(--blue));
@@ -98,23 +94,21 @@ p { margin-top: 0; }
   pointer-events: none;
 }
 .hero-parallax-media {
-  inset: -12% 0;
   z-index: 0;
-  opacity: var(--hero-photo);
-  transition: opacity 40ms linear;
+  overflow: hidden;
 }
-.hero-parallax-media img {
+.hero-parallax-media > img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: translate3d(0, var(--parallax-y), 0) scale(1.08);
-  will-change: transform, opacity;
+  transform: scale(1.04);
 }
 .hero-parallax-veil {
   z-index: 1;
   background: linear-gradient(135deg, rgb(16 42 67 / 96%), rgb(20 91 130 / 88%));
   opacity: var(--hero-veil);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hero-parallax .hero-layout {
   position: relative;
@@ -123,26 +117,50 @@ p { margin-top: 0; }
   margin-inline: auto;
   padding-block: clamp(3.5rem, 7vw, 6rem);
   opacity: var(--hero-content);
+  transform: translateY(12px) scale(0.985);
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hero-parallax.is-revealing {
+  --hero-veil: 1;
+  --hero-content: 1;
+}
+.hero-parallax.is-revealing .hero-layout {
+  transform: none;
+}
+.hero-parallax.is-settled .hero-parallax-media {
+  display: none;
 }
 .hero-parallax .hero-visual img {
   box-shadow: 0 18px 40px rgb(9 28 45 / 28%);
 }
-@media (max-width: 900px) {
-  .hero-parallax { min-height: 150vh; }
+.hero-shard {
+  position: absolute;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+  animation: hero-shard-out 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes hero-shard-out {
+  to {
+    opacity: 0;
+    filter: blur(2px);
+    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(0.72);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-parallax {
-    --parallax-y: 0px;
-    --hero-photo: 0;
     --hero-veil: 1;
     --hero-content: 1;
-    min-height: 0;
   }
-  .hero-parallax-stage { position: relative; min-height: 0; }
-  .hero-parallax-media { display: none; }
-  .hero-parallax-media img {
+  .hero-parallax .hero-layout {
     transform: none;
-    will-change: auto;
+    transition: none;
+  }
+  .hero-parallax-media,
+  .hero-shard {
+    display: none !important;
   }
 }
 
