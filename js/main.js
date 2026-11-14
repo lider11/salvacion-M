@@ -53,7 +53,7 @@
   if (!section || !media || !photo) return;
 
   const HOLD_MS = 1000;
-  const DISINTEGRATE_MS = 1000;
+  const DISINTEGRATE_MS = 2800;
   const COLS = 8;
   const ROWS = 5;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -72,9 +72,9 @@
     for (let row = 0; row < ROWS; row += 1) {
       for (let col = 0; col < COLS; col += 1) {
         const shard = document.createElement('span');
-        const dx = ((Math.random() - 0.5) * 140).toFixed(1);
-        const dy = ((Math.random() - 0.35) * 110).toFixed(1);
-        const rot = ((Math.random() - 0.5) * 36).toFixed(1);
+        const dx = ((Math.random() - 0.5) * 36).toFixed(1);
+        const dy = ((Math.random() - 0.4) * 28).toFixed(1);
+        const rot = ((Math.random() - 0.5) * 8).toFixed(1);
         shard.className = 'hero-shard';
         shard.style.width = `${100 / COLS}%`;
         shard.style.height = `${100 / ROWS}%`;
@@ -86,13 +86,13 @@
         shard.style.setProperty('--dx', `${dx}px`);
         shard.style.setProperty('--dy', `${dy}px`);
         shard.style.setProperty('--rot', `${rot}deg`);
-        shard.style.animationDelay = `${Math.floor(Math.random() * 160)}ms`;
+        shard.style.animationDelay = `${Math.floor(Math.random() * 520)}ms`;
         fragment.appendChild(shard);
       }
     }
     media.appendChild(fragment);
 
-    window.setTimeout(settle, DISINTEGRATE_MS + 180);
+    window.setTimeout(settle, DISINTEGRATE_MS + 520);
   }
 
   function start() {
