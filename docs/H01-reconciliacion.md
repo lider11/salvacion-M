@@ -3,6 +3,7 @@
 Fecha: 2026-11-15 (America/Bogota). Orden: SM-H01-ARQUITECTURA-2026-002 v2.0.
 Base verificada de `main`: `3d6e7833040583851d23531050599fa932573675`.
 Rama de corrección: `fix/h01-hostinger-architecture-20261115`.
+Commit de implementación probado y guardado: `61ebed4c6f1eaf395358142598d7225da464c3b0`. La actualización posterior solo registra trazabilidad en memoria e informe.
 
 **Estado: RESUELTO en la rama de corrección; integración en `main` pendiente.** Cierre del hallazgo documental y de las contradicciones técnicas aquí descritas, no declaración de operación ni cumplimiento integral. No se modifica producción, Sites ni bases existentes.
 
