@@ -108,6 +108,14 @@ if ($errors !== []) {
     api_respond(422, ['ok' => false, 'error' => 'validation_failed', 'fields' => $errors]);
 }
 
+// Sin una dirección de red confiable el límite global sería evadible.
+try {
+    $clientNetwork = api_client_network_token($_SERVER);
+} catch (RuntimeException) {
+    error_log('api_requests reliable client network unavailable');
+    api_respond(503, ['ok' => false, 'error' => 'service_unavailable']);
+}
+
 $requestId = api_uuid();
 try {
     $pdo = api_database($config);
@@ -115,32 +123,28 @@ try {
 
     $windowStart = gmdate('Y-m-d H:00:00');
     $emailHash = hash_hmac('sha256', $email, $config['email_hash_key']);
-    if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
-        $rateStatement = $pdo->prepare(
-            'INSERT INTO request_rate_limits (email_hash, window_start, request_count) VALUES (:email_hash, :window_start, 1) '
-            . 'ON CONFLICT(email_hash, window_start) DO UPDATE SET request_count = request_count + 1'
-        );
-    } else {
-        $rateStatement = $pdo->prepare(
-            'INSERT INTO request_rate_limits (email_hash, window_start, request_count) VALUES (:email_hash, :window_start, 1) '
-            . 'ON DUPLICATE KEY UPDATE request_count = request_count + 1'
-        );
-    }
-    $rateStatement->execute(['email_hash' => $emailHash, 'window_start' => $windowStart]);
+    $networkHash = hash_hmac('sha256', 'remote-network:' . $clientNetwork, $config['email_hash_key']);
 
-    $limitStatement = $pdo->prepare(
-        'SELECT request_count FROM request_rate_limits WHERE email_hash = :email_hash AND window_start = :window_start'
-    );
-    $limitStatement->execute(['email_hash' => $emailHash, 'window_start' => $windowStart]);
-    $requestCount = (int) $limitStatement->fetchColumn();
-    if ($requestCount > $config['rate_limit_per_hour']) {
+    // Ambos límites comparten la misma transacción que guarda la solicitud.
+    // El contador por red frena correos rotativos; el de correo sigue vigente.
+    $networkCount = api_increment_rate_limit($pdo, 'network', $networkHash, $windowStart);
+    $emailCount = api_increment_rate_limit($pdo, 'email', $emailHash, $windowStart);
+
+    $cutoff = gmdate('Y-m-d H:i:s', time() - 86_400);
+    foreach (['request_rate_limits', 'request_network_rate_limits'] as $table) {
+        $cleanup = $pdo->prepare("DELETE FROM {$table} WHERE window_start < :cutoff");
+        $cleanup->execute(['cutoff' => $cutoff]);
+    }
+
+    if (
+        $emailCount > $config['rate_limit_per_hour']
+        || $networkCount > $config['network_rate_limit_per_hour']
+    ) {
+        // Conservar contadores incluso en bloqueos evita reiniciarlos por rollback.
         $pdo->commit();
         header('Retry-After: 3600');
         api_respond(429, ['ok' => false, 'error' => 'rate_limit_exceeded']);
     }
-
-    $cleanup = $pdo->prepare('DELETE FROM request_rate_limits WHERE window_start < :cutoff');
-    $cleanup->execute(['cutoff' => gmdate('Y-m-d H:i:s', time() - 86_400)]);
 
     $insert = $pdo->prepare(
         'INSERT INTO requests '
