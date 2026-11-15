@@ -1,5 +1,19 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H02: controlador único del formulario (PARCIAL)
+
+**Objetivo y causa:** eliminar los dos controladores de `orientacion-form`, sus validaciones divergentes y los mensajes que confundían lectura del borrador con consentimiento. HEAD inspeccionado: `3d6e7833040583851d23531050599fa932573675`.
+
+**Implementación registrada:** `35fe0ac6d0bec7ee5b9f177deede9c21f5193700`, rama `fix/h02-formulario-controlador-unico`. Un solo controlador y función de validación; revisión local; eventos sin duplicación; errores asociados; seis enlaces con selección de servicio; bloqueo incondicional de submit y method=dialog, independiente de data-preview-only. El envío permanece oculto/deshabilitado y no se incorpora transporte ni almacenamiento. Se conserva el CSS y el código ajeno al formulario.
+
+**Archivos:** `js/main.js`, `index.html`, `privacidad.html`, `docs/backend-hostinger.md`, `tests/h02-formulario-dom.cjs`, `tests/h02-formulario.cjs`, `docs/H02-verificacion.md` y resultados en `output/h02/`.
+
+**Pruebas realizadas:** sintaxis de JavaScript, diff sin errores y atributos HTML sin duplicados. 41/41 comprobaciones jsdom aprobadas; la misma batería sobre la base muestra 21 aprobadas y 20 fallidas. Se conserva SHA-256 de los archivos probados. Estas son pruebas de DOM simulado, no pruebas de navegador ni de red real.
+
+**Bloqueo:** Chromium abortó al iniciar por `socket() failed: Operation not permitted (1)`; la alternativa Headless Shell no se descargó como ZIP válido. La batería Playwright está preparada pero NO VERIFICADA. Sin prueba real de POST/Enter/submit nativo, responsive, foco visual, axe ni lectores de pantalla. No se acredita WCAG ni se declara H02 resuelto.
+
+**Resultado y riesgos:** PARCIAL, pendiente ejecutar E2E y revisión visual en entorno compatible. Privacidad aprobada, integración API y Hostinger siguen pendientes fuera de este alcance. No hay merge, despliegue, activación de recepción ni cambios de producción. Detalle reproducible: `docs/H02-verificacion.md`.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
