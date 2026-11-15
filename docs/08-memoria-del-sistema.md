@@ -8,7 +8,9 @@
 
 **Alcance y restricciones:** solo rama `fix/h03-rate-limit-network-20261115`; formulario permanece en vista previa, sin despliegue. Antes de incorporar o desplegar: comprobar pruebas PHP/SQLite, proxy real de Hostinger, concurrencia MySQL y requisitos de privacidad. El control por IP reduce evasiones simples; no sustituye controles contra ataques distribuidos.
 
-**Verificación del 2026-11-15:** revisión estática de integración, migraciones y casos de prueba: coherente. Pruebas locales aisladas del algoritmo de normalización IPv4, IPv4-mapped, IPv6 /64 y rechazo de cabeceras reenviadas: PASS en PHP 8.4. Simulación SQL de UPSERT y saturación de contador: PASS con SQLite de Python. **Suite HTTP PHP completa: NOT_RUN**, porque el PHP disponible carece de `pdo_sqlite` y `mbstring`; estos ensayos aislados no sustituyen la suite ni certifican MySQL. Hostinger y concurrencia real: NO VERIFICADO.
+**Verificación ejecutada el 2026-11-15:** GitHub Actions (rama de corrección) ejecutó con éxito PHP 8.2 y 8.4, extensiones `mbstring`, `pdo_sqlite`, `pdo_mysql` y `curl`: lint PHP sin errores, suite HTTP/SQLite **25/25 por versión** y prueba concurrente MySQL 8 **7/7 por versión**. Resultado **64/64 PASS**. Diez solicitudes simultáneas con correos ficticios distintos desde una misma dirección remota produjeron cuatro HTTP 201, seis HTTP 429 y cuatro registros MySQL; todas compartieron un contador HMAC de red. Evidencia: https://github.com/lider11/salvacion-M/actions/runs/43735108060.
+
+**Limitación:** ensayo MySQL/SQLite en CI, **no** staging Hostinger. No se acreditó subdominio/URL de staging de Salvación M, acceso hPanel ni `REMOTE_ADDR` detrás del proxy efectivo de Hostinger. **H03 integrado funcionalmente en la rama, verificación real de staging pendiente; PR #20 en borrador.** No tocar producción ni activar formulario.
 
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
