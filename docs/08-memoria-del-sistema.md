@@ -1,5 +1,13 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H03: mitigación de evasión por correos rotativos (rama de corrección)
+
+**Problema:** la API limitaba únicamente por correo HMAC; solicitudes con direcciones distintas desde una misma red podían eludir la cuota.
+
+**Corrección propuesta:** añadir cuota independiente por `REMOTE_ADDR` (IPv6 agrupada /64), con HMAC privado y sin confianza en cabeceras de reenvío. Dos contadores transaccionales SQLite/MySQL, respuestas 429 sin persistencia y migración idempotente `request_network_rate_limits`. Configuración `network_rate_limit_per_hour` (30/h por defecto), pruebas de correos rotativos y spoofing, y documentación Hostinger actualizada.
+
+**Alcance y restricciones:** solo rama `fix/h03-rate-limit-network-20261115`; formulario permanece en vista previa, sin despliegue. Antes de incorporar o desplegar: comprobar pruebas PHP/SQLite, proxy real de Hostinger, concurrencia MySQL y requisitos de privacidad. El control por IP reduce evasiones simples; no sustituye controles contra ataques distribuidos.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
