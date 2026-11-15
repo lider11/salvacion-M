@@ -1,5 +1,9 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Conciliación con archivo del portátil
+
+Inspeccionado `salvacion-M(2).7z`: HEAD `3d6e7833040583851d23531050599fa932573675`, dos stashes conservados. Único cambio versionado de contenido, ignorando CRLF: `backend/migrate.php`. Frontend coincide con base del PR #21. Copia independiente integrada con frontend del SHA remoto `11c2d75d655962a4b5ccc2d560a7541038867281`; migrador, work y output preservados. Sintaxis JS PASS, Node 13/13 PASS en esa copia. Sin cambios del portátil, sin POST ni despliegue. Migrador local pendiente de revisión MySQL; excluido del PR frontend. Detalle: `docs/conciliacion-portatil-20261115.md`.
+
 ## 2026-11-15 — Integración frontend/API en rama aislada
 
 Base `3d6e7833040583851d23531050599fa932573675`. Nuevo módulo `js/formulario-api.js`, integración en `index.html`, retiro de controlador duplicado en `js/main.js`, estado CSS y 13 pruebas mock PASS. Aplicador Python 1/1 PASS; sintaxis y diff PASS. Corregida validación de ciudad sin letras. Envío sigue bloqueado. Sin modificaciones de backend, MySQL o producción.
