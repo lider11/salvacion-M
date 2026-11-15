@@ -15,7 +15,7 @@ Línea canónica: rama `main` (y PRs hacia ella).
 | CRM | Pendiente |
 | Producción | Sin cambios sin autorización expresa |
 
-No hay gate global tipo G3. Cada entrega se verifica por lo que realmente se construyó y se probó.
+**Decisión vigente del titular (2026-11-15): G3 y el SDD extenso quedan retirados como puertas globales de aprobación.** Su documentación y las antiguas evidencias QA son antecedentes, no requisitos activos de `main`. Cada entrega se verifica mediante criterios concretos y pruebas pertinentes; se mantienen los controles de seguridad, privacidad, accesibilidad y autorización de despliegue.
 
 ## Stack
 
