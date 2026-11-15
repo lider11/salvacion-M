@@ -1,0 +1,80 @@
+<div id="hero-wireframes">
+  <style>
+    #hero-wireframes { color: var(--foreground); }
+    #hero-wireframes .proposals { display: grid; gap: 24px; }
+    #hero-wireframes .proposal { display: grid; gap: 12px; }
+    #hero-wireframes .hero-layout { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 24px; align-items: center; padding-block: 24px; }
+    #hero-wireframes .copy { display: grid; gap: 12px; }
+    #hero-wireframes .image-placeholder { display: grid; place-content: center; gap: 8px; min-height: 190px; text-align: center; color: var(--muted-foreground); background: var(--muted); }
+    #hero-wireframes .centered { display: grid; gap: 16px; text-align: center; max-width: 54ch; margin-inline: auto; padding-block: 28px; }
+    #hero-wireframes .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    #hero-wireframes .centered .actions { justify-content: center; }
+    #hero-wireframes .steps { display: grid; gap: 16px; margin: 0; padding-left: 24px; }
+    #hero-wireframes .steps li { padding-left: 4px; }
+    #hero-wireframes .trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; padding-block: 12px; }
+    #hero-wireframes .topline { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 520px) {
+      #hero-wireframes .hero-layout { grid-template-columns: minmax(0, 1fr); }
+      #hero-wireframes .image-placeholder { min-height: 130px; }
+    }
+  </style>
+  <div class="proposals">
+    <section class="proposal" aria-labelledby="wireframe-one">
+      <h2 id="wireframe-one">01 · Mensaje + imagen lateral</h2>
+      <div class="card">
+        <div class="topline"><span>Salvación M</span><span class="text-small">Inicio · Servicios · Contacto</span></div>
+        <hr>
+        <div class="hero-layout">
+          <div class="copy">
+            <span class="text-small">Orientación en salud · Colombia</span>
+            <h1>Orientación clara para defender tu acceso a la salud</h1>
+            <p>Te acompañamos a comprender tus derechos y las alternativas ante las dificultades de atención.</p>
+            <div class="actions"><button class="btn btn-primary" type="button" disabled>Solicitar consulta gratuita</button></div>
+            <span class="text-small">Consulta inicial gratuita</span>
+          </div>
+          <div class="image-placeholder" role="img" aria-label="Espacio reservado para una imagen de acompañamiento humano">
+            <i data-lucide="image" aria-hidden="true"></i><span>Imagen de acompañamiento</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="proposal" aria-labelledby="wireframe-two">
+      <h2 id="wireframe-two">02 · Mensaje central</h2>
+      <div class="card">
+        <div class="topline"><span>Salvación M</span><span class="text-small">Inicio · Servicios · Contacto</span></div>
+        <hr>
+        <div class="centered">
+          <span class="text-small">Consulta inicial gratuita</span>
+          <h1>Da el primer paso para entender tus opciones en salud</h1>
+          <p>Si enfrentas barreras con citas, medicamentos o tratamientos, te ayudamos a comprender las alternativas disponibles.</p>
+          <div class="actions"><button class="btn btn-primary" type="button" disabled>Solicitar orientación</button><button class="btn" type="button" disabled>Conocer el proceso</button></div>
+        </div>
+        <hr>
+        <div class="trust"><span>Citas médicas</span><span>Medicamentos</span><span>Tratamientos</span></div>
+      </div>
+    </section>
+    <section class="proposal" aria-labelledby="wireframe-three">
+      <h2 id="wireframe-three">03 · Mensaje + pasos del proceso</h2>
+      <div class="card">
+        <div class="topline"><span>Salvación M</span><span class="text-small">Inicio · Servicios · Contacto</span></div>
+        <hr>
+        <div class="hero-layout">
+          <div class="copy">
+            <span class="text-small">Acompañamiento paso a paso</span>
+            <h1>Comprende qué puedes hacer ante una barrera de acceso a la salud</h1>
+            <p>Te orientamos para que puedas tomar decisiones informadas sobre los siguientes pasos.</p>
+            <div class="actions"><button class="btn btn-primary" type="button" disabled>Solicitar consulta gratuita</button></div>
+          </div>
+          <div class="copy">
+            <h3>¿Cómo te acompañamos?</h3>
+            <ol class="steps">
+              <li><strong>Cuéntanos tu situación</strong><p>El primer paso es comprender tu dificultad.</p></li>
+              <li><strong>Revisamos tu solicitud</strong><p>Analizamos la información que nos compartes.</p></li>
+              <li><strong>Conoce tus alternativas</strong><p>Te explicamos las opciones disponibles.</p></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

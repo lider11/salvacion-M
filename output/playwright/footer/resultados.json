@@ -1,0 +1,513 @@
+{
+  "date": "2026-11-08",
+  "baseline": "output/playwright/contacto/antes.html + antes.css (pre-footer local snapshot)",
+  "widths": [
+    {
+      "viewport": 320,
+      "documentWidth": 320,
+      "hasHorizontalOverflow": false,
+      "gridColumns": 1,
+      "brandGridColumn": "auto",
+      "footerHeight": 1176,
+      "logoLoaded": true,
+      "footerLinks": [
+        {
+          "href": "#inicio",
+          "targetExists": true
+        },
+        {
+          "href": "#servicios",
+          "targetExists": true
+        },
+        {
+          "href": "#nosotros",
+          "targetExists": true
+        },
+        {
+          "href": "#proceso",
+          "targetExists": true
+        },
+        {
+          "href": "#contacto",
+          "targetExists": true
+        }
+      ],
+      "contactLinks": [
+        {
+          "href": "tel:+573004218699",
+          "text": "+57 300 421 8699",
+          "minTargetHeight": 44
+        },
+        {
+          "href": "mailto:info@salvacionm.com",
+          "text": "info@salvacionm.com",
+          "minTargetHeight": 44
+        }
+      ]
+    },
+    {
+      "viewport": 375,
+      "documentWidth": 375,
+      "hasHorizontalOverflow": false,
+      "gridColumns": 1,
+      "brandGridColumn": "auto",
+      "footerHeight": 1130,
+      "logoLoaded": true,
+      "footerLinks": [
+        {
+          "href": "#inicio",
+          "targetExists": true
+        },
+        {
+          "href": "#servicios",
+          "targetExists": true
+        },
+        {
+          "href": "#nosotros",
+          "targetExists": true
+        },
+        {
+          "href": "#proceso",
+          "targetExists": true
+        },
+        {
+          "href": "#contacto",
+          "targetExists": true
+        }
+      ],
+      "contactLinks": [
+        {
+          "href": "tel:+573004218699",
+          "text": "+57 300 421 8699",
+          "minTargetHeight": 44
+        },
+        {
+          "href": "mailto:info@salvacionm.com",
+          "text": "info@salvacionm.com",
+          "minTargetHeight": 44
+        }
+      ]
+    },
+    {
+      "viewport": 768,
+      "documentWidth": 768,
+      "hasHorizontalOverflow": false,
+      "gridColumns": 2,
+      "brandGridColumn": "1 / -1",
+      "footerHeight": 798,
+      "logoLoaded": true,
+      "footerLinks": [
+        {
+          "href": "#inicio",
+          "targetExists": true
+        },
+        {
+          "href": "#servicios",
+          "targetExists": true
+        },
+        {
+          "href": "#nosotros",
+          "targetExists": true
+        },
+        {
+          "href": "#proceso",
+          "targetExists": true
+        },
+        {
+          "href": "#contacto",
+          "targetExists": true
+        }
+      ],
+      "contactLinks": [
+        {
+          "href": "tel:+573004218699",
+          "text": "+57 300 421 8699",
+          "minTargetHeight": 44
+        },
+        {
+          "href": "mailto:info@salvacionm.com",
+          "text": "info@salvacionm.com",
+          "minTargetHeight": 44
+        }
+      ]
+    },
+    {
+      "viewport": 1024,
+      "documentWidth": 1024,
+      "hasHorizontalOverflow": false,
+      "gridColumns": 3,
+      "brandGridColumn": "auto",
+      "footerHeight": 552,
+      "logoLoaded": true,
+      "footerLinks": [
+        {
+          "href": "#inicio",
+          "targetExists": true
+        },
+        {
+          "href": "#servicios",
+          "targetExists": true
+        },
+        {
+          "href": "#nosotros",
+          "targetExists": true
+        },
+        {
+          "href": "#proceso",
+          "targetExists": true
+        },
+        {
+          "href": "#contacto",
+          "targetExists": true
+        }
+      ],
+      "contactLinks": [
+        {
+          "href": "tel:+573004218699",
+          "text": "+57 300 421 8699",
+          "minTargetHeight": 44
+        },
+        {
+          "href": "mailto:info@salvacionm.com",
+          "text": "info@salvacionm.com",
+          "minTargetHeight": 44
+        }
+      ]
+    },
+    {
+      "viewport": 1440,
+      "documentWidth": 1440,
+      "hasHorizontalOverflow": false,
+      "gridColumns": 3,
+      "brandGridColumn": "auto",
+      "footerHeight": 565,
+      "logoLoaded": true,
+      "footerLinks": [
+        {
+          "href": "#inicio",
+          "targetExists": true
+        },
+        {
+          "href": "#servicios",
+          "targetExists": true
+        },
+        {
+          "href": "#nosotros",
+          "targetExists": true
+        },
+        {
+          "href": "#proceso",
+          "targetExists": true
+        },
+        {
+          "href": "#contacto",
+          "targetExists": true
+        }
+      ],
+      "contactLinks": [
+        {
+          "href": "tel:+573004218699",
+          "text": "+57 300 421 8699",
+          "minTargetHeight": 44
+        },
+        {
+          "href": "mailto:info@salvacionm.com",
+          "text": "info@salvacionm.com",
+          "minTargetHeight": 44
+        }
+      ]
+    }
+  ],
+  "links": {
+    "expectedFragments": [
+      "#inicio",
+      "#servicios",
+      "#nosotros",
+      "#proceso",
+      "#contacto"
+    ],
+    "tel": "tel:+573004218699",
+    "mailto": "mailto:info@salvacionm.com",
+    "allFooterFragmentsResolve": true
+  },
+  "contact": {},
+  "contrast": {
+    "heading": {
+      "foreground": "rgb(240, 195, 91)",
+      "background": "rgb(9, 30, 48)",
+      "ratio": 10.21
+    },
+    "bodySecondary": {
+      "foreground": "rgb(213, 227, 236)",
+      "background": "rgb(9, 30, 48)",
+      "ratio": 12.93
+    },
+    "link": {
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(9, 30, 48)",
+      "ratio": 16.94
+    },
+    "disclaimer": {
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(16, 42, 67)",
+      "ratio": 14.64
+    }
+  },
+  "keyboard": {
+    "keyboardFocusedFooterLink": true,
+    "focusedText": "Servicios",
+    "outlineStyle": "solid",
+    "outlineWidth": "3px"
+  },
+  "regression": [
+    {
+      "width": 320,
+      "selector": ".site-header",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 320,
+      "selector": "#inicio",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 320,
+      "selector": "#servicios",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 320,
+      "selector": "#nosotros",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 320,
+      "selector": "#proceso",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 375,
+      "selector": ".site-header",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 375,
+      "selector": "#inicio",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 375,
+      "selector": "#servicios",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 375,
+      "selector": "#nosotros",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 375,
+      "selector": "#proceso",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 768,
+      "selector": ".site-header",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 768,
+      "selector": "#inicio",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 768,
+      "selector": "#servicios",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 768,
+      "selector": "#nosotros",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 768,
+      "selector": "#proceso",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1024,
+      "selector": ".site-header",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1024,
+      "selector": "#inicio",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1024,
+      "selector": "#servicios",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1024,
+      "selector": "#nosotros",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1024,
+      "selector": "#proceso",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1440,
+      "selector": ".site-header",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1440,
+      "selector": "#inicio",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1440,
+      "selector": "#servicios",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1440,
+      "selector": "#nosotros",
+      "computedStylesUnchanged": true
+    },
+    {
+      "width": 1440,
+      "selector": "#proceso",
+      "computedStylesUnchanged": true
+    }
+  ],
+  "consoleErrors": [],
+  "externalRequests": [],
+  "checks": {
+    "htmlValidationHasNoNewFooterIssues": false,
+    "cssParses": true,
+    "allResponsiveWidthsFit": true,
+    "responsiveColumnsMatch": false,
+    "allFooterLinksResolve": true,
+    "exactContactSchemes": true,
+    "touchTargetsAtLeast44px": true,
+    "keyboardFocusVisible": true,
+    "sampledTextContrastAtLeastAA": true,
+    "noAxeViolations": true,
+    "unaffectedSectionsComputedStylesUnchanged": true,
+    "noConsoleErrors": true,
+    "noThirdPartyNetworkRequests": true,
+    "allStructuralChecks": true
+  },
+  "htmlValidation": {
+    "currentValid": false,
+    "currentMessages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1222,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      },
+      {
+        "ruleId": "tel-non-breaking",
+        "severity": 2,
+        "message": "\" \" should be replaced with \"&nbsp;\" (non-breaking space) in telephone number",
+        "offset": 20376,
+        "line": 328,
+        "column": 113,
+        "size": 1,
+        "selector": "html > body > footer > div > div:nth-child(1) > section:nth-child(3) > address > p:nth-child(2) > a",
+        "ruleUrl": "https://html-validate.org/rules/tel-non-breaking.html",
+        "context": {
+          "pattern": " ",
+          "replacement": "&nbsp;",
+          "description": "non-breaking space"
+        }
+      },
+      {
+        "ruleId": "tel-non-breaking",
+        "severity": 2,
+        "message": "\" \" should be replaced with \"&nbsp;\" (non-breaking space) in telephone number",
+        "offset": 20380,
+        "line": 328,
+        "column": 117,
+        "size": 1,
+        "selector": "html > body > footer > div > div:nth-child(1) > section:nth-child(3) > address > p:nth-child(2) > a",
+        "ruleUrl": "https://html-validate.org/rules/tel-non-breaking.html",
+        "context": {
+          "pattern": " ",
+          "replacement": "&nbsp;",
+          "description": "non-breaking space"
+        }
+      },
+      {
+        "ruleId": "tel-non-breaking",
+        "severity": 2,
+        "message": "\" \" should be replaced with \"&nbsp;\" (non-breaking space) in telephone number",
+        "offset": 20384,
+        "line": 328,
+        "column": 121,
+        "size": 1,
+        "selector": "html > body > footer > div > div:nth-child(1) > section:nth-child(3) > address > p:nth-child(2) > a",
+        "ruleUrl": "https://html-validate.org/rules/tel-non-breaking.html",
+        "context": {
+          "pattern": " ",
+          "replacement": "&nbsp;",
+          "description": "non-breaking space"
+        }
+      }
+    ],
+    "baselineValid": false,
+    "baselineMessageCount": 1
+  },
+  "cssValidation": {
+    "parser": "css-tree",
+    "parseErrors": []
+  },
+  "structuralChecks": {
+    "footerClass": true,
+    "expectedSections": true,
+    "navigationLabel": true,
+    "contactAddress": true,
+    "exactEmergencyWarning": true,
+    "currentYear": true,
+    "noLegalLinkInvented": true,
+    "noThirdPartyScript": true,
+    "expectedLogoPath": true
+  },
+  "axe": {
+    "violations": [],
+    "incomplete": [],
+    "passes": [
+      "aria-allowed-attr",
+      "aria-conditional-attr",
+      "aria-prohibited-attr",
+      "aria-valid-attr-value",
+      "aria-valid-attr",
+      "color-contrast",
+      "duplicate-id-aria",
+      "image-alt",
+      "link-name",
+      "list",
+      "listitem",
+      "target-size"
+    ]
+  },
+  "generatedAt": "2026-11-09T02:12:11.836Z",
+  "overall": false
+}

@@ -12,20 +12,38 @@ try {
     $config = api_config();
     $pdo = api_database($config);
     $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+
     if (!in_array($driver, ['mysql', 'sqlite'], true)) {
         throw new RuntimeException('Only MySQL and SQLite migrations are provided.');
     }
 
     $migrationPath = __DIR__ . '/migrations/' . $driver . '.sql';
+    if (!is_file($migrationPath) || !is_readable($migrationPath)) {
+        throw new RuntimeException("Migration file not found: {$migrationPath}");
+    }
+
     $sql = file_get_contents($migrationPath);
     if ($sql === false) {
         throw new RuntimeException('Migration file could not be read.');
     }
 
-    foreach (array_filter(array_map('trim', explode(';', $sql))) as $statement) {
-        $pdo->exec($statement);
+    // Mejor separación de sentencias (aún no perfecta, pero más segura)
+    $statements = array_filter(
+        array_map('trim', preg_split('/;\s*$/m', $sql)),
+        fn($s) => $s !== '' && !str_starts_with($s, '--')
+    );
+
+    $pdo->beginTransaction();
+    try {
+        foreach ($statements as $statement) {
+            $pdo->exec($statement);
+        }
+        $pdo->commit();
+        fwrite(STDOUT, "Migration completed successfully for {$driver}.\n");
+    } catch (Throwable $e) {
+        $pdo->rollBack();
+        throw $e;
     }
-    fwrite(STDOUT, "Migration completed for {$driver}.\n");
 } catch (Throwable $error) {
     fwrite(STDERR, "Migration failed: {$error->getMessage()}\n");
     exit(1);

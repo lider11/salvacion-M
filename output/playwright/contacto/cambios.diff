@@ -1,0 +1,237 @@
+diff --git a/output/playwright/contacto/antes.html b/index.html
+index fa6fcc8..48c13c1 100644
+--- a/output/playwright/contacto/antes.html
++++ b/index.html
+@@ -215,13 +215,79 @@
+ 
+                 <h2 id="contacto-titulo" tabindex="-1">Solicita orientación</h2>
+ 
+-                <p>
+-                    La consulta inicial es gratuita.
+-                    Próximamente estará disponible el
+-                    formulario seguro de solicitudes.
+-                </p>
+-
+-                <!-- Aquí integraremos el formulario -->
++                <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
++                <p class="contacto-aviso" id="contacto-privacidad">No incluyas historias clínicas, diagnósticos ni documentos médicos en esta solicitud inicial.</p>
++                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Vista previa: envío no disponible.</strong> La recepción segura y la política de tratamiento de datos están pendientes de verificación. Para probar esta interfaz, utiliza solo datos ficticios. No envíes datos personales reales.</p>
++
++                <form id="orientacion-form" class="contacto-form" method="dialog" aria-describedby="contacto-disponibilidad contacto-privacidad" novalidate autocomplete="off">
++                    <p>Los campos marcados con <span aria-hidden="true">*</span> «obligatorio» son necesarios.</p>
++                    <div id="contacto-errores" class="contacto-errores" tabindex="-1" hidden>
++                        <p><strong>Revisa los campos indicados:</strong></p>
++                        <ul></ul>
++                    </div>
++                    <fieldset class="contacto-datos">
++                        <legend>Datos de contacto</legend>
++                        <div class="contacto-campos">
++                            <div class="contacto-campo">
++                                <label for="contacto-nombre">Nombre completo <span>(obligatorio) *</span></label>
++                                <input id="contacto-nombre" type="text" required minlength="3" maxlength="100" aria-describedby="contacto-nombre-ayuda contacto-nombre-error">
++                                <small id="contacto-nombre-ayuda">Entre 3 y 100 caracteres. Usa letras, espacios, apóstrofos o guiones.</small>
++                                <p class="contacto-error" id="contacto-nombre-error" hidden></p>
++                            </div>
++                            <div class="contacto-campo">
++                                <label for="contacto-email">Correo electrónico <span>(obligatorio) *</span></label>
++                                <input id="contacto-email" type="email" required maxlength="254" aria-describedby="contacto-email-error">
++                                <p class="contacto-error" id="contacto-email-error" hidden></p>
++                            </div>
++                            <div class="contacto-campo">
++                                <label for="contacto-telefono">Teléfono <span>(opcional)</span></label>
++                                <input id="contacto-telefono" type="tel" maxlength="25" aria-describedby="contacto-telefono-ayuda contacto-telefono-error">
++                                <small id="contacto-telefono-ayuda">Entre 7 y 15 dígitos; puedes usar +, espacios, paréntesis y guiones.</small>
++                                <p class="contacto-error" id="contacto-telefono-error" hidden></p>
++                            </div>
++                            <div class="contacto-campo">
++                                <label for="contacto-ciudad">Ciudad o municipio <span>(opcional)</span></label>
++                                <input id="contacto-ciudad" type="text" maxlength="100" aria-describedby="contacto-ciudad-error">
++                                <p class="contacto-error" id="contacto-ciudad-error" hidden></p>
++                            </div>
++                        </div>
++                    </fieldset>
++                    <fieldset class="contacto-servicios" aria-describedby="contacto-servicio-error">
++                        <legend>Servicio solicitado (obligatorio) *</legend>
++                        <label class="contacto-opcion">
++                            <input id="contacto-servicio-negacion" type="radio" name="servicio" value="Negación de servicios" required>
++                            <span><strong>Negación de servicios</strong><span>Orientación ante barreras de acceso a tratamientos y procedimientos.</span></span>
++                        </label>
++                        <label class="contacto-opcion">
++                            <input id="contacto-servicio-medicamentos" type="radio" name="servicio" value="Medicamentos" required>
++                            <span><strong>Medicamentos</strong><span>Orientación ante retrasos o falta de entrega.</span></span>
++                        </label>
++                        <label class="contacto-opcion">
++                            <input id="contacto-servicio-citas" type="radio" name="servicio" value="Citas médicas" required>
++                            <span><strong>Citas médicas</strong><span>Orientación ante demoras en citas, especialistas y autorizaciones.</span></span>
++                        </label>
++                        <p class="contacto-error" id="contacto-servicio-error" hidden></p>
++                    </fieldset>
++                    <div class="contacto-campo">
++                        <label for="contacto-descripcion">Describe brevemente tu situación <span>(obligatorio) *</span></label>
++                        <textarea id="contacto-descripcion" rows="5" required minlength="20" maxlength="1000" aria-describedby="contacto-descripcion-ayuda contacto-descripcion-error"></textarea>
++                        <small id="contacto-descripcion-ayuda">Explica qué ocurrió, sin incluir información médica sensible. Entre 20 y 1000 caracteres.</small>
++                        <p class="contacto-error" id="contacto-descripcion-error" hidden></p>
++                    </div>
++                    <div class="contacto-autorizacion">
++                        <label>
++                            <input id="contacto-consentimiento" type="checkbox" required disabled aria-describedby="contacto-politica-estado">
++                            <span>He leído la política de tratamiento de datos personales y autorizo el tratamiento de mis datos para gestionar esta solicitud.</span>
++                        </label>
++                        <p id="contacto-politica-estado">Autorización no disponible: la política vigente y su enlace están pendientes de aprobación. Esta vista previa no registra consentimiento.</p>
++                    </div>
++                    <div class="contacto-acciones">
++                        <button class="contacto-revisar" type="button" hidden>Revisar campos sin enviar</button>
++                        <button class="contacto-enviar" type="submit" disabled aria-describedby="contacto-disponibilidad">Enviar solicitud de orientación</button>
++                    </div>
++                    <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true">No se ha enviado ninguna solicitud.</p>
++                    <noscript><p>La revisión local de campos requiere JavaScript. El envío permanece deshabilitado.</p></noscript>
++                </form>
+ 
+             </div>
+ 
+diff --git a/output/playwright/contacto/antes.css b/css/style.css
+index cd7a683..816f510 100644
+--- a/output/playwright/contacto/antes.css
++++ b/css/style.css
+@@ -206,3 +206,47 @@ p { margin-top: 0; }
+ @media (prefers-reduced-motion: no-preference) {
+   #proceso .proceso-cta { transition: background-color 160ms ease; }
+ }
++
++/* SM-FRONT-CONTACTO-001 — interfaz de revisión; envío real bloqueado. */
++#contacto > .container { max-width: 60rem; }
++#contacto .contacto-intro { font-size: 1.125rem; }
++#contacto .contacto-aviso { color: #102a43; font-weight: 650; }
++#contacto .contacto-bloqueo { max-width: none; margin-block: 1.5rem; padding: 1rem 1.25rem; border-left: 4px solid #f0c35b; border-radius: .4rem; background: #102a43; color: #fff; }
++#contacto .contacto-form { min-width: 0; padding: clamp(1rem, 4vw, 2.5rem); border: 1px solid #b8cbd5; border-radius: 1.25rem; background: #fff; box-shadow: 0 8px 28px rgb(16 42 67 / 8%); }
++#contacto fieldset { min-width: 0; margin: 0 0 2rem; padding: 0; border: 0; }
++#contacto legend { max-width: 100%; margin-bottom: 1rem; padding: 0; color: #102a43; font-size: 1.2rem; font-weight: 750; }
++#contacto .contacto-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
++#contacto .contacto-campo { min-width: 0; }
++#contacto .contacto-campo label { display: block; margin-bottom: .5rem; color: #102a43; font-weight: 700; }
++#contacto label span, #contacto small { overflow-wrap: anywhere; }
++#contacto .contacto-campo label span { font-size: .875rem; font-weight: 400; }
++#contacto input:not([type="radio"]):not([type="checkbox"]), #contacto textarea { display: block; width: 100%; min-height: 48px; padding: .75rem; border: 1px solid #405769; border-radius: .5rem; color: #102a43; background: #fff; font: inherit; }
++#contacto textarea { resize: vertical; }
++#contacto small { display: block; margin-top: .4rem; color: #405769; font-size: .875rem; }
++#contacto .contacto-opcion { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: .75rem; padding: 1rem; border: 1px solid #405769; border-radius: .65rem; cursor: pointer; }
++#contacto .contacto-opcion > span { min-width: 0; }
++#contacto .contacto-opcion strong, #contacto .contacto-opcion span span { display: block; }
++#contacto .contacto-opcion strong { color: #102a43; }
++#contacto .contacto-opcion span span { color: #405769; }
++#contacto input[type="radio"], #contacto input[type="checkbox"] { flex: 0 0 24px; width: 24px; height: 24px; margin: .15rem 0 0; accent-color: #086c72; }
++#contacto .contacto-opcion:has(:checked) { border: 2px solid #086c72; padding: calc(1rem - 1px); background: #eef5f8; }
++#contacto .contacto-autorizacion { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #b8cbd5; }
++#contacto .contacto-autorizacion label { display: flex; align-items: flex-start; gap: .75rem; }
++#contacto .contacto-autorizacion p { margin-top: .75rem; color: #405769; font-size: .9375rem; }
++#contacto .contacto-acciones { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1.5rem; }
++#contacto button { max-width: 100%; min-height: 48px; padding: .85rem 1.25rem; border: 2px solid #102a43; border-radius: .55rem; font: inherit; font-weight: 750; overflow-wrap: anywhere; }
++#contacto .contacto-revisar { color: #fff; background: #102a43; cursor: pointer; }
++#contacto .contacto-revisar:hover { background: #086c72; }
++#contacto .contacto-enviar { background: #eef5f8; color: #405769; border-color: #b8cbd5; cursor: not-allowed; }
++#contacto :focus-visible { outline: 3px solid #086c72; outline-offset: 4px; }
++#contacto .contacto-error { margin: .5rem 0 0; color: #922b21; font-weight: 600; }
++#contacto [aria-invalid="true"] { border-color: #922b21; border-width: 2px; }
++#contacto .contacto-errores { margin-block: 1rem 2rem; padding: 1rem; border: 2px solid #922b21; border-radius: .5rem; }
++#contacto .contacto-errores p { margin-bottom: .5rem; }
++#contacto .contacto-errores ul { padding-left: 1.25rem; margin: 0; }
++#contacto .contacto-errores a { display: inline-block; padding-block: .35rem; color: #922b21; overflow-wrap: anywhere; }
++#contacto .contacto-estado { margin-bottom: 0; color: #102a43; }
++@media (max-width: 650px) {
++  #contacto .contacto-campos { grid-template-columns: minmax(0, 1fr); }
++  #contacto .contacto-acciones > button { width: 100%; }
++}
+diff --git a/output/playwright/contacto/antes.js b/js/main.js
+index 9a46be6..d7d0ff5 100644
+--- a/output/playwright/contacto/antes.js
++++ b/js/main.js
+@@ -47,6 +47,89 @@
+   syncViewport();
+ })();
+ 
++// Vista previa de Contacto: solo validación local, sin contrato de envío aprobado.
++(() => {
++  const form = document.getElementById('orientacion-form');
++  if (!form) return;
++  const review = form.querySelector('.contacto-revisar');
++  const summary = document.getElementById('contacto-errores');
++  const list = summary.querySelector('ul');
++  const status = document.getElementById('contacto-estado');
++  const fields = {
++    nombre: document.getElementById('contacto-nombre'),
++    email: document.getElementById('contacto-email'),
++    telefono: document.getElementById('contacto-telefono'),
++    ciudad: document.getElementById('contacto-ciudad'),
++    descripcion: document.getElementById('contacto-descripcion')
++  };
++  const radios = [...form.querySelectorAll('input[name="servicio"]')];
++  const textCharacters = /^[\p{L}\p{M} .’'\-]+$/u;
++  let reviewing = false;
++  let reviewed = false;
++
++  function validate(focusSummary = false) {
++    list.replaceChildren();
++    let errors = 0;
++    function show(key, message, controls) {
++      const error = document.getElementById(`contacto-${key}-error`);
++      error.textContent = message;
++      error.hidden = !message;
++      controls.forEach(control => {
++        if (message) control.setAttribute('aria-invalid', 'true');
++        else control.removeAttribute('aria-invalid');
++      });
++      if (!message) return;
++      errors += 1;
++      const item = document.createElement('li');
++      const link = document.createElement('a');
++      link.href = `#${controls[0].id}`;
++      link.textContent = message;
++      link.addEventListener('click', event => {
++        event.preventDefault();
++        controls[0].focus();
++      });
++      item.append(link);
++      list.append(item);
++    }
++    const name = fields.nombre.value.trim();
++    show('nombre', name.length < 3 || name.length > 100 || !textCharacters.test(name) || !/\p{L}/u.test(name)
++      ? 'Nombre completo: escribe entre 3 y 100 caracteres con letras, espacios, apóstrofos o guiones.' : '', [fields.nombre]);
++    const email = fields.email.value.trim();
++    show('email', !email || email.length > 254 || fields.email.validity.typeMismatch
++      ? 'Correo electrónico: escribe una dirección válida de hasta 254 caracteres.' : '', [fields.email]);
++    const phone = fields.telefono.value.trim();
++    const digits = phone.replace(/\D/g, '');
++    show('telefono', phone && (phone.length > 25 || !/^\+?[\d ()\-]+$/.test(phone) || digits.length < 7 || digits.length > 15)
++      ? 'Teléfono: usa entre 7 y 15 dígitos y solo + inicial, espacios, paréntesis o guiones.' : '', [fields.telefono]);
++    const city = fields.ciudad.value.trim();
++    show('ciudad', city && (city.length > 100 || !textCharacters.test(city) || !/\p{L}/u.test(city))
++      ? 'Ciudad o municipio: escribe hasta 100 caracteres con letras, espacios, apóstrofos o guiones.' : '', [fields.ciudad]);
++    show('servicio', radios.some(radio => radio.checked) ? '' : 'Servicio solicitado: selecciona una de las tres opciones.', radios);
++    const description = fields.descripcion.value.trim();
++    show('descripcion', description.length < 20 || description.length > 1000
++      ? 'Descripción: escribe entre 20 y 1000 caracteres, sin información médica sensible.' : '', [fields.descripcion]);
++    summary.hidden = errors === 0;
++    status.textContent = errors
++      ? 'Hay campos por corregir. No se ha enviado ninguna solicitud.'
++      : 'Los campos revisados cumplen las reglas locales. El envío sigue bloqueado: la política y la recepción segura están pendientes de verificación. No se ha enviado ninguna solicitud.';
++    if (focusSummary && errors) summary.focus();
++  }
++
++  review.hidden = false;
++  review.addEventListener('click', () => {
++    if (reviewing) return;
++    reviewing = true;
++    reviewed = true;
++    try { validate(true); } finally { reviewing = false; }
++  });
++  form.addEventListener('input', () => { if (reviewed) validate(); });
++  form.addEventListener('change', () => { if (reviewed) validate(); });
++  form.addEventListener('submit', event => {
++    event.preventDefault();
++    status.textContent = 'Envío bloqueado. La recepción segura y la política de datos no están verificadas. No se ha enviado ninguna solicitud.';
++  });
++})();
++
+ (() => {
+   const consultationLink = document.querySelector('.hero .btn-primary[href="#contacto"]');
+   const contactTitle = document.getElementById('contacto-titulo');

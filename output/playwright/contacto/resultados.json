@@ -1,0 +1,625 @@
+{
+  "date": "2026-11-08",
+  "widths": [
+    {
+      "width": 375,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 33,
+          "y": 4493.90625,
+          "w": 309,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 4623.25,
+          "w": 309,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 4752.59375,
+          "w": 309,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 4881.9375,
+          "w": 309,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 5011.28125,
+          "w": 309,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 5140.625,
+          "w": 309,
+          "h": 106.953125
+        }
+      ],
+      "columns": "309px"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 47.71875,
+          "y": 3915.125,
+          "w": 331.078125,
+          "h": 106.953125
+        },
+        {
+          "x": 389.1875,
+          "y": 3915.125,
+          "w": 331.09375,
+          "h": 106.953125
+        },
+        {
+          "x": 47.71875,
+          "y": 4044.46875,
+          "w": 331.078125,
+          "h": 106.953125
+        },
+        {
+          "x": 389.1875,
+          "y": 4044.46875,
+          "w": 331.09375,
+          "h": 106.953125
+        },
+        {
+          "x": 47.71875,
+          "y": 4173.8125,
+          "w": 331.078125,
+          "h": 106.953125
+        },
+        {
+          "x": 389.1875,
+          "y": 4173.8125,
+          "w": 331.09375,
+          "h": 106.953125
+        }
+      ],
+      "columns": "324.281px 324.281px"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 73,
+          "y": 3675.5625,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 405.1875,
+          "y": 3675.5625,
+          "w": 321.8125,
+          "h": 106.953125
+        },
+        {
+          "x": 73,
+          "y": 3804.90625,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 405.1875,
+          "y": 3804.90625,
+          "w": 321.8125,
+          "h": 106.953125
+        },
+        {
+          "x": 73,
+          "y": 3934.25,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 405.1875,
+          "y": 3934.25,
+          "w": 321.8125,
+          "h": 106.953125
+        }
+      ],
+      "columns": "315px 315px"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 281,
+          "y": 3866.390625,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 613.1875,
+          "y": 3866.390625,
+          "w": 321.8125,
+          "h": 106.953125
+        },
+        {
+          "x": 281,
+          "y": 3995.734375,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 613.1875,
+          "y": 3995.734375,
+          "w": 321.8125,
+          "h": 106.953125
+        },
+        {
+          "x": 281,
+          "y": 4125.078125,
+          "w": 321.796875,
+          "h": 106.953125
+        },
+        {
+          "x": 613.1875,
+          "y": 4125.078125,
+          "w": 321.8125,
+          "h": 106.953125
+        }
+      ],
+      "columns": "315px 315px"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "cards": [
+        {
+          "x": 33,
+          "y": 4752.578125,
+          "w": 254,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 4881.921875,
+          "w": 254,
+          "h": 106.953125
+        },
+        {
+          "x": 33,
+          "y": 5011.265625,
+          "w": 254,
+          "h": 125.84375
+        },
+        {
+          "x": 33,
+          "y": 5159.5,
+          "w": 254,
+          "h": 132.546875
+        },
+        {
+          "x": 33,
+          "y": 5314.4375,
+          "w": 254,
+          "h": 132.546875
+        },
+        {
+          "x": 33,
+          "y": 5469.375,
+          "w": 254,
+          "h": 106.953125
+        }
+      ],
+      "columns": "254px"
+    }
+  ],
+  "errors": [],
+  "regressions": [
+    {
+      "width": 375,
+      "selector": ".site-header",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 375,
+      "selector": "#inicio",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 375,
+      "selector": "#servicios",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 375,
+      "selector": "#nosotros",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 375,
+      "selector": "#proceso",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 375,
+      "selector": ".site-footer",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": ".site-header",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": "#inicio",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": "#servicios",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": "#nosotros",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": "#proceso",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 768,
+      "selector": ".site-footer",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": ".site-header",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": "#inicio",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": "#servicios",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": "#nosotros",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": "#proceso",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1024,
+      "selector": ".site-footer",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": ".site-header",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": "#inicio",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": "#servicios",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": "#nosotros",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": "#proceso",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 1440,
+      "selector": ".site-footer",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": ".site-header",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": "#inicio",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": "#servicios",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": "#nosotros",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": "#proceso",
+      "computedStylesIdentical": false
+    },
+    {
+      "width": 320,
+      "selector": ".site-footer",
+      "computedStylesIdentical": false
+    }
+  ],
+  "links": [],
+  "contrast": [
+    {
+      "fg": "ffffff",
+      "bg": "102a43",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "f0c35b",
+      "bg": "102a43",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "e0eaf1",
+      "bg": "102a43",
+      "ratio": 11.998295777274466
+    },
+    {
+      "fg": "102a43",
+      "bg": "ffffff",
+      "ratio": 14.641624298935564
+    },
+    {
+      "fg": "405769",
+      "bg": "ffffff",
+      "ratio": 7.539691271884016
+    },
+    {
+      "fg": "102a43",
+      "bg": "f0c35b",
+      "ratio": 8.828315104544313
+    },
+    {
+      "fg": "086c72",
+      "bg": "eef5f8",
+      "ratio": 5.606239062807375
+    },
+    {
+      "fg": "086c72",
+      "bg": "ffffff",
+      "ratio": 6.17950468651033
+    }
+  ],
+  "html": {
+    "valid": true,
+    "messages": [],
+    "baselineMessages": [
+      {
+        "ruleId": "element-permitted-content",
+        "severity": 2,
+        "message": "<figure> element is not permitted as content under <span>",
+        "offset": 1222,
+        "line": 35,
+        "column": 22,
+        "size": 6,
+        "selector": "html > body > header > div > a > span:nth-child(1) > figure",
+        "ruleUrl": "https://html-validate.org/rules/element-permitted-content.html",
+        "context": {
+          "kind": "content",
+          "parent": "<span>",
+          "child": "<figure>"
+        }
+      }
+    ]
+  },
+  "css": {
+    "parseErrors": []
+  },
+  "outsideHtmlUnchanged": false,
+  "axe": {
+    "violations": [],
+    "incomplete": [],
+    "passes": [
+      "aria-allowed-attr",
+      "aria-conditional-attr",
+      "aria-hidden-focus",
+      "aria-prohibited-attr",
+      "aria-valid-attr-value",
+      "aria-valid-attr",
+      "autocomplete-valid",
+      "button-name",
+      "color-contrast",
+      "duplicate-id-aria",
+      "form-field-multiple-labels",
+      "label",
+      "link-in-text-block",
+      "link-name",
+      "nested-interactive",
+      "target-size"
+    ]
+  },
+  "ui": [
+    {
+      "name": "submission_disabled",
+      "pass": true
+    },
+    {
+      "name": "privacy_acknowledgement_enabled",
+      "pass": true
+    },
+    {
+      "name": "required_errors",
+      "pass": true
+    },
+    {
+      "name": "summary_focus",
+      "pass": true
+    },
+    {
+      "name": "invalid_status_visible",
+      "pass": true
+    },
+    {
+      "name": "error_link_focus",
+      "pass": true
+    },
+    {
+      "name": "invalid_email",
+      "pass": true
+    },
+    {
+      "name": "service_#contacto-servicio-negacion",
+      "pass": true
+    },
+    {
+      "name": "service_#contacto-servicio-medicamentos",
+      "pass": true
+    },
+    {
+      "name": "service_#contacto-servicio-citas",
+      "pass": true
+    },
+    {
+      "name": "valid_optional_empty",
+      "pass": true
+    },
+    {
+      "name": "valid_review_visible",
+      "pass": true
+    },
+    {
+      "name": "no_success_claim",
+      "pass": true
+    },
+    {
+      "name": "short_phone",
+      "pass": true
+    },
+    {
+      "name": "valid_phone",
+      "pass": true
+    },
+    {
+      "name": "invalid_name",
+      "pass": true
+    },
+    {
+      "name": "city_rejects_markup",
+      "pass": true
+    },
+    {
+      "name": "max_description_enforced",
+      "pass": true
+    },
+    {
+      "name": "max_description_accepted",
+      "pass": true
+    },
+    {
+      "name": "max_name_enforced",
+      "pass": true
+    },
+    {
+      "name": "max_city_enforced",
+      "pass": true
+    },
+    {
+      "name": "max_email_enforced",
+      "pass": true
+    },
+    {
+      "name": "markup_not_rendered",
+      "pass": true
+    },
+    {
+      "name": "no_transmission",
+      "pass": true
+    },
+    {
+      "name": "submission_still_disabled",
+      "pass": true
+    },
+    {
+      "name": "blocked_status",
+      "pass": true
+    },
+    {
+      "name": "keyboard_review",
+      "pass": true
+    },
+    {
+      "name": "no_storage",
+      "pass": true
+    },
+    {
+      "name": "nojs_disabled",
+      "pass": true
+    },
+    {
+      "name": "nojs_no_review",
+      "pass": true
+    },
+    {
+      "name": "implicit_enter_no_navigation",
+      "pass": true
+    },
+    {
+      "name": "native_submit_dialog_no_navigation",
+      "pass": true
+    }
+  ],
+  "axeErrors": {
+    "violations": [],
+    "incomplete": []
+  },
+  "keyboard": [
+    {
+      "id": "",
+      "outline": "solid"
+    },
+    {
+      "class": "contacto-revisar",
+      "outline": "solid"
+    }
+  ],
+  "storage": {
+    "local": 0,
+    "session": 0
+  },
+  "zoom": [
+    {
+      "width": 1440,
+      "sectionOverflow": false,
+      "globalOverflow": false
+    },
+    {
+      "width": 375,
+      "sectionOverflow": false,
+      "globalOverflow": false
+    }
+  ],
+  "localLinks": true
+}
