@@ -1,7 +1,7 @@
 # H02 — Unificación del formulario
 
 Fecha: 15 de noviembre de 2026. Base remota: `3d6e7833040583851d23531050599fa932573675`.
-Rama: `fix/h02-formulario-controlador-unico`. Estado: **PARCIAL: implementado; navegador pendiente**.
+Rama: `fix/h02-formulario-controlador-unico`. Estado: **RESUELTO FUNCIONALMENTE; revisión manual con lector de pantalla pendiente**.
 
 ## Diagnóstico y corrección
 
@@ -22,13 +22,15 @@ Rama: `fix/h02-formulario-controlador-unico`. Estado: **PARCIAL: implementado; n
 | Diff y atributos HTML duplicados | PASS | `git diff --check` y análisis con HTMLParser de `index.html` y `privacidad.html` |
 | DOM simulado: validación, mensajes, enlaces, foco DOM y cancelación de submit | 41/41 PASS | `output/h02/dom-results.json`, con SHA-256 del código probado |
 | Misma batería contra la base | 21 PASS / 20 FAIL | `output/h02/baseline-dom-results.json`; evidencia de defectos detectados, no resultados de la corrección |
-| Chromium / Playwright | BLOCKED, 0 comprobaciones E2E ejecutadas | `output/h02/browser-blocked.json` |
-| POST reales, envío nativo, Enter y controles alterados en navegador | NO VERIFICADO | Batería preparada en `tests/h02-formulario.cjs`; no ejecutada por bloqueo de inicio |
-| Responsive, navegación móvil, foco visual y axe | NO VERIFICADO | Chromium aborta con `socket() failed: Operation not permitted (1)`; descarga alternativa de Headless Shell inválida |
+| Chromium / Playwright | 48/48 PASS | `output/h02/results.json`; Chromium 151.0.7922.34 |
+| POST/API/almacenamiento, submit nativo, Enter y atributo de vista previa alterado | PASS: cero POST, solicitudes a `/api/`, navegación de envío o persistencia | `tests/h02-formulario.cjs`; servidor E2E rechaza cualquier método distinto de GET |
+| Responsive y menú móvil | PASS en 320/375/768/1024/1440 px; menú validado con teclado/Escape y cambio a escritorio | Capturas en `output/h02/` y `results.json` |
+| axe WCAG A/AA automatizado | Cero violaciones confirmadas en los cinco anchos; `color-contrast` queda incompleto para revisión manual | `results.json`; elementos decorativos con flecha y textarea con fondo parcialmente oscurecido; no equivale a aprobación automática de contraste |
+| Foco visual y navegación de seis servicios | PASS en Chromium: selección, un cambio, un foco y un scroll por activación | `tests/h02-formulario.cjs` |
 | Lectores de pantalla reales | NO VERIFICADO | Sin sesión de tecnología de asistencia |
 | API PHP, MySQL y Hostinger | Fuera del alcance; no ejecutados | Sin modificaciones ni despliegues |
 
-Las pruebas jsdom ejecutan el código real sobre un DOM simulado. Instrumentan los puntos de transporte/almacenamiento y comprueban la cancelación del evento, pero **no demuestran ausencia de POST en navegador real, envío nativo bloqueado, layout, navegación física por teclado ni conformidad WCAG**. No hay capturas ni certificación visual de esta entrega. El bloqueo ambiental no es un defecto demostrado del formulario.
+Las pruebas jsdom ejecutan el código real sobre un DOM simulado. La batería E2E también se ejecutó en Chromium local: observa peticiones del navegador y del servidor, prueba `requestSubmit()`, submit nativo, Enter y controles alterados. Resultado: cero POST/API, cero navegación de envío y cero excepciones de consola. Las capturas móvil/escritorio se inspeccionaron. Axe no confirmó violaciones, pero dejó contraste incompleto; no se declara conformidad WCAG integral.
 
 El bloqueo de interfaz cubre los controles previstos y cambios accidentales del atributo de vista previa; no pretende impedir que código arbitrario o una persona con consola sustituya el formulario, su método y sus manejadores. La API y su futura habilitación requieren controles independientes.
 
@@ -46,6 +48,6 @@ node tests/h02-formulario.cjs
 
 Puede indicarse `CHROMIUM_PATH` para un ejecutable instalado. `H02_ROOT` selecciona la copia que se probará y `H02_OUTPUT` el directorio de resultados. El servidor E2E se limita a `127.0.0.1`, rechaza recepción API y usa únicamente datos ficticios. Las peticiones se observan tanto en Playwright como en el servidor; una petición bloqueada por el servidor también debe fallar la prueba.
 
-## Cierre pendiente
+## Cierre
 
-Ejecutar la batería Chromium en un entorno compatible, inspeccionar capturas de 375/1440 px y corregir cualquier regresión. La batería incluye 320/375/768/1024/1440 px, clic/Enter, menú móvil, privacidad, seis categorías, axe y bloqueo con y sin `data-preview-only`. Hasta obtener esa evidencia, **H02 no se declara RESUELTO**. El PR se presenta en borrador, sin merge ni despliegue.
+La batería Chromium se ejecutó después del primer bloqueo ambiental y pasó 48/48 comprobaciones. Se corrigieron dos detalles de la propia prueba: espera del evento asíncrono al cambiar el viewport y selector no ambiguo en privacidad; se añadió una aserción de seis manejadores para los seis enlaces. **H02 queda RESUELTO en su alcance funcional**, sin habilitar envío ni desplegar. La validación manual con lector de pantalla y el contraste marcado incompleto por axe permanecen NO VERIFICADOS; no se presenta esto como certificación WCAG. Se propone el cambio mediante PR en borrador; no hacer merge automáticamente.

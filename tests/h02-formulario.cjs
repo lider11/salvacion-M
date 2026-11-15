@@ -76,6 +76,7 @@ const server = http.createServer((req, res) => {
       const listeners = await page.evaluate(() => window.h02Listeners);
       for (const type of ['input', 'change', 'submit']) assert.equal(listeners.filter(x => x.target === 'orientacion-form' && x.type === type).length, 1);
       assert.equal(listeners.filter(x => x.target === 'contacto-revisar' && x.type === 'click').length, 1);
+      assert.equal(listeners.filter(x => x.target === 'servicio-enlace' && x.type === 'click').length, 6);
       assert.equal(await page.locator(form).getAttribute('method'), 'dialog');
       assert.equal(await page.locator(form).getAttribute('data-preview-only'), 'true');
       assert.equal(await page.locator('.contacto-enviar').isDisabled(), true);
@@ -219,7 +220,7 @@ const server = http.createServer((req, res) => {
         await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
         const audit = await page.evaluate(async () => {
           const r = await axe.run({ include: ['#contacto', '#servicios'] }, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'] } });
-          return { violations: r.violations, incomplete: r.incomplete.map(x => ({ id: x.id, impact: x.impact })) };
+          return { violations: r.violations, incomplete: r.incomplete.map(x => ({ id: x.id, impact: x.impact, nodes: x.nodes.map(node => ({ target: node.target, summary: node.failureSummary })) })) };
         });
         result.accessibility.push({ width, ...audit });
         assert.equal(audit.violations.length, 0);
@@ -246,6 +247,7 @@ const server = http.createServer((req, res) => {
       assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
       assert.equal(await page.evaluate(() => location.hash), '#contacto');
       await page.setViewportSize({ width: 1440, height: 1000 });
+      await page.locator('#primary-navigation').waitFor({ state: 'visible' });
       assert.equal(await page.locator('#primary-navigation').isVisible(), true);
     });
     await check('Hero, CTA de proceso, enlaces internos y página de privacidad', async () => {
@@ -257,7 +259,7 @@ const server = http.createServer((req, res) => {
       assert.equal(await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].every(a => document.getElementById(a.hash.slice(1)))), true);
       await page.goto(origin + '/privacidad.html');
       assert.match(await page.locator('#autorizacion').innerText(), /casilla solo confirma.*borrador/);
-      await page.locator('a[href="./index.html#contacto"]').click();
+      await page.locator('nav[aria-label="Navegación principal"] a[href="./index.html#contacto"]').click();
       assert.equal(await page.locator(form).count(), 1);
     });
     await check('JavaScript desactivado: botón inactivo y submit nativo no transmite', async () => {

@@ -1,18 +1,18 @@
 # Memoria canónica — Salvación M
 
-## 2026-11-15 — H02: controlador único del formulario (PARCIAL)
+## 2026-11-15 — H02: controlador único del formulario (RESUELTO FUNCIONALMENTE)
 
-**Objetivo y causa:** eliminar los dos controladores de `orientacion-form`, sus validaciones divergentes y los mensajes que confundían lectura del borrador con consentimiento. HEAD inspeccionado: `3d6e7833040583851d23531050599fa932573675`.
+**Objetivo y causa:** eliminar los dos controladores de `orientacion-form`, sus validaciones divergentes y los mensajes que confundían lectura del borrador con consentimiento. HEAD de GitHub inspeccionado: `3d6e7833040583851d23531050599fa932573675`.
 
-**Implementación registrada:** `35fe0ac6d0bec7ee5b9f177deede9c21f5193700`, rama `fix/h02-formulario-controlador-unico`. Un solo controlador y función de validación; revisión local; eventos sin duplicación; errores asociados; seis enlaces con selección de servicio; bloqueo incondicional de submit y method=dialog, independiente de data-preview-only. El envío permanece oculto/deshabilitado y no se incorpora transporte ni almacenamiento. Se conserva el CSS y el código ajeno al formulario.
+**Implementación:** rama `fix/h02-formulario-controlador-unico`, commit base de código `35fe0ac6d0bec7ee5b9f177deede9c21f5193700`. Un único controlador y función de validación; revisión local; errores y foco asociados; seis enlaces con selección de servicio; bloqueo incondicional de submit y `method=dialog`, independiente de `data-preview-only`. Se conserva oculto y deshabilitado el envío; sin transporte ni persistencia. El detalle está en `docs/H02-verificacion.md`.
 
-**Archivos:** `js/main.js`, `index.html`, `privacidad.html`, `docs/backend-hostinger.md`, `tests/h02-formulario-dom.cjs`, `tests/h02-formulario.cjs`, `docs/H02-verificacion.md` y resultados en `output/h02/`.
+**Archivos de la corrección:** `js/main.js`, `index.html`, `privacidad.html`, `docs/backend-hostinger.md`, pruebas H02, memoria y evidencias en `output/h02/`.
 
-**Pruebas realizadas:** sintaxis de JavaScript, diff sin errores y atributos HTML sin duplicados. 41/41 comprobaciones jsdom aprobadas; la misma batería sobre la base muestra 21 aprobadas y 20 fallidas. Se conserva SHA-256 de los archivos probados. Estas son pruebas de DOM simulado, no pruebas de navegador ni de red real.
+**Pruebas realizadas:** 41/41 DOM y 48/48 Chromium/Playwright aprobadas; los cinco anchos 320/375/768/1024/1440 sin overflow; seis enlaces, menú móvil, privacidad, foco y estados revisados. Axe no confirmó violaciones, pero dejó `color-contrast` incompleto para inspección manual. Red: cero POST/API, navegación de envío o excepciones. Resultados y SHA-256 de archivos probados en `output/h02/results.json`; capturas móvil/escritorio en `output/h02/`.
 
-**Bloqueo:** Chromium abortó al iniciar por `socket() failed: Operation not permitted (1)`; la alternativa Headless Shell no se descargó como ZIP válido. La batería Playwright está preparada pero NO VERIFICADA. Sin prueba real de POST/Enter/submit nativo, responsive, foco visual, axe ni lectores de pantalla. No se acredita WCAG ni se declara H02 resuelto.
+**Resultado:** RESUELTO en el alcance funcional de H02; rama lista para PR en borrador. Sin merge, despliegue ni activación de recepción.
 
-**Resultado y riesgos:** PARCIAL, pendiente ejecutar E2E y revisión visual en entorno compatible. Privacidad aprobada, integración API y Hostinger siguen pendientes fuera de este alcance. No hay merge, despliegue, activación de recepción ni cambios de producción. Detalle reproducible: `docs/H02-verificacion.md`.
+**Riesgos pendientes:** lectores de pantalla reales NO VERIFICADOS; el contraste señalado como incompleto por axe necesita revisión manual y no se acredita WCAG integral. Aviso jurídico, configuración API/Hostinger y recepción real permanecen bloqueados y fuera de alcance. SHA del commit de verificación y PR: consultar el historial Git/enlace de PR.
 
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 

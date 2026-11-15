@@ -170,10 +170,10 @@
     "No acredita red real ni envío nativo del navegador.",
     "Responsive, teclado físico, foco visual, axe y lectores de pantalla NO VERIFICADOS."
   ],
-  "js/main.js": "8b1c55317982134d72946dd9de4ce026e16366cc7ee11e28b818285ee3afd397",
-  "index.html": "99e78a2c6f3c31817b55211c61985245a1af6469eac89a6e118bc3aa8f156c10",
-  "css/style.css": "b3c35197673c9830f8c4e6040e7aa345075dda1d47e5934d73e45c8d2098ca9f",
-  "privacidad.html": "e64a308fb7bf3f05a4423ea040fb2dfbfe9eb7a6e890c58b322eb439df61efa6",
+  "js/main.js": "5cfde209641c984b3ca66f0be84f84ca79d491cd2bb8e31c12c91a5057f45d98",
+  "index.html": "0c210178fef5b1cbf6f985c00f643140266b700af0b5119f52c1fb45e837d4da",
+  "css/style.css": "5ebfdebf57b9d02c3212c8186ab28ef6b774853dfdca1772db5cfefc0b7a9347",
+  "privacidad.html": "4b7ec6cc874494e3a122301a2bee2551b6c139c5e7fa4693df76001aea8db020",
   "passed": 41,
   "failed": 0
 }
