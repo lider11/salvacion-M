@@ -21,12 +21,12 @@ Línea canónica: rama `main` (y PRs hacia ella).
 
 - Frontend: HTML5, CSS3, JavaScript Vanilla
 - Backend: PHP 8.2+ con PDO; API JSON para solicitudes
-- Persistencia prevista para Hostinger: MySQL 8+; SQLite se usa en pruebas locales
+- Persistencia prevista para Hostinger: MySQL compatible (versión real pendiente de verificar); SQLite se usa en pruebas locales
 - GitHub: solo código, documentación e historial — no scheduler ni despliegue operativo
 
 ## Cómo trabajar
 
-1. Leer este README y `docs/08-memoria-del-sistema.md`
+1. Leer `AGENTS.md`, este README y `docs/08-memoria-del-sistema.md`
 2. Cambiar una cosa a la vez, probarla, documentar el resultado
 3. No afirmar éxito de una solicitud hasta persistirla de verdad
 4. No tocar producción sin autorización expresa
@@ -37,5 +37,13 @@ Configuración y despliegue backend: `docs/backend-hostinger.md`.
 
 ## Ramas históricas
 
-- `reinicio-2026-desde-cero`: experimentó SDD/backend largo; decisiones útiles (Express, retiro de G3) se consolidan aquí; el resto queda histórico.
-- `trabajo-proceso-001`: rediseño UI experimental con artefactos SDD/Playwright; no forma parte de la línea canónica hasta una integración deliberada y simple.
+- `reinicio-2026-desde-cero`: experimentó SDD/backend largo; su propuesta Node/Express quedó sustituida por PHP/PDO/MySQL; se conserva como antecedente.
+- `trabajo-proceso-001`: contiene rediseños y evidencias históricas; parte del frontend fue integrada posteriormente. No importar sus procedimientos SDD como reglas vigentes.
+
+## Verificación y sistemas separados
+
+Ejecutar `php tests/php-api-smoke.php`, `node --check js/main.js` y `node --check js/social.js`. PHP requiere `mbstring` y PDO SQLite para estas pruebas; Hostinger requiere PDO MySQL. La API solo recibe con `'accept_requests' => true` en configuración privada; por defecto permanece cerrada. La casilla actual confirma lectura del borrador, no consentimiento.
+
+Los Sites `salvacion-m-gates-qa` y `salvacion-m-crm-qa` son sistemas históricos separados, cuyo estado real no se ha verificado en esta entrega. No se sincronizan con `main`, no se trasladan sus bases y no se modifican automáticamente. El CRM nuevo aún no existe.
+
+Inventario, resultados y pendientes de H01: [reconciliación arquitectónica](docs/H01-reconciliacion.md).

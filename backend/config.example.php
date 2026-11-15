@@ -7,6 +7,8 @@ declare(strict_types=1);
  * Rellena los datos en Hostinger; no subas la copia real al repositorio.
  */
 return [
+    // Cierre por defecto. true solo tras autorización y pruebas de staging.
+    'accept_requests' => false,
     'dsn' => 'mysql:host=localhost;dbname=CAMBIAR_BASE;charset=utf8mb4',
     'db_user' => 'CAMBIAR_USUARIO',
     'db_password' => 'CAMBIAR_PASSWORD',

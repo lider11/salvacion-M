@@ -38,7 +38,7 @@ Las fichas describirán alcance y límites de cada servicio. Evitar afirmar que 
 7. Privacidad y términos: textos jurídicos sujetos a revisión antes de producción.
 
 ## 6. Flujo del usuario
-Visita → identifica necesidad → comprende condiciones → envía solicitud → API valida y persiste → confirma recepción con identificador → CRM independiente recibe/consulta solicitud → seguimiento y eventual cita. Nunca mostrar éxito por el mero envío del navegador ni simular persistencia.
+Flujo objetivo (no operativo todavía): visita → identifica necesidad → comprende condiciones → envía solicitud → API valida y persiste → confirma recepción con identificador → CRM independiente recibe/consulta solicitud → seguimiento y eventual cita. Nunca mostrar éxito por el mero envío del navegador ni simular persistencia.
 
 ## 7. Voz y microcopy
 **Usar:** “Te orientamos sobre las opciones disponibles”; “Cuéntanos brevemente qué necesitas”; “Recibimos tu solicitud”.
@@ -49,7 +49,7 @@ En errores: indicar qué ocurrió, cómo corregirlo y si la solicitud fue recibi
 Minimizar datos, evitar pedir historia clínica en el primer contacto salvo justificación y controles adecuados; informar responsable, finalidad, derechos y canales de atención conforme a normativa colombiana aplicable. Consentimiento no preseleccionado cuando sea exigible. No mostrar testimonios, cifras de éxito ni sellos sin autorización y evidencia. El sitio no sustituye atención médica de urgencia.
 
 ## 9. Arquitectura técnica
-HTML5, CSS3 y JavaScript Vanilla en el portal. Backend previsto: Node.js LTS + Express. Persistencia por definir al implementar. CRM separado del portal. GitHub solo como repositorio de código e historial, no scheduler ni despliegue. No usar GitHub Actions para recordatorios. No tocar producción sin autorización expresa.
+HTML5, CSS3 y JavaScript Vanilla en el portal. API inicial: PHP 8.2+ con PDO; MySQL compatible para Hostinger previsto y SQLite solo en pruebas locales. Sustituye la previsión Node/Express. CRM administrativo independiente pendiente. El formulario actual es vista previa, sin envío; API cerrada por defecto hasta activación expresa. GitHub solo como repositorio de código e historial, no scheduler ni despliegue. No usar GitHub Actions para recordatorios. No tocar producción sin autorización expresa.
 
 ## 10. Indicadores de experiencia propuestos
 Comprensión de propuesta de valor; tasa de inicio y finalización de formulario; errores de validación; recepción persistida; accesibilidad móvil y teclado; tiempo de respuesta del proceso. Son objetivos de medición, no métricas obtenidas.

@@ -369,8 +369,8 @@
     }
 
     if (!consentimiento) {
-      setFieldError('contacto-consentimiento', 'Marca la casilla si aceptas el aviso de privacidad.');
-      const control = addIssue(issues, 'Autorización de datos', 'contacto-consentimiento', fields.consentimiento);
+      setFieldError('contacto-consentimiento', 'Confirma que consultaste el aviso en borrador. Esta casilla no autoriza el tratamiento de datos.');
+      const control = addIssue(issues, 'Lectura del aviso en borrador', 'contacto-consentimiento', fields.consentimiento);
       firstInvalid ??= control;
     }
 

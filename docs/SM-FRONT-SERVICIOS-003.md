@@ -1,5 +1,7 @@
 ﻿# SM-FRONT-SERVICIOS-003 — inspección y riesgos
 
+> Vigencia (2026-11-15): informe histórico; conserva los resultados de su fecha. Las menciones a G3/SDD/D1 no son obligaciones de la línea actual. Arquitectura vigente: [PHP/PDO/MySQL y Hostinger previsto](arquitectura-inicial.md).
+
 Fecha: 2026-11-08. SHA inicial: a1f1fafdcb03c33b1f31c6ea40b47bf44ac2702d.
 Rama inicial: main. Rama de trabajo: trabajo-servicios-opcion-3.
 

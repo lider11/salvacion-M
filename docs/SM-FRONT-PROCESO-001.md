@@ -1,5 +1,7 @@
 ﻿# SM-FRONT-PROCESO-001
 
+> Vigencia (2026-11-15): informe histórico; conserva los resultados de su fecha. Las menciones a G3/SDD/D1 no son obligaciones de la línea actual. Arquitectura vigente: [PHP/PDO/MySQL y Hostinger previsto](arquitectura-inicial.md).
+
 Inspección 2026-11-08: README, AGENTS, memoria y sistema de diseño revisados. HTML activo index.html y CSS enlazado css/style.css. Reglas existentes de #proceso ol/li y breakpoint 600 px identificadas; .container global se conserva.
 Rama inicial trabajo-nosotros-opcion-3; rama de implementación trabajo-proceso-001. SHA inicial a1f1fafdcb03c33b1f31c6ea40b47bf44ac2702d.
 Los cambios de Servicios/Nosotros permanecen sin commit; base real de comparación guardada en output/playwright/proceso/antes.html y antes.css.

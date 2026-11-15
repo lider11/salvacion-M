@@ -2,14 +2,14 @@
 
 ## Estado y alcance
 
-La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. Está probada localmente, pero **no está conectada al formulario ni desplegada**. La página conserva `data-preview-only="true"`, el envío deshabilitado y el aviso jurídico pendiente.
+La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. Las pruebas locales se detallan en [H01-reconciliacion.md](H01-reconciliacion.md); **no está conectada al formulario y no hay despliegue acreditado**. La página conserva `data-preview-only="true"`, el envío deshabilitado y el aviso jurídico pendiente.
 
 La API solo debe recibir solicitudes cuando estén aprobados el aviso de privacidad, la finalidad y retención de datos, el consentimiento y los canales de atención. No usar datos personales reales durante pruebas. No se toca producción desde este trabajo.
 
 ## Requisitos
 
-- PHP 8.2 o superior con PDO y `pdo_mysql` habilitado.
-- MySQL 8+ (o la versión compatible ofrecida por el plan Hostinger).
+- PHP 8.2 o superior con PDO, `pdo_mysql` y `mbstring` habilitados.
+- MySQL compatible con la migración InnoDB/utf8mb4 (versión real por confirmar en el plan).
 - HTTPS activo para el dominio.
 - El archivo privado de configuración y las copias de seguridad fuera del directorio web público.
 
@@ -42,6 +42,7 @@ La ruta predeterminada de configuración es `private/salvacion.php`, hermana de 
 
 `POST /api/requests.php`
 
+- Recepción cerrada por defecto: requiere `accept_requests` como booleano `true`; ausente, `false` o texto `"true"` devuelven `503 requests_disabled` sin escribir. Los ejemplos `CAMBIAR_*` se rechazan.
 - Acepta exclusivamente JSON y verifica `Origin` contra una lista exacta; no habilita CORS.
 - Valida nombre, correo, teléfono opcional, ciudad opcional, una de las seis categorías y descripción de 20–1000 caracteres.
 - Requiere `consentimiento: true` y `privacy_version` exactamente igual a la versión configurada.
@@ -53,7 +54,7 @@ No hay panel CRM, autenticación de operador, correo, borrado/retención automat
 
 ## Activación futura del formulario
 
-No se debe quitar `data-preview-only="true"`, habilitar el checkbox ni conectar `fetch()` hasta contar con:
+La casilla actual está activa y solo confirma lectura del borrador: no es consentimiento ni autoriza recepción. No se debe quitar `data-preview-only="true"`, convertir esa casilla en consentimiento, habilitar el envío, conectar `fetch()` ni poner `accept_requests` en `true` hasta contar con:
 
 1. aviso y finalidad aprobados jurídicamente;
 2. versión de privacidad coordinada entre configuración del servidor y payload;
@@ -66,12 +67,12 @@ La API no se anuncia como canal disponible antes de completar esos puntos.
 
 ## Pruebas locales
 
-Con PHP 8.2+ y extensiones PDO SQLite habilitadas:
+Con PHP 8.2+, `mbstring` y PDO SQLite habilitados:
 
 - `php -l api/requests.php`
 - `php tests/php-api-smoke.php`
 
-El test crea temporalmente un SQLite y un servidor PHP ligado solo a `127.0.0.1`; usa una versión de privacidad ficticia y datos sintéticos, y elimina los archivos temporales al terminar. No requiere instalar paquetes. No prueba la conexión real a MySQL de Hostinger.
+El test crea temporalmente una estructura `public_html/`, `backend/` y `private/` separada, un SQLite y un servidor PHP ligado solo a `127.0.0.1`; usa una versión de privacidad ficticia y datos sintéticos, y elimina los archivos temporales al terminar. No requiere instalar paquetes. No prueba la conexión real a MySQL de Hostinger.
 
 Para preparar manualmente SQLite en desarrollo, crea una configuración privada con `dsn` `sqlite:/ruta/fuera-del-webroot/dev.sqlite` y ejecuta `php backend/migrate.php`.
 
@@ -88,3 +89,18 @@ Para preparar manualmente SQLite en desarrollo, crea una configuración privada 
 - Revisión de solicitudes: directamente por el responsable del proyecto; no implica que exista CRM, acceso de operador ni notificaciones.
 - Conservación y eliminación: el responsable desea decidirlas personalmente. Falta documentar un criterio de necesidad, plazo o evento de cierre y procedimiento de eliminación; no se interpreta como conservación indefinida aprobada.
 - El formulario conserva su vista previa. El teléfono sigue opcional: antes de activar un flujo de llamadas se debe resolver esa coherencia con los campos y la validación.
+
+## Inspección del alojamiento y seguridad pendiente
+
+No se dispone en esta entrega de conexión al alojamiento; Hostinger Mail no permite inspeccionar hPanel. PHP, extensiones, dominio, HTTPS, MySQL, permisos y rutas reales siguen pendientes. No copiar el repositorio completo a `public_html`: excluir `.git/`, `.github/`, `.impeccable/`, `docs/`, `tests/`, `output/`, backend, configuración y bases de datos.
+
+Antes del staging, confirmar su document root real y usar carpeta y base propias. Si el subdominio tiene una raíz anidada, configurar `SALVACION_BACKEND_BOOTSTRAP` y `SALVACION_CONFIG` con rutas absolutas comprobadas. La protección `.htaccess` es defensa adicional de Apache/LiteSpeed y no funciona en el servidor PHP integrado; no sustituye la separación física. La prueba local comprueba rutas de despliegue, no reglas del servidor Hostinger.
+
+Verificar HTTPS y redirección HTTP, `display_errors=Off`, permisos de lectura mínimos para la configuración, ausencia de acceso HTTP a configuración/backend/migraciones y cabeceras reales del portal y API. La API emite `Cache-Control: no-store, private`, `X-Content-Type-Options: nosniff` y `Referrer-Policy: no-referrer`; no se acredita todavía CSP/HSTS del alojamiento. Un bootstrap ausente responde JSON 503 sin exponer su ruta.
+
+El origen exacto y JSON sin CORS reducen solicitudes de navegador ajenas, pero no autentican a clientes HTTP ni sustituyen protección antiabuso. La API pública no usa sesiones ni cookies; el futuro CRM necesitará autenticación, RBAC, CSRF, escape contextual al mostrar texto guardado y auditoría de operaciones. El límite por correo es básico y se evade rotando correos; falta protección de volumen en servidor. No hay idempotencia de solicitudes ni notificaciones. No almacenar secretos o datos en logs. Resolver responsable legal, derechos, minimización y retención antes de aceptar datos reales; no se declara cumplimiento integral de la Ley 1581 de 2012.
+
+### Referencias del proveedor, consultadas el 2026-11-15
+
+- [Versión PHP](https://www.hostinger.com/support/1575755-how-to-change-the-php-version-of-your-hostinger-hosting-plan/): el cambio global puede afectar otros sitios del plan. Inspeccionar el alcance antes de cambiar; no alterar producción para preparar staging.
+- [Extensiones PHP](https://www.hostinger.com/support/4667515-how-to-manage-php-extensions-and-options-in-hostinger/): comprobar las extensiones activas de la versión efectiva. Estas guías no acreditan el estado de la cuenta.

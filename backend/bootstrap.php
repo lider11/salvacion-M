@@ -12,6 +12,8 @@ function api_config(): array
     if ($configPath === false || $configPath === '') {
         $configPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'salvacion.php';
     }
+    // Re-evaluate symlinks if deployment changes the private path between requests.
+    clearstatcache(true);
     $realPath = realpath($configPath);
     if ($realPath === false || !is_file($realPath) || !is_readable($realPath)) {
         throw new RuntimeException('Private API configuration is missing.');
@@ -31,16 +33,22 @@ function api_config(): array
         throw new RuntimeException('API configuration must return an array.');
     }
 
+    // Ausente, texto "true" o cualquier otro valor no habilitan recepción.
+    $loaded['accept_requests'] = ($loaded['accept_requests'] ?? false) === true;
+
     $required = ['dsn', 'db_user', 'db_password', 'email_hash_key', 'privacy_notice_version', 'allowed_origins'];
     foreach ($required as $key) {
         if (!array_key_exists($key, $loaded)) {
             throw new RuntimeException('API configuration is incomplete.');
         }
+        if (is_string($loaded[$key]) && str_contains($loaded[$key], 'CAMBIAR_')) {
+            throw new RuntimeException('Example configuration values must be replaced.');
+        }
     }
     if (!is_string($loaded['dsn']) || $loaded['dsn'] === '' || !is_string($loaded['email_hash_key']) || strlen($loaded['email_hash_key']) < 32) {
         throw new RuntimeException('API configuration is invalid.');
     }
-    if (!is_string($loaded['privacy_notice_version']) || $loaded['privacy_notice_version'] === '') {
+    if (!is_string($loaded['privacy_notice_version']) || $loaded['privacy_notice_version'] === '' || strlen($loaded['privacy_notice_version']) > 80) {
         throw new RuntimeException('A privacy notice version must be configured.');
     }
     if (!is_array($loaded['allowed_origins']) || $loaded['allowed_origins'] === []) {
@@ -49,6 +57,7 @@ function api_config(): array
     foreach ($loaded['allowed_origins'] as $origin) {
         if (
             !is_string($origin)
+            || str_contains($origin, 'CAMBIAR_')
             || filter_var($origin, FILTER_VALIDATE_URL) === false
             || !in_array(parse_url($origin, PHP_URL_SCHEME), ['http', 'https'], true)
             || !in_array(parse_url($origin, PHP_URL_PATH), [null, ''], true)

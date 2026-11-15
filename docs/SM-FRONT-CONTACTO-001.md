@@ -1,5 +1,7 @@
 ﻿# SM-FRONT-CONTACTO-001 — inspección y riesgos
 
+> Vigencia (2026-11-15): informe histórico; conserva los resultados de su fecha. Las menciones a G3/SDD/D1 no son obligaciones de la línea actual. Arquitectura vigente: [PHP/PDO/MySQL y Hostinger previsto](arquitectura-inicial.md).
+
 Fecha: 2026-11-08. Rama trabajo-contacto-001; SHA base 4e1775de3c70dbd714740f6b9229c22734246adc. README, AGENTS, memoria, arquitectura y documentación de diseño revisados. HTML activo index.html; CSS css/style.css; JS js/main.js. Copias previas en output/playwright/contacto/.
 
 Inventario y búsqueda de endpoints, fetch, tablas, CSRF y categorías: solo documentación de arquitectura prevista; no hay backend, contratos de recepción, CRM ni esquema D1 verificables. No se inventan códigos de API: valores de radio solo textos visibles de interfaz, sin contrato de serialización.
