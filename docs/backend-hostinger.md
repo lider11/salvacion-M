@@ -77,6 +77,20 @@ El test crea temporalmente un SQLite y un servidor PHP ligado solo a `127.0.0.1`
 
 Para preparar manualmente SQLite en desarrollo, crea una configuración privada con `dsn` `sqlite:/ruta/fuera-del-webroot/dev.sqlite` y ejecuta `php backend/migrate.php`.
 
+## Verificación H03 en staging Hostinger — pendiente de acceso
+
+Las pruebas de CI (https://github.com/lider11/salvacion-M/actions/runs/43735108060) cubren PHP 8.2/8.4, SQLite y concurrencia real de MySQL 8, pero no establecen qué IP recibe `REMOTE_ADDR` en Hostinger.
+
+**Procedimiento controlado al disponer de un staging autorizado:**
+
+1. Confirmar dominio de staging y `POST /api/requests.php`, configuración PHP (incluyendo `mbstring` y `pdo_mysql`) y migración MySQL, sin datos reales.
+2. Identificar en el servidor el origen efectivo de `REMOTE_ADDR` con una inspección temporal de acceso restringido que solo muestre un identificador HMAC, sin exponer IP ni secretos; retirar la inspección al terminar.
+3. Desde dos redes externas distintas y autorizadas, ejecutar solicitudes sintéticas con correos nuevos y límites de staging bajos. Verificar que cada red tenga su cuota independiente, que se devuelva HTTP 429 al superarla y que ninguna petición rechazada se inserte.
+4. Repetir con encabezados `X-Forwarded-For` distintos: no deben alterar la cuota. Si ambas redes comparten el mismo identificador HMAC de `REMOTE_ADDR`, existe un proxy o salida común que provoca falsos positivos y el control por red **NO está acreditado para Hostinger**.
+5. Antes de usar un encabezado de IP real, verificar explícitamente la topología y la lista de proxies de confianza con el proveedor. Nunca confiar de forma general en cabeceras inyectables. Registrar resultados, retirar instrumentos temporales y mantener el formulario desactivado.
+
+**Estado actual:** staging de Salvación M y proxy real de Hostinger NO VERIFICADOS; no se ejecutaron solicitudes contra el alojamiento.
+
 ## Riesgos pendientes
 
 - La aprobación jurídica y la política real de conservación están pendientes; almacenar datos personales antes de eso no está autorizado.
