@@ -1,5 +1,29 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H03: recuperación de evidencia POST real en staging
+
+**Objetivo:** verificar recepción y persistencia de la solicitud sintética única, sin repetir envíos.
+
+**Evidencia recuperada:** workflow `.github/workflows/h03-staging-post-once-20261115.yml`, ejecución https://github.com/lider11/salvacion-M/actions/runs/43741646276, job 132895897473, intento 1, SHA ejecutado `a6c153a3d1abf391c7091242d1c5b215a211c42f`. Registro del 2026-11-15 a las 12:32:15 America/Bogota: `HTTP_STATUS: 201`, `API_OK: True`, `API_ERROR: none`, `REQUEST_ID: 979ec848-c417-4266-bb89-51b2d3b86569`. El workflow contiene un único POST sin reintentos al staging autorizado y el payload sintético previsto. No se ejecutó otro POST durante esta revisión.
+
+**Resultado parcial:** respuesta real de staging HTTP 201 y UUID formato v4 acreditados. La respuesta declara guardado; no sustituye comprobación independiente de MySQL. Persistencia en `u270515629_salvacion_qa`, coincidencia del UUID, número de filas, estado `nueva`, versión sintética y contadores de correo/red: NO VERIFICADOS. Tampoco se verificaron configuración privada desplegada, rutas, ausencia de diagnósticos públicos ni correspondencia del código desplegado con el SHA del workflow.
+
+**Bloqueo:** hPanel redirige a inicio de sesión y Hostinger restringe el inicio de sesión desde el navegador en la nube disponible. Sin herramienta de alojamiento/MySQL conectada; el conector Hostinger Mail no cubre estas operaciones. No se introdujeron credenciales ni se intentó eludir esa restricción.
+
+**Decisiones:** POST_HTTP_201=TRUE; API_OK=TRUE; UUID_VALIDO=TRUE; MYSQL_VERIFICADO=FALSE; SIN_DUPLICADOS_ACREDITADO=FALSE; CONTADORES_H03_VERIFICADOS=FALSE; SEGURIDAD_ALOJAMIENTO_VERIFICADA=FALSE. PROXY HOSTINGER: NO VERIFICADO. Estado global de esta prueba: BLOCKED (resultado HTTP parcial satisfactorio). Sin cambios de código, despliegue, producción, formulario o notificaciones. Sin restaurar G3/SDD. SHA final documental: el commit que incorpora esta entrada, consultable en el historial; SHA base indicado arriba.
+
+## 2026-11-15 — H03: mitigación de evasión por correos rotativos (rama de corrección)
+
+**Problema:** la API limitaba únicamente por correo HMAC; solicitudes con direcciones distintas desde una misma red podían eludir la cuota.
+
+**Corrección propuesta:** añadir cuota independiente por `REMOTE_ADDR` (IPv6 agrupada /64), con HMAC privado y sin confianza en cabeceras de reenvío. Dos contadores transaccionales SQLite/MySQL, respuestas 429 sin persistencia y migración idempotente `request_network_rate_limits`. Configuración `network_rate_limit_per_hour` (30/h por defecto), pruebas de correos rotativos y spoofing, y documentación Hostinger actualizada.
+
+**Alcance y restricciones:** solo rama `fix/h03-rate-limit-network-20261115`; formulario permanece en vista previa, sin despliegue. Antes de incorporar o desplegar: comprobar pruebas PHP/SQLite, proxy real de Hostinger, concurrencia MySQL y requisitos de privacidad. El control por IP reduce evasiones simples; no sustituye controles contra ataques distribuidos.
+
+**Verificación ejecutada el 2026-11-15:** GitHub Actions (rama de corrección) ejecutó con éxito PHP 8.2 y 8.4, extensiones `mbstring`, `pdo_sqlite`, `pdo_mysql` y `curl`: lint PHP sin errores, suite HTTP/SQLite **25/25 por versión** y prueba concurrente MySQL 8 **7/7 por versión**. Resultado **64/64 PASS**. Diez solicitudes simultáneas con correos ficticios distintos desde una misma dirección remota produjeron cuatro HTTP 201, seis HTTP 429 y cuatro registros MySQL; todas compartieron un contador HMAC de red. Evidencia: https://github.com/lider11/salvacion-M/actions/runs/43735108060.
+
+**Limitación:** ensayo MySQL/SQLite en CI, **no** staging Hostinger. No se acreditó subdominio/URL de staging de Salvación M, acceso hPanel ni `REMOTE_ADDR` detrás del proxy efectivo de Hostinger. **H03 integrado funcionalmente en la rama, verificación real de staging pendiente; PR #20 en borrador.** No tocar producción ni activar formulario.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.

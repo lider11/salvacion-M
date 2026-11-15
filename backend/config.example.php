@@ -17,5 +17,6 @@ return [
     'allowed_origins' => [
         'https://CAMBIAR_DOMINIO',
     ],
-    'rate_limit_per_hour' => 5,
+    'rate_limit_per_hour' => 5, // Por correo, por hora.
+    'network_rate_limit_per_hour' => 30, // Por IP (IPv6: prefijo /64), por hora.
 ];

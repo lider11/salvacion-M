@@ -8,7 +8,7 @@ La API solo debe recibir solicitudes cuando estén aprobados el aviso de privaci
 
 ## Requisitos
 
-- PHP 8.2 o superior con PDO y `pdo_mysql` habilitado.
+- PHP 8.2 o superior con PDO, `pdo_mysql` y `mbstring` habilitados.
 - MySQL 8+ (o la versión compatible ofrecida por el plan Hostinger).
 - HTTPS activo para el dominio.
 - El archivo privado de configuración y las copias de seguridad fuera del directorio web público.
@@ -31,7 +31,7 @@ El endpoint busca primero `backend/bootstrap.php` como carpeta hermana de `publi
 
 1. En hPanel crea una base MySQL y un usuario con contraseña aleatoria.
 2. Importa `backend/migrations/mysql.sql` desde phpMyAdmin.
-3. Para el usuario runtime, concede solo `SELECT`, `INSERT`, `UPDATE` y `DELETE` sobre las tablas `requests` y `request_rate_limits`. No necesita permisos DDL después de importar.
+3. Para el usuario runtime, concede solo `SELECT`, `INSERT`, `UPDATE` y `DELETE` sobre las tablas `requests`, `request_rate_limits` y `request_network_rate_limits`. No necesita permisos DDL después de importar. **Aplica la migración actualizada antes de ejecutar la nueva versión de la API**; `CREATE TABLE IF NOT EXISTS` conserva las tablas existentes.
 4. Guarda la configuración a partir de `backend/config.example.php` como `private/salvacion.php`, fuera de `public_html` y del repositorio.
 5. Sustituye todos los valores `CAMBIAR_*`. Genera `email_hash_key` con al menos 32 bytes aleatorios; por ejemplo, usando un generador criptográfico confiable. No reutilices contraseñas ni claves del repositorio.
 6. Configura `privacy_notice_version` con una versión aprobada, no con el texto de ejemplo. Añade a `allowed_origins` el origen exacto del portal, como `https://dominio-real` (sin ruta ni barra final). Incluye el origen `www` únicamente si se sirve de verdad.
@@ -45,7 +45,9 @@ La ruta predeterminada de configuración es `private/salvacion.php`, hermana de 
 - Acepta exclusivamente JSON y verifica `Origin` contra una lista exacta; no habilita CORS.
 - Valida nombre, correo, teléfono opcional, ciudad opcional, una de las seis categorías y descripción de 20–1000 caracteres.
 - Requiere `consentimiento: true` y `privacy_version` exactamente igual a la versión configurada.
-- Aplica un límite por correo normalizado (5 por hora por defecto, ajustable hasta 30). La tabla de límites guarda solo HMAC del correo, no el correo ni la IP; las ventanas antiguas se eliminan durante solicitudes aceptadas.
+- Aplica **dos cuotas transaccionales**: por correo normalizado (`rate_limit_per_hour`, 5/h por defecto, máximo 30) y por red de origen (`network_rate_limit_per_hour`, 30/h por defecto, máximo 240). Para IPv4 se usa la dirección completa y para IPv6 su prefijo /64. Un exceso en cualquiera de las dos devuelve 429 sin guardar la solicitud; los contadores persisten para impedir evasiones por correos rotativos.
+- Para identificar la red solo se consulta `REMOTE_ADDR` proporcionada por el servidor. No se confía en `X-Forwarded-For`, `Forwarded` ni cabeceras manipulables. Si falta una dirección fiable, la API responde 503 y no guarda datos. **En staging verifica si Hostinger usa un proxy inverso**: un `REMOTE_ADDR` compartido puede agrupar clientes distintos; no autorices el uso de cabeceras reenviadas salvo tras validar y configurar proxies explícitamente confiables.
+- Ambas tablas de límites almacenan solo HMAC de identificadores (nunca IP en texto claro), con separación de dominio y clave privada `email_hash_key`. Son datos seudonimizados sujetos a protección de datos, no anónimos. Se eliminan las ventanas caducadas de más de 24 horas durante operaciones de recepción; documentar y verificar la política de retención y un mecanismo operativo de limpieza cuando no haya tráfico.
 - Usa consultas PDO preparadas y límite de cuerpo JSON de 16 KiB.
 - Responde `201` con un identificador solo después de confirmar el commit. No devuelve el contenido personal. Un `201` significa guardado, no aceptación del caso ni garantía de resultado.
 
@@ -75,11 +77,26 @@ El test crea temporalmente un SQLite y un servidor PHP ligado solo a `127.0.0.1`
 
 Para preparar manualmente SQLite en desarrollo, crea una configuración privada con `dsn` `sqlite:/ruta/fuera-del-webroot/dev.sqlite` y ejecuta `php backend/migrate.php`.
 
+## Verificación H03 en staging Hostinger — pendiente de acceso
+
+Las pruebas de CI (https://github.com/lider11/salvacion-M/actions/runs/43735108060) cubren PHP 8.2/8.4, SQLite y concurrencia real de MySQL 8, pero no establecen qué IP recibe `REMOTE_ADDR` en Hostinger.
+
+**Procedimiento controlado al disponer de un staging autorizado:**
+
+1. Confirmar dominio de staging y `POST /api/requests.php`, configuración PHP (incluyendo `mbstring` y `pdo_mysql`) y migración MySQL, sin datos reales.
+2. Identificar en el servidor el origen efectivo de `REMOTE_ADDR` con una inspección temporal de acceso restringido que solo muestre un identificador HMAC, sin exponer IP ni secretos; retirar la inspección al terminar.
+3. Desde dos redes externas distintas y autorizadas, ejecutar solicitudes sintéticas con correos nuevos y límites de staging bajos. Verificar que cada red tenga su cuota independiente, que se devuelva HTTP 429 al superarla y que ninguna petición rechazada se inserte.
+4. Repetir con encabezados `X-Forwarded-For` distintos: no deben alterar la cuota. Si ambas redes comparten el mismo identificador HMAC de `REMOTE_ADDR`, existe un proxy o salida común que provoca falsos positivos y el control por red **NO está acreditado para Hostinger**.
+5. Antes de usar un encabezado de IP real, verificar explícitamente la topología y la lista de proxies de confianza con el proveedor. Nunca confiar de forma general en cabeceras inyectables. Registrar resultados, retirar instrumentos temporales y mantener el formulario desactivado.
+
+**Estado actual:** staging de Salvación M y proxy real de Hostinger NO VERIFICADOS; no se ejecutaron solicitudes contra el alojamiento.
+
 ## Riesgos pendientes
 
 - La aprobación jurídica y la política real de conservación están pendientes; almacenar datos personales antes de eso no está autorizado.
 - El proveedor debe confirmar versión/extensiones PHP, MySQL, rutas fuera de `public_html`, backups y permisos del plan contratado.
 - Antes de aceptar solicitudes reales se necesita una revisión operativa y de seguridad en un entorno de staging; las pruebas locales no certifican producción ni cumplimiento legal.
+- H03: las cuotas por correo y red dificultan la evasión simple, pero no detienen ataques distribuidos, redes móviles compartidas ni tráfico automatizado masivo. Verificar límites reales, comportamiento de `REMOTE_ADDR`, concurrencia MySQL y protecciones en el perímetro (WAF/CDN) antes de activar recepción pública. No usar la IP para analítica ni identificación de usuarios.
 
 ## Definiciones del responsable — 2026-11-15
 

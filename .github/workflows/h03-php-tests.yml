@@ -1,0 +1,68 @@
+name: H03 PHP API security tests
+
+on:
+  push:
+    branches:
+      - fix/h03-rate-limit-network-20261115
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  php-smoke:
+    name: PHP ${{ matrix.php }} / SQLite HTTP tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: salvacion_h03_ci
+          MYSQL_ROOT_PASSWORD: h03-ci-only-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ph03-ci-only-password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      H03_CI_ONLY: '1'
+      H03_TEST_MYSQL_DSN: 'mysql:host=127.0.0.1;port=3306;dbname=salvacion_h03_ci;charset=utf8mb4'
+      H03_TEST_MYSQL_USER: root
+      H03_TEST_MYSQL_PASSWORD: h03-ci-only-password
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.4']
+    steps:
+      - name: Check out candidate branch
+        uses: actions/checkout@v4
+      - name: Install PHP and required extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_sqlite, pdo_mysql, curl
+          coverage: none
+      - name: Verify runtime and required extensions
+        shell: bash
+        run: |
+          php -v
+          php -m
+          php -r 'foreach (["mbstring","pdo_sqlite","pdo_mysql"] as $extension) { if (!extension_loaded($extension)) { fwrite(STDERR, "Missing $extension\\n"); exit(1); } }'
+      - name: Lint the PHP API and test runner
+        shell: bash
+        run: |
+          php -l api/requests.php
+          php -l backend/bootstrap.php
+          php -l backend/config.example.php
+          php -l backend/migrate.php
+          php -l tests/php-api-smoke.php
+          php -l tests/php-api-mysql.php
+      - name: Run full local HTTP/SQLite API suite with synthetic data
+        run: php tests/php-api-smoke.php
+      - name: Run concurrent MySQL API test with synthetic data
+        run: php tests/php-api-mysql.php

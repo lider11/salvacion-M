@@ -1,0 +1,81 @@
+name: H03 staging one-shot synthetic POST
+
+# Triggered only when this file is first introduced on the H03 branch.
+# Does not deploy, create scheduled checks or rerun the request on failure.
+on:
+  push:
+    branches: [fix/h03-rate-limit-network-20261115]
+    paths: [.github/workflows/h03-staging-post-once-20261115.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  single-synthetic-post:
+    name: Single synthetic QA POST to Hostinger staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Send exactly one HTTP POST without retry
+        shell: bash
+        env:
+          STAGING_ORIGIN: https://darkviolet-hippopotamus-789000.hostingersite.com
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+
+          origin = os.environ["STAGING_ORIGIN"]
+          payload = {
+              "nombre": "Persona Sintetica",
+              "email": "sm-h03-qa-20261115-single@example.invalid",
+              "telefono": "",
+              "ciudad": "",
+              "servicio": "citas",
+              "descripcion": "Prueba H03 exclusiva de staging sin personas ni informacion clinica real.",
+              "consentimiento": True,
+              "privacy_version": "sm-h03-staging-sintetico-v1",
+              "website": "",
+          }
+          body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+          request = urllib.request.Request(
+              origin + "/api/requests.php",
+              data=body,
+              headers={
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  "Origin": origin,
+                  "Sec-Fetch-Site": "same-origin",
+              },
+              method="POST",
+          )
+          # No retries. A network error after sending may be ambiguous;
+          # do not resend automatically and review the database first.
+          try:
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  status = response.status
+                  raw = response.read(2000).decode("utf-8", "replace")
+          except urllib.error.HTTPError as error:
+              status = error.code
+              raw = error.read(2000).decode("utf-8", "replace")
+          except Exception as error:
+              print("NETWORK_ERROR:", type(error).__name__, str(error)[:300])
+              sys.exit(2)
+
+          try:
+              data = json.loads(raw)
+          except ValueError:
+              print("HTTP_STATUS:", status)
+              print("UNEXPECTED_NON_JSON_RESPONSE")
+              sys.exit(1)
+          print("HTTP_STATUS:", status)
+          print("API_OK:", data.get("ok"))
+          print("API_ERROR:", data.get("error", "none"))
+          print("REQUEST_ID:", data.get("id", "none"))
+          if status != 201 or data.get("ok") is not True or not isinstance(data.get("id"), str):
+              sys.exit(1)
+          print("PASS: staging accepted and reported one synthetic request")
+          PY

@@ -23,3 +23,13 @@ CREATE TABLE IF NOT EXISTS request_rate_limits (
 );
 
 CREATE INDEX IF NOT EXISTS idx_rate_limits_window ON request_rate_limits (window_start);
+
+-- H03: no se almacenan IP en texto claro, solo HMAC por ventana.
+CREATE TABLE IF NOT EXISTS request_network_rate_limits (
+    network_hash TEXT NOT NULL,
+    window_start TEXT NOT NULL,
+    request_count INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (network_hash, window_start)
+);
+
+CREATE INDEX IF NOT EXISTS idx_network_rate_limits_window ON request_network_rate_limits (window_start);
