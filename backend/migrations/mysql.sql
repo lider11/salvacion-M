@@ -21,3 +21,13 @@ CREATE TABLE IF NOT EXISTS request_rate_limits (
     PRIMARY KEY (email_hash, window_start),
     INDEX idx_rate_limits_window (window_start)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- H03: límite adicional por red. Se almacena exclusivamente un HMAC,
+-- nunca una dirección IP en texto claro. CREATE IF NOT EXISTS permite migrar.
+CREATE TABLE IF NOT EXISTS request_network_rate_limits (
+    network_hash CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    window_start DATETIME NOT NULL,
+    request_count SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (network_hash, window_start),
+    INDEX idx_network_rate_limits_window (window_start)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
