@@ -8,20 +8,18 @@ function api_config(): array
         return $config;
     }
 
-    $configPath = getenv('SALVACION_CONFIG');
-    if ($configPath === false || $configPath === '') {
-        $configPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'salvacion.php';
-    }
+    $configPath = getenv('SALVACION_CONFIG') ?: dirname(__DIR__) . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'salvacion.php';
     $realPath = realpath($configPath);
+
     if ($realPath === false || !is_file($realPath) || !is_readable($realPath)) {
-        throw new RuntimeException('Private API configuration is missing.');
+        throw new RuntimeException('Private API configuration is missing or unreadable.');
     }
 
     $documentRoot = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
     if ($documentRoot !== false) {
-        $documentRoot = rtrim($documentRoot, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $candidate = $realPath . DIRECTORY_SEPARATOR;
-        if (stripos($candidate, $documentRoot) === 0) {
+        $normalizedRoot = rtrim(str_replace('\\', '/', $documentRoot), '/') . '/';
+        $normalizedPath = str_replace('\\', '/', $realPath) . '/';
+        if (str_starts_with(strtolower($normalizedPath), strtolower($normalizedRoot))) {
             throw new RuntimeException('API configuration must be outside the document root.');
         }
     }
@@ -34,11 +32,18 @@ function api_config(): array
     $required = ['dsn', 'db_user', 'db_password', 'email_hash_key', 'privacy_notice_version', 'allowed_origins'];
     foreach ($required as $key) {
         if (!array_key_exists($key, $loaded)) {
-            throw new RuntimeException('API configuration is incomplete.');
+            throw new RuntimeException("API configuration is missing required key: {$key}");
         }
     }
-    if (!is_string($loaded['dsn']) || $loaded['dsn'] === '' || !is_string($loaded['email_hash_key']) || strlen($loaded['email_hash_key']) < 32) {
-        throw new RuntimeException('API configuration is invalid.');
+
+    if (!is_string($loaded['dsn']) || $loaded['dsn'] === '') {
+        throw new RuntimeException('Invalid DSN.');
+    }
+    if (!is_string($loaded['db_user']) || !is_string($loaded['db_password'])) {
+        throw new RuntimeException('Database credentials must be strings.');
+    }
+    if (!is_string($loaded['email_hash_key']) || strlen($loaded['email_hash_key']) < 32) {
+        throw new RuntimeException('email_hash_key must be a string of at least 32 characters.');
     }
     if (!is_string($loaded['privacy_notice_version']) || $loaded['privacy_notice_version'] === '') {
         throw new RuntimeException('A privacy notice version must be configured.');
@@ -46,6 +51,7 @@ function api_config(): array
     if (!is_array($loaded['allowed_origins']) || $loaded['allowed_origins'] === []) {
         throw new RuntimeException('At least one exact allowed origin must be configured.');
     }
+
     foreach ($loaded['allowed_origins'] as $origin) {
         if (
             !is_string($origin)
@@ -63,36 +69,57 @@ function api_config(): array
 
     $loaded['rate_limit_per_hour'] = max(1, min(30, (int) ($loaded['rate_limit_per_hour'] ?? 5)));
     $config = $loaded;
+
     return $config;
 }
 
 function api_database(array $config): PDO
 {
-    $pdo = new PDO($config['dsn'], $config['db_user'], $config['db_password'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-    ]);
-    if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql') {
-        $pdo->exec("SET time_zone = '+00:00'");
-    } elseif ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
-        $pdo->exec('PRAGMA foreign_keys = ON');
+        PDO::ATTR_EMULATE_PREPARES   => false,
+        PDO::ATTR_STRINGIFY_FETCHES  => false,
+    ];
+
+    if (str_starts_with($config['dsn'], 'mysql:')) {
+        $options[PDO::ATTR_TIMEOUT] = 5;
     }
+
+    $pdo = new PDO($config['dsn'], $config['db_user'], $config['db_password'], $options);
+
+    $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+    if ($driver === 'mysql') {
+        $pdo->exec("SET time_zone = '+00:00'");
+    } elseif ($driver === 'sqlite') {
+        $pdo->exec('PRAGMA foreign_keys = ON');
+        $pdo->exec('PRAGMA journal_mode = WAL');
+    }
+
     return $pdo;
 }
 
 function api_respond(int $status, array $body): never
 {
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        header('Cache-Control: no-store');
+    }
+
     http_response_code($status);
-    echo json_encode($body, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+    echo json_encode(
+        $body,
+        JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE | JSON_THROW_ON_ERROR
+    );
     exit;
 }
 
 function api_uuid(): string
 {
     $bytes = random_bytes(16);
-    $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x40);
-    $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
-    $hex = bin2hex($bytes);
-    return sprintf('%s-%s-%s-%s-%s', substr($hex, 0, 8), substr($hex, 8, 4), substr($hex, 12, 4), substr($hex, 16, 4), substr($hex, 20));
+    $bytes[6] = chr(ord($bytes[6]) & 0x0f | 0x40); // version 4
+    $bytes[8] = chr(ord($bytes[8]) & 0x3f | 0x80); // variant RFC 4122
+
+    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
 }
