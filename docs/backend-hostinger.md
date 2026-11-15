@@ -53,7 +53,9 @@ No hay panel CRM, autenticación de operador, correo, borrado/retención automat
 
 ## Activación futura del formulario
 
-No se debe quitar `data-preview-only="true"`, habilitar el checkbox ni conectar `fetch()` hasta contar con:
+La casilla actual está habilitada únicamente para confirmar la lectura del borrador; no representa consentimiento ni se transforma en `consentimiento: true` para la API. Quitar `data-preview-only="true"` no activa envíos: el controlador es exclusivamente local y conserva `method="dialog"` y un bloqueo incondicional de `submit`.
+
+No se debe implementar el envío, sustituir esa casilla por una autorización ni conectar `fetch()` hasta contar con:
 
 1. aviso y finalidad aprobados jurídicamente;
 2. versión de privacidad coordinada entre configuración del servidor y payload;
@@ -88,3 +90,4 @@ Para preparar manualmente SQLite en desarrollo, crea una configuración privada 
 - Revisión de solicitudes: directamente por el responsable del proyecto; no implica que exista CRM, acceso de operador ni notificaciones.
 - Conservación y eliminación: el responsable desea decidirlas personalmente. Falta documentar un criterio de necesidad, plazo o evento de cierre y procedimiento de eliminación; no se interpreta como conservación indefinida aprobada.
 - El formulario conserva su vista previa. El teléfono sigue opcional: antes de activar un flujo de llamadas se debe resolver esa coherencia con los campos y la validación.
+
