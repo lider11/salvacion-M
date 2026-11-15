@@ -1,5 +1,17 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H03: recuperación de evidencia POST real en staging
+
+**Objetivo:** verificar recepción y persistencia de la solicitud sintética única, sin repetir envíos.
+
+**Evidencia recuperada:** workflow `.github/workflows/h03-staging-post-once-20261115.yml`, ejecución https://github.com/lider11/salvacion-M/actions/runs/43741646276, job 132895897473, intento 1, SHA ejecutado `a6c153a3d1abf391c7091242d1c5b215a211c42f`. Registro del 2026-11-15 a las 12:32:15 America/Bogota: `HTTP_STATUS: 201`, `API_OK: True`, `API_ERROR: none`, `REQUEST_ID: 979ec848-c417-4266-bb89-51b2d3b86569`. El workflow contiene un único POST sin reintentos al staging autorizado y el payload sintético previsto. No se ejecutó otro POST durante esta revisión.
+
+**Resultado parcial:** respuesta real de staging HTTP 201 y UUID formato v4 acreditados. La respuesta declara guardado; no sustituye comprobación independiente de MySQL. Persistencia en `u270515629_salvacion_qa`, coincidencia del UUID, número de filas, estado `nueva`, versión sintética y contadores de correo/red: NO VERIFICADOS. Tampoco se verificaron configuración privada desplegada, rutas, ausencia de diagnósticos públicos ni correspondencia del código desplegado con el SHA del workflow.
+
+**Bloqueo:** hPanel redirige a inicio de sesión y Hostinger restringe el inicio de sesión desde el navegador en la nube disponible. Sin herramienta de alojamiento/MySQL conectada; el conector Hostinger Mail no cubre estas operaciones. No se introdujeron credenciales ni se intentó eludir esa restricción.
+
+**Decisiones:** POST_HTTP_201=TRUE; API_OK=TRUE; UUID_VALIDO=TRUE; MYSQL_VERIFICADO=FALSE; SIN_DUPLICADOS_ACREDITADO=FALSE; CONTADORES_H03_VERIFICADOS=FALSE; SEGURIDAD_ALOJAMIENTO_VERIFICADA=FALSE. PROXY HOSTINGER: NO VERIFICADO. Estado global de esta prueba: BLOCKED (resultado HTTP parcial satisfactorio). Sin cambios de código, despliegue, producción, formulario o notificaciones. Sin restaurar G3/SDD. SHA final documental: el commit que incorpora esta entrada, consultable en el historial; SHA base indicado arriba.
+
 ## 2026-11-15 — H03: mitigación de evasión por correos rotativos (rama de corrección)
 
 **Problema:** la API limitaba únicamente por correo HMAC; solicitudes con direcciones distintas desde una misma red podían eludir la cuota.
