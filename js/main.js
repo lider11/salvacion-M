@@ -59,7 +59,8 @@
     email: document.getElementById('contacto-email'),
     telefono: document.getElementById('contacto-telefono'),
     ciudad: document.getElementById('contacto-ciudad'),
-    descripcion: document.getElementById('contacto-descripcion')
+    descripcion: document.getElementById('contacto-descripcion'),
+    avisoLeido: document.getElementById('contacto-consentimiento')
   };
   const radios = [...form.querySelectorAll('input[name="servicio"]')];
   const textCharacters = /^[\p{L}\p{M} .’'\-]+$/u;
@@ -107,10 +108,14 @@
     const description = fields.descripcion.value.trim();
     show('descripcion', description.length < 20 || description.length > 1000
       ? 'Descripción: escribe entre 20 y 1000 caracteres, sin información médica sensible.' : '', [fields.descripcion]);
+    show('consentimiento', fields.avisoLeido.checked
+      ? '' : 'Confirma que consultaste el aviso de privacidad en borrador.', [fields.avisoLeido]);
     summary.hidden = errors === 0;
+    status.hidden = false;
+    status.className = `contacto-estado${errors ? ' is-error' : ' is-info'}`;
     status.textContent = errors
-      ? 'Hay campos por corregir. No se ha enviado ninguna solicitud.'
-      : 'Los campos revisados cumplen las reglas locales. El envío sigue bloqueado: la política y la recepción segura están pendientes de verificación. No se ha enviado ninguna solicitud.';
+      ? 'Hay campos por corregir. No se envió ni se guardó ninguna solicitud.'
+      : 'Revisión local completada. No se envió ni se guardó ninguna solicitud; la casilla solo confirma que consultaste un aviso en borrador.';
     if (focusSummary && errors) summary.focus();
   }
 

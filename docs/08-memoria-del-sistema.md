@@ -1,5 +1,45 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Consolidación para GitHub
+
+**Cambio:** consolidación del logo, revisión local del formulario, borrador de privacidad y API PHP con guía Hostinger. Se excluyen work/ y capturas temporales. El envío público sigue bloqueado.
+
+**Verificación actual:** node --check en js/main.js y js/social.js, y git diff --check correctos. PHP no disponible en esta sesión: pruebas backend NO VERIFICADAS nuevamente; los resultados anteriores permanecen como históricos. Hostinger y staging NO VERIFICADOS. Sin despliegue.
+
+**Riesgos:** privacidad y retención pendientes; MySQL real y operación pendientes. SHA base: 7d99ffe; SHA de consolidación disponible en el historial Git.
+
+## 2026-11-15 — Finalidad y responsable declarados
+
+**Cambio:** borrador de privacidad 0.2: responsable declarado Salvación M y finalidad limitada al contacto telefónico solicitado. Revisión manual por el responsable del proyecto documentada en la guía de Hostinger. Identificación legal, canal de derechos y reglas de conservación siguen pendientes; no se activan consentimiento ni envío.
+
+**Riesgos:** conservación a criterio personal requiere concretar reglas; teléfono opcional debe revisarse antes de activar llamadas.
+
+**Verificación:** revisión del diff y comprobaciones de contenido; navegador y staging NO VERIFICADOS. SHA base `7d99ffe`; cambios locales sin commit ni despliegue.
+
+## 2026-11-15 — Confirmación y revisión del formulario
+
+**Problema:** la casilla de lectura estaba deshabilitada y el estado de revisión permanecía oculto; la persona no recibía una respuesta visible.
+
+**Corrección:** casilla activa que solo confirma haber consultado el aviso en borrador (no constituye consentimiento); la revisión valida esa confirmación y muestra errores o un resultado informativo. El envío continúa bloqueado y no se transmiten ni guardan datos.
+
+**Verificación:** interacción real en Chromium; errores visibles y foco en resumen; revisión válida visible; Playwright: todos los chequeos UI pasan, axe sin violaciones en Contacto, cero solicitudes POST y sin overflow en los tamaños probados.
+
+## 2026-11-14 — API PHP inicial para Hostinger
+
+**Decisión:** PHP 8.2+ con PDO y MySQL para la API de solicitudes; SQLite solo para desarrollo/pruebas. El frontend permanece en vista previa y no está conectado.
+
+**Implementación:** `api/requests.php`, validación de payload, comprobación de origen, persistencia transaccional, versión de consentimiento obligatoria, consultas preparadas y límite por correo HMAC. Configuración privada y migración fuera del webroot documentadas en `docs/backend-hostinger.md`.
+
+**Verificación:** PHP 8.2.12 local; `php -l` en todos los PHP y 16 pruebas HTTP/SQLite aprobadas. MySQL real de Hostinger y despliegue: NO VERIFICADOS. No se envían ni guardan datos desde el portal todavía.
+
+## 2026-11-14 — Logo de abrazo aportado por el responsable
+
+**Cambio:** imagen PNG original incorporada en `assets/logo-salvacion-m.png`; reemplazo en cabeceras, pie e iconos de pestaña de inicio y privacidad. Contenedores blancos con esquinas redondeadas para conservar contraste y evitar recorte circular.
+
+**Pruebas:** SHA-256 de la copia idéntico al archivo aportado; cinco referencias HTML actualizadas; `git diff --check` correcto. Visualización en navegador y legibilidad del texto dentro del logo a tamaños pequeños: NO VERIFICADO.
+
+**Riesgos:** el texto integrado en el PNG puede resultar pequeño en cabecera y favicon; se conserva el nombre textual de la marca. Sin despliegue. SHA base: `7d99ffe65e4f3c75f10728348c16b804a54d5e26`; cambios locales sin commit.
+
 ## 2026-11-14 — Recuperación de la composición visual
 
 **Causa:** la conciliación dejó variantes duplicadas del formulario y secciones HTML básicas sin el marcado y los estilos del diseño trabajado.

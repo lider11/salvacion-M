@@ -7,11 +7,11 @@ Portal de orientación para personas que enfrentan barreras de acceso al sistema
 Línea canónica: rama `main` (y PRs hacia ella).
 
 | Pieza | Estado |
-|---|---|
+| --- | --- |
 | Landing pública (HTML/CSS/JS) | En progreso — hero, 6 servicios interactivos, nosotros, proceso, footer de contacto |
-| Formulario de solicitudes | UI + validación local; envío deshabilitado hasta API/persistencia |
+| Formulario de solicitudes | UI + validación local; permanece en vista previa hasta aprobación del aviso y activación explícita |
 | Privacidad | Borrador jurídico amplio (`privacidad.html`); pendiente aprobación |
-| Backend API | Pendiente (Node.js + Express cuando se implemente) |
+| Backend API PHP | Implementación inicial local en `api/` y `backend/`; pendiente configuración MySQL y despliegue en Hostinger |
 | CRM | Pendiente |
 | Producción | Sin cambios sin autorización expresa |
 
@@ -20,8 +20,8 @@ No hay gate global tipo G3. Cada entrega se verifica por lo que realmente se con
 ## Stack
 
 - Frontend: HTML5, CSS3, JavaScript Vanilla
-- Backend previsto: Node.js LTS + Express (API REST modular)
-- Persistencia: por definir al implementar (SQLite o PostgreSQL)
+- Backend: PHP 8.2+ con PDO; API JSON para solicitudes
+- Persistencia prevista para Hostinger: MySQL 8+; SQLite se usa en pruebas locales
 - GitHub: solo código, documentación e historial — no scheduler ni despliegue operativo
 
 ## Cómo trabajar
@@ -33,6 +33,7 @@ No hay gate global tipo G3. Cada entrega se verifica por lo que realmente se con
 
 Detalle de arquitectura: `docs/arquitectura-inicial.md`.  
 Marca y diseño: `docs/ADN-MAESTRO-V2.md`, `docs/SISTEMA-DISENO-V2.md`.
+Configuración y despliegue backend: `docs/backend-hostinger.md`.
 
 ## Ramas históricas
 

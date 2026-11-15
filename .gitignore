@@ -10,6 +10,10 @@ coverage/
 .DS_Store
 Thumbs.db
 *.log
+*.sqlite
+*.sqlite-*
+/private/
+/backend/config.local.php
 
 test-results/
 package-lock.json
