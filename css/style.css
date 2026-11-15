@@ -565,3 +565,6 @@ p { margin-top: 0; }
 @media (prefers-reduced-motion: no-preference) {
   #proceso .proceso-cta { transition: background-color 160ms ease; }
 }
+
+/* Fase 2: confirmación accesible del servidor. */
+#contacto .contacto-estado.is-ok { border: 1px solid #a9ccb5; background: #e8f6ed; color: #154d30; padding: 1rem; border-radius: .5rem; }

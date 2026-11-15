@@ -1,5 +1,11 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Integración frontend/API en rama aislada
+
+Base `3d6e7833040583851d23531050599fa932573675`. Nuevo módulo `js/formulario-api.js`, integración en `index.html`, retiro de controlador duplicado en `js/main.js`, estado CSS y 13 pruebas mock PASS. Aplicador Python 1/1 PASS; sintaxis y diff PASS. Corregida validación de ciudad sin letras. Envío sigue bloqueado. Sin modificaciones de backend, MySQL o producción.
+
+Staging observado: «Próximamente». Publicación BLOCKED por restricción de acceso cloud a hPanel; navegador no alcanzó localhost. Visual/móvil/teclado NOT_RUN. Checkout Windows no accesible. Informe y rollback condicionado en `docs/formulario-hostinger-fase2-20261115.md`; log Node en `docs/evidencias/formulario-node-20261115.txt`. SHA de entrega en historial de esta rama; PR en borrador, sin fusión.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
