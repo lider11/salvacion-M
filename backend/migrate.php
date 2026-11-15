@@ -33,15 +33,17 @@ try {
         fn($s) => $s !== '' && !str_starts_with($s, '--')
     );
 
-    $pdo->beginTransaction();
+    // MySQL hace commit implicito con DDL; no promete rollback de CREATE TABLE.
+    $transactional = $driver === 'sqlite';
+    if ($transactional) { $pdo->beginTransaction(); }
     try {
         foreach ($statements as $statement) {
             $pdo->exec($statement);
         }
-        $pdo->commit();
+        if ($transactional) { $pdo->commit(); }
         fwrite(STDOUT, "Migration completed successfully for {$driver}.\n");
     } catch (Throwable $e) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) { $pdo->rollBack(); }
         throw $e;
     }
 } catch (Throwable $error) {

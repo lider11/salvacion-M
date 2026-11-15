@@ -9,9 +9,9 @@ Línea canónica: rama `main` (y PRs hacia ella).
 | Pieza | Estado |
 | --- | --- |
 | Landing pública (HTML/CSS/JS) | En progreso — hero, 6 servicios interactivos, nosotros, proceso, footer de contacto |
-| Formulario de solicitudes | UI + validación local; permanece en vista previa hasta aprobación del aviso y activación explícita |
+| Formulario de solicitudes | Envío y persistencia SQLite en servidor local de pruebas; el HTML público permanece en vista previa |
 | Privacidad | Borrador jurídico amplio (`privacidad.html`); pendiente aprobación |
-| Backend API PHP | Implementación inicial local en `api/` y `backend/`; pendiente configuración MySQL y despliegue en Hostinger |
+| Backend API PHP | Persistencia local probada con SQLite y MySQL 8; pendiente configuración y despliegue en Hostinger |
 | CRM | Pendiente |
 | Producción | Sin cambios sin autorización expresa |
 
@@ -34,6 +34,13 @@ Línea canónica: rama `main` (y PRs hacia ella).
 Detalle de arquitectura: `docs/arquitectura-inicial.md`.  
 Marca y diseño: `docs/ADN-MAESTRO-V2.md`, `docs/SISTEMA-DISENO-V2.md`.
 Configuración y despliegue backend: `docs/backend-hostinger.md`.
+
+## Probar el formulario en este equipo
+
+Desde PowerShell, ejecuta `.\iniciar-local.ps1` y abre `http://127.0.0.1:8088/#contacto`.
+Usa solo datos ficticios. El servidor usa PHP y SQLite, confirma el guardado con un identificador y conserva los registros fuera de la carpeta pública.
+No funciona el envío desde Live Server ni abriendo el HTML como archivo. Instrucciones y consulta de registros: `docs/pruebas-locales.md`.
+Informe de pruebas y límites: `docs/informe-verificacion-formulario-local.md`.
 
 ## Ramas históricas
 

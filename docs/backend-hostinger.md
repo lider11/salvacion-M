@@ -2,7 +2,9 @@
 
 ## Estado y alcance
 
-La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. Está probada localmente, pero **no está conectada al formulario ni desplegada**. La página conserva `data-preview-only="true"`, el envío deshabilitado y el aviso jurídico pendiente.
+La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. Está probada localmente, pero **no está activada en el formulario público ni desplegada en Hostinger**. El HTML público conserva `data-preview-only="true"`, el envío deshabilitado y el aviso jurídico pendiente.
+
+Actualización local: `iniciar-local.ps1` habilita una copia servida con pruebas ficticias y persistencia SQLite. El HTML público sigue en vista previa y el despliegue Hostinger continúa pendiente. Instrucciones: `docs/pruebas-locales.md`. No subir `serve-local.php`, `local-router.php` ni `local-requests.php` como parte del backend de producción.
 
 La API solo debe recibir solicitudes cuando estén aprobados el aviso de privacidad, la finalidad y retención de datos, el consentimiento y los canales de atención. No usar datos personales reales durante pruebas. No se toca producción desde este trabajo.
 
@@ -11,6 +13,7 @@ La API solo debe recibir solicitudes cuando estén aprobados el aviso de privaci
 - PHP 8.2 o superior con PDO y `pdo_mysql` habilitado.
 - MySQL 8+ (o la versión compatible ofrecida por el plan Hostinger).
 - HTTPS activo para el dominio.
+- `display_errors=Off`, `display_startup_errors=Off` y `log_errors=On` desde la configuración PHP del alojamiento: los avisos de inicio pueden romper las respuestas JSON antes de ejecutar el endpoint.
 - El archivo privado de configuración y las copias de seguridad fuera del directorio web público.
 
 ## Estructura sugerida en Hostinger
@@ -49,7 +52,7 @@ La ruta predeterminada de configuración es `private/salvacion.php`, hermana de 
 - Usa consultas PDO preparadas y límite de cuerpo JSON de 16 KiB.
 - Responde `201` con un identificador solo después de confirmar el commit. No devuelve el contenido personal. Un `201` significa guardado, no aceptación del caso ni garantía de resultado.
 
-No hay panel CRM, autenticación de operador, correo, borrado/retención automatizados ni conexión del formulario en esta primera entrega.
+No hay panel CRM, autenticación de operador, correo ni borrado/retención automatizados. La conexión del formulario existe únicamente en el entorno local ficticio; la activación pública está pendiente.
 
 ## Activación futura del formulario
 
@@ -72,6 +75,8 @@ Con PHP 8.2+ y extensiones PDO SQLite habilitadas:
 - `php tests/php-api-smoke.php`
 
 El test crea temporalmente un SQLite y un servidor PHP ligado solo a `127.0.0.1`; usa una versión de privacidad ficticia y datos sintéticos, y elimina los archivos temporales al terminar. No requiere instalar paquetes. No prueba la conexión real a MySQL de Hostinger.
+
+`php tests/mysql-local-smoke.php` prueba el mismo endpoint contra una instancia MySQL 8 efímera en loopback, con usuario runtime sin DDL. Busca por defecto el binario instalado en `C:/Program Files/MySQL/MySQL Server 8.0/bin/mysqld.exe`; puede indicarse otro mediante `SALVACION_TEST_MYSQLD`. Crea y elimina su propio datadir temporal, sin usar servicios existentes. Esto no verifica Hostinger. Evidencia actual: `docs/informe-verificacion-formulario-local.md`.
 
 Para preparar manualmente SQLite en desarrollo, crea una configuración privada con `dsn` `sqlite:/ruta/fuera-del-webroot/dev.sqlite` y ejecuta `php backend/migrate.php`.
 

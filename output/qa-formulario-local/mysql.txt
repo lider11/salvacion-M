@@ -1,0 +1,59 @@
+PASS: isolated MySQL 8.0.46 started on loopback
+PASS: MySQL migration run 1
+PASS: MySQL migration run 2
+PASS: isolated test database starts empty
+PASS: PHP built-in server starts for local tests
+PASS: GET is rejected
+PASS: unapproved origin is rejected
+PASS: non-JSON content type is rejected
+PASS: malformed JSON is rejected
+PASS: invalid nombre case 0 returns JSON 422
+PASS: invalid nombre case 1 returns JSON 422
+PASS: invalid nombre case 2 returns JSON 422
+PASS: invalid nombre case 3 returns JSON 422
+PASS: invalid email case 0 returns JSON 422
+PASS: invalid email case 1 returns JSON 422
+PASS: invalid telefono case 0 returns JSON 422
+PASS: invalid telefono case 1 returns JSON 422
+PASS: invalid telefono case 2 returns JSON 422
+PASS: invalid ciudad case 0 returns JSON 422
+PASS: invalid ciudad case 1 returns JSON 422
+PASS: invalid servicio case 0 returns JSON 422
+PASS: invalid servicio case 1 returns JSON 422
+PASS: invalid descripcion case 0 returns JSON 422
+PASS: invalid descripcion case 1 returns JSON 422
+PASS: invalid descripcion case 2 returns JSON 422
+PASS: invalid privacy_version case 0 returns JSON 422
+PASS: invalid privacy_version case 1 returns JSON 422
+PASS: invalid consentimiento case 0 returns JSON 422
+PASS: invalid consentimiento case 1 returns JSON 422
+PASS: invalid website case 0 returns JSON 422
+PASS: array root is rejected
+PASS: oversize body is rejected
+PASS: missing origin is rejected
+PASS: cross-site request is rejected
+PASS: all rejected payloads leave database empty
+PASS: consent is mandatory
+PASS: honeypot submissions are rejected
+PASS: valid request is persisted
+PASS: success returns a request id only after persistence
+PASS: response does not echo personal data
+PASS: prepared insert preserves submitted text as data
+PASS: returned ID and consent evidence match persisted row
+PASS: response prevents caching
+PASS: rate limit stores only a keyed email hash
+PASS: configured hourly request allowance is honored
+PASS: requests above the hourly allowance are throttled
+PASS: throttled request is not persisted
+PASS: SQL and HTML text remain data
+PASS: prepared statements protect table
+PASS: MySQL trigger failure returns HTTP 500
+PASS: MySQL trigger failure leaves no partial request
+PASS: MySQL rollback also reverts rate counter
+PASS: invalid MySQL credentials return controlled persistence error
+PASS: failed connection cannot create a request
+PASS: runtime user has no CREATE privilege
+PASS: missing private configuration returns JSON 503 without paths
+PASS: missing bootstrap returns controlled JSON 503
+PASS: logs exclude payload and secret key
+Passed checks: 55

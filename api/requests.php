@@ -7,12 +7,20 @@ if ($bootstrapPath === false || $bootstrapPath === '') {
     $localDevelopment = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'bootstrap.php';
     $bootstrapPath = is_file($outsideDocumentRoot) ? $outsideDocumentRoot : $localDevelopment;
 }
-require_once $bootstrapPath;
-
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, private');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
+
+try {
+    if (!is_file($bootstrapPath)) { throw new RuntimeException('Bootstrap unavailable'); }
+    require_once $bootstrapPath;
+} catch (Throwable) {
+    error_log('api_requests bootstrap unavailable');
+    http_response_code(503);
+    echo json_encode(['ok' => false, 'error' => 'service_unavailable']);
+    exit;
+}
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
@@ -45,7 +53,7 @@ if ($contentLength > 16_384) {
     api_respond(413, ['ok' => false, 'error' => 'request_too_large']);
 }
 
-$rawBody = file_get_contents('php://input');
+$rawBody = file_get_contents('php://input', false, null, 0, 16_385);
 if ($rawBody === false || strlen($rawBody) > 16_384) {
     api_respond(413, ['ok' => false, 'error' => 'request_too_large']);
 }
@@ -61,7 +69,13 @@ if (!$decoded instanceof stdClass) {
 }
 
 $data = get_object_vars($decoded);
-if (trim((string) ($data['website'] ?? '')) !== '') {
+// No convertir objetos/arrays a string ni descartar silenciosamente opcionales.
+foreach (['nombre', 'email', 'telefono', 'ciudad', 'servicio', 'descripcion', 'privacy_version', 'website'] as $field) {
+    if (array_key_exists($field, $data) && !is_string($data[$field])) {
+        api_respond(422, ['ok' => false, 'error' => 'validation_failed', 'fields' => [$field => 'Se requiere texto.']]);
+    }
+}
+if (trim($data['website'] ?? '') !== '') {
     api_respond(400, ['ok' => false, 'error' => 'invalid_payload']);
 }
 

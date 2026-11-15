@@ -1,0 +1,8 @@
+{
+  "environment": "local-synthetic-only",
+  "database": "SQLite",
+  "httpStatus": 201,
+  "returnedId": "de384a87-783f-4349-b350-950bbb2f80b2",
+  "persistedId": "de384a87-783f-4349-b350-950bbb2f80b2",
+  "privacyVersion": "local-ficticio-v1"
+}

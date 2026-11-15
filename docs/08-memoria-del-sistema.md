@@ -1,5 +1,23 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Verificación solicitada Constructor, Crítico y Árbitro
+
+**Alcance:** fases secuenciales en una sesión para esta entrega, sin reactivar G3 global. Se conservaron los cambios locales. Se corrigieron migración DDL MySQL, tipos JSON inesperados, respuesta de bootstrap ausente, lectura acotada de cuerpo y avisos PHP que contaminaban JSON; se bloquearon campos durante envío.
+
+**Pruebas reales:** 52 comprobaciones HTTP/SQLite, 55 HTTP/MySQL 8.0.46 y 28 Chromium aprobadas. MySQL aislado con datos sintéticos, migración repetida, usuario sin DDL y rollback probado por HTTP. ID devuelto y fila SQLite coinciden. PHP lint y sintaxis JS correctos. Evidencias y archivos: `docs/informe-verificacion-formulario-local.md`.
+
+**Resultado:** funcionamiento local acreditado; Hostinger/producción NO VERIFICADOS, sin cambios. Aviso real, activación pública, idempotencia y operación siguen pendientes. SHA base 9f6b345a79e0f9a46e7d3ba6283cb154f132919e; SHA de entrega en historial del informe y cierre de la tarea.
+
+## 2026-11-15 — Formulario funcional en entorno local
+
+**Cambio:** un solo controlador de formulario, envío JSON a la API existente, carga con doble clic bloqueado y confirmación únicamente con 201, ok true e ID válido. Launcher PHP en loopback con SQLite y configuración fuera del webroot; router restringido y consulta CLI de registros. El HTML público conserva vista previa y no se activa producción. Datos exclusivamente ficticios; versión local-ficticio-v1.
+
+**Verificación:** PHP XAMPP 8.2.12 encontrado y ejecutado; 16 pruebas HTTP/SQLite de API aprobadas y 26 comprobaciones Chromium aprobadas, incluyendo ID contra fila real, fallo transaccional sin registro, respuestas inválidas, red interrumpida, archivos internos bloqueados y preview sin envío. Sin overflow a 320, 375, 768 y 1440 px. Captura local revisada. Sintaxis JS y PHP correctas. No es auditoría WCAG integral.
+
+**Operación:** `.\iniciar-local.ps1`, abrir http://127.0.0.1:8088/#contacto. Ver `docs/pruebas-locales.md`. Sin correo ni CRM. La base temporal persiste reinicios pero Windows puede limpiarla. No hay reintento automático ni idempotencia entre envíos separados.
+
+**Riesgos y alcance:** Hostinger/MySQL NO VERIFICADOS; aviso real pendiente; no usar información personal real. SHA base 9f6b345a79e0f9a46e7d3ba6283cb154f132919e. Cambios locales sin commit ni despliegue.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.

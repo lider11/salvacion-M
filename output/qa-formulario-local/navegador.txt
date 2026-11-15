@@ -1,0 +1,29 @@
+PASS: envio local visible
+PASS: casilla inicialmente desmarcada
+PASS: datos invalidos no generan POST
+PASS: doble envio bloqueado durante guardado
+PASS: campos bloqueados durante envio para no perder ediciones
+PASS: un unico POST confirma 201
+PASS: ID visible corresponde a fila SQLite real
+PASS: confirmacion muestra el ID persistido
+PASS: campos disponibles tras respuesta
+PASS: fallo real de persistencia devuelve 500
+PASS: fallo de transaccion no guarda solicitud
+PASS: error conserva campos
+PASS: respuesta 422 sin confirmacion valida no muestra exito
+PASS: respuesta 429 sin confirmacion valida no muestra exito
+PASS: respuesta 503 sin confirmacion valida no muestra exito
+PASS: respuesta 201 sin confirmacion valida no muestra exito
+PASS: red interrumpida informa incertidumbre y conserva campos
+PASS: archivo interno bloqueado: /backend/bootstrap.php
+PASS: archivo interno bloqueado: /backend/config.example.php
+PASS: archivo interno bloqueado: /.git/config
+PASS: archivo interno bloqueado: /tests/php-api-smoke.php
+PASS: sin overflow a 320
+PASS: sin overflow a 375
+PASS: sin overflow a 768
+PASS: sin overflow a 1440
+PASS: HTML publico conserva envio oculto
+PASS: revision publica no envia
+PASS: sin errores JavaScript
+Passed checks: 28
