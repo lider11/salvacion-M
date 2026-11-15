@@ -1,5 +1,13 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Retiro expreso de G3 como requisito global
+
+**Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
+
+**Alcance:** se conserva todo el historial anterior de Sites/QA y G3 sin borrar evidencias ni presentar resultados antiguos como vigentes. Los controles efectivos de seguridad, protección de datos, accesibilidad, persistencia y pruebas proporcionales al cambio continúan siendo exigibles. El retiro de G3 no significa que Hostinger, CRM, scheduler o producción estén verificados ni activados.
+
+**Cambios documentales:** `AGENTS.md`, `README.md` y esta memoria. No se modifica código ejecutable ni se realiza despliegue. Verificar coherencia documental y SHA del nuevo commit.
+
 ## 2026-11-15 — Consolidación para GitHub
 
 **Cambio:** consolidación del logo, revisión local del formulario, borrador de privacidad y API PHP con guía Hostinger. Se excluyen work/ y capturas temporales. El envío público sigue bloqueado.
