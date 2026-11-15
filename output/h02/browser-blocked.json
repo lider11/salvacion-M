@@ -1,0 +1,17 @@
+{
+  "status": "BLOCKED",
+  "environment": "Chromium local /usr/bin/chromium via Playwright 1.62.1",
+  "attempt": "Inicio de tests/h02-formulario.cjs",
+  "reason": "Chromium abortó antes de abrir una página: socket() failed: Operation not permitted (1).",
+  "checks_executed": 0,
+  "post_requests_verified": false,
+  "visual_review_verified": false,
+  "accessibility_axe_verified": false,
+  "fallback": "La descarga de Chromium Headless Shell no proporcionó un ZIP válido. No se afirma ejecución E2E.",
+  "source_sha256": {
+    "js/main.js": "8b1c55317982134d72946dd9de4ce026e16366cc7ee11e28b818285ee3afd397",
+    "index.html": "99e78a2c6f3c31817b55211c61985245a1af6469eac89a6e118bc3aa8f156c10",
+    "css/style.css": "b3c35197673c9830f8c4e6040e7aa345075dda1d47e5934d73e45c8d2098ca9f",
+    "privacidad.html": "e64a308fb7bf3f05a4423ea040fb2dfbfe9eb7a6e890c58b322eb439df61efa6"
+  }
+}

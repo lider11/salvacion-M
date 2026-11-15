@@ -1,0 +1,524 @@
+{
+  "scope": "H02, navegador local; sin API ni producción",
+  "checks": [
+    {
+      "name": "Controlador único y estado inicial seguro",
+      "pass": true
+    },
+    {
+      "name": "Vacío: cinco errores, resumen enfocado y enlaces accesibles",
+      "pass": true
+    },
+    {
+      "name": "Validación nombre: 2 caracteres (1)",
+      "pass": true
+    },
+    {
+      "name": "Validación nombre: 101 caracteres (2)",
+      "pass": true
+    },
+    {
+      "name": "Validación nombre: 4 caracteres (3)",
+      "pass": true
+    },
+    {
+      "name": "Validación nombre: 3 caracteres (4)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 8 caracteres (5)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 16 caracteres (6)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 20 caracteres (7)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 18 caracteres (8)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 81 caracteres (9)",
+      "pass": true
+    },
+    {
+      "name": "Validación email: 256 caracteres (10)",
+      "pass": true
+    },
+    {
+      "name": "Validación telefono: 6 caracteres (11)",
+      "pass": true
+    },
+    {
+      "name": "Validación telefono: 16 caracteres (12)",
+      "pass": true
+    },
+    {
+      "name": "Validación telefono: 10 caracteres (13)",
+      "pass": true
+    },
+    {
+      "name": "Validación telefono: 10 caracteres (14)",
+      "pass": true
+    },
+    {
+      "name": "Validación telefono: 27 caracteres (15)",
+      "pass": true
+    },
+    {
+      "name": "Validación ciudad: 1 caracteres (16)",
+      "pass": true
+    },
+    {
+      "name": "Validación ciudad: 101 caracteres (17)",
+      "pass": true
+    },
+    {
+      "name": "Validación ciudad: 4 caracteres (18)",
+      "pass": true
+    },
+    {
+      "name": "Validación descripcion: 9 caracteres (19)",
+      "pass": true
+    },
+    {
+      "name": "Validación descripcion: 1001 caracteres (20)",
+      "pass": true
+    },
+    {
+      "name": "Validación descripcion: 50 caracteres (21)",
+      "pass": true
+    },
+    {
+      "name": "Sin categoría; categoría manipulada fuera de la lista",
+      "pass": true
+    },
+    {
+      "name": "Casilla sin marcar: error de lectura, nunca de autorización",
+      "pass": true
+    },
+    {
+      "name": "Datos válidos con teléfono y ciudad opcionales vacíos; sin fake-success",
+      "pass": true
+    },
+    {
+      "name": "Límites válidos, Unicode y datos opcionales con formato",
+      "pass": true
+    },
+    {
+      "name": "Corrección en vivo sin duplicar anuncios ni validación input/change",
+      "pass": true
+    },
+    {
+      "name": "Enlace negacion: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Enlace medicamentos: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Enlace citas: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Enlace incapacidades: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Enlace eps-ips: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Enlace reclamacion: clic y Enter, una selección, un foco y un desplazamiento",
+      "pass": true
+    },
+    {
+      "name": "Bloqueo al cargar con data-preview-only=true",
+      "pass": true
+    },
+    {
+      "name": "Bloqueo al cargar con data-preview-only=false",
+      "pass": true
+    },
+    {
+      "name": "Bloqueo al cargar con data-preview-only=null",
+      "pass": true
+    },
+    {
+      "name": "submit antes de revisar muestra un estado visible",
+      "pass": true
+    },
+    {
+      "name": "Texto HTML se mantiene inerte; sin almacenamiento local",
+      "pass": true
+    },
+    {
+      "name": "Responsive 320px: sin desbordamiento, teclado y axe",
+      "pass": true
+    },
+    {
+      "name": "Responsive 375px: sin desbordamiento, teclado y axe",
+      "pass": true
+    },
+    {
+      "name": "Responsive 768px: sin desbordamiento, teclado y axe",
+      "pass": true
+    },
+    {
+      "name": "Responsive 1024px: sin desbordamiento, teclado y axe",
+      "pass": true
+    },
+    {
+      "name": "Responsive 1440px: sin desbordamiento, teclado y axe",
+      "pass": true
+    },
+    {
+      "name": "Menú móvil: teclado, Escape, selección y transición a escritorio",
+      "pass": true
+    },
+    {
+      "name": "Hero, CTA de proceso, enlaces internos y página de privacidad",
+      "pass": true
+    },
+    {
+      "name": "JavaScript desactivado: botón inactivo y submit nativo no transmite",
+      "pass": true
+    },
+    {
+      "name": "Red y consola: cero POST, cero API, cero consultas con datos, cero excepciones",
+      "pass": true
+    }
+  ],
+  "accessibility": [
+    {
+      "width": 320,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "a[data-servicio=\"negacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"medicamentos\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"citas\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"incapacidades\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"eps-ips\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"reclamacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".servicios-cta > span[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "#contacto-descripcion"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "a[data-servicio=\"negacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"medicamentos\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"citas\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"incapacidades\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"eps-ips\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"reclamacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".servicios-cta > span[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "#contacto-descripcion"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "a[data-servicio=\"negacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"medicamentos\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"citas\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"incapacidades\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"eps-ips\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"reclamacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".servicios-cta > span[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "#contacto-descripcion"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "a[data-servicio=\"negacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"medicamentos\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"citas\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"incapacidades\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"eps-ips\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"reclamacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".servicios-cta > span[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "#contacto-descripcion"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                "a[data-servicio=\"negacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"medicamentos\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"citas\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"incapacidades\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"eps-ips\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "a[data-servicio=\"reclamacion\"] > .servicio-flecha[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                ".servicios-cta > span[aria-hidden=\"true\"]"
+              ],
+              "summary": "Fix any of the following:\n  Element content contains only non-text characters"
+            },
+            {
+              "target": [
+                "#contacto-descripcion"
+              ],
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it's partially obscured by another element"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    "contacto-375.png",
+    "servicios-375.png",
+    "contacto-1440.png",
+    "servicios-1440.png"
+  ],
+  "network": {
+    "post": 0,
+    "api": 0,
+    "query": 0,
+    "browserNonGet": 0
+  },
+  "limitations": [
+    "Lectores de pantalla reales NO VERIFICADOS.",
+    "Hostinger, MySQL y recepción real fuera del alcance."
+  ],
+  "js/main.js": "5cfde209641c984b3ca66f0be84f84ca79d491cd2bb8e31c12c91a5057f45d98",
+  "index.html": "0c210178fef5b1cbf6f985c00f643140266b700af0b5119f52c1fb45e837d4da",
+  "css/style.css": "5ebfdebf57b9d02c3212c8186ab28ef6b774853dfdca1772db5cfefc0b7a9347",
+  "privacidad.html": "4b7ec6cc874494e3a122301a2bee2551b6c139c5e7fa4693df76001aea8db020",
+  "browser": "151.0.7922.34",
+  "runtimeErrors": [],
+  "passed": 48,
+  "failed": 0,
+  "pass": true
+}

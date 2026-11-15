@@ -1,0 +1,179 @@
+{
+  "environment": "jsdom 26.1.0 — DOM simulado, sin motor de renderizado",
+  "checks": [
+    {
+      "name": "Un registro de cada evento del controlador y estado inicial bloqueado",
+      "pass": true
+    },
+    {
+      "name": "Vacío: cinco errores, foco DOM en resumen y enlace al campo",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 1: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 2: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 3: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 4: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 5: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 6: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 7: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 8: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 9: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 10: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 11: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 12: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 13: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 14: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 15: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 16: ciudad",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 17: ciudad",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 18: ciudad",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 19: descripcion",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 20: descripcion",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 21: descripcion",
+      "pass": true
+    },
+    {
+      "name": "Servicio requerido y lista cerrada",
+      "pass": true
+    },
+    {
+      "name": "Casilla de lectura requerida, sin afirmar consentimiento",
+      "pass": true
+    },
+    {
+      "name": "Datos válidos y campos opcionales vacíos",
+      "pass": true
+    },
+    {
+      "name": "Límites válidos y conteo Unicode compatible con mb_strlen",
+      "pass": true
+    },
+    {
+      "name": "Errores asociados a todos los controles",
+      "pass": true
+    },
+    {
+      "name": "Una validación por cambio de radio y sin repetir anuncio idéntico",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: negacion",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: medicamentos",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: citas",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: incapacidades",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: eps-ips",
+      "pass": true
+    },
+    {
+      "name": "Enlace y selección DOM: reclamacion",
+      "pass": true
+    },
+    {
+      "name": "submit cancelado con atributo true",
+      "pass": true
+    },
+    {
+      "name": "submit cancelado con atributo false",
+      "pass": true
+    },
+    {
+      "name": "submit cancelado con atributo null",
+      "pass": true
+    },
+    {
+      "name": "submit antes de revisión presenta estado visible",
+      "pass": true
+    },
+    {
+      "name": "Contenido HTML en descripción se trata como texto",
+      "pass": true
+    },
+    {
+      "name": "Código sin transporte, almacenamiento o segundo controlador",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "No acredita red real ni envío nativo del navegador.",
+    "Responsive, teclado físico, foco visual, axe y lectores de pantalla NO VERIFICADOS."
+  ],
+  "js/main.js": "5cfde209641c984b3ca66f0be84f84ca79d491cd2bb8e31c12c91a5057f45d98",
+  "index.html": "0c210178fef5b1cbf6f985c00f643140266b700af0b5119f52c1fb45e837d4da",
+  "css/style.css": "5ebfdebf57b9d02c3212c8186ab28ef6b774853dfdca1772db5cfefc0b7a9347",
+  "privacidad.html": "4b7ec6cc874494e3a122301a2bee2551b6c139c5e7fa4693df76001aea8db020",
+  "passed": 41,
+  "failed": 0
+}

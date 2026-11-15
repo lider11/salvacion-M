@@ -82,7 +82,7 @@
                 </header>
                 <div class="servicios-grid">
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="negacion"
                             aria-label="Solicitar orientación sobre negación de servicios">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -98,7 +98,7 @@
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="medicamentos"
                             aria-label="Solicitar orientación sobre medicamentos">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -114,7 +114,7 @@
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="citas"
                             aria-label="Solicitar orientación sobre citas médicas">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -125,6 +125,51 @@
                             <div class="servicio-texto">
                                 <h3>Citas médicas</h3>
                                 <p>Demoras en citas y autorizaciones.</p>
+                            </div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
+                    </article>
+                    <article class="servicio">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="incapacidades"
+                            aria-label="Solicitar orientación sobre incapacidades y prestaciones">
+                            <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
+                                    height="32" fill="none" stroke="currentColor" stroke-width="1.7"
+                                    stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                    <path d="M5 3h14v18H5z M8 8h8m-8 4h8m-8 4h5" />
+                                </svg></span>
+                            <div class="servicio-texto">
+                                <h3>Incapacidades y prestaciones</h3>
+                                <p>Dudas sobre incapacidades y otras prestaciones.</p>
+                            </div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
+                    </article>
+                    <article class="servicio">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="eps-ips"
+                            aria-label="Solicitar orientación sobre dificultades con EPS o IPS">
+                            <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
+                                    height="32" fill="none" stroke="currentColor" stroke-width="1.7"
+                                    stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                    <path d="M4 21V7h16v14M9 7V3h6v4M9 21v-6h6v6M9 11h6m-3-3v6" />
+                                </svg></span>
+                            <div class="servicio-texto">
+                                <h3>Dificultades con EPS o IPS</h3>
+                                <p>Barreras con tu entidad o centro de atención.</p>
+                            </div>
+                            <span class="servicio-flecha" aria-hidden="true">→</span>
+                        </a>
+                    </article>
+                    <article class="servicio">
+                        <a class="servicio-enlace" href="#contacto" data-servicio="reclamacion"
+                            aria-label="Solicitar orientación sobre rutas de reclamación">
+                            <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
+                                    height="32" fill="none" stroke="currentColor" stroke-width="1.7"
+                                    stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                    <path d="M4 3h16v18H4z M8 8h8m-8 4h8m-8 4h5" />
+                                </svg></span>
+                            <div class="servicio-texto">
+                                <h3>Rutas de reclamación</h3>
+                                <p>Canales y alternativas para presentar tu reclamación.</p>
                             </div>
                             <span class="servicio-flecha" aria-hidden="true">→</span>
                         </a>
@@ -299,39 +344,39 @@
                         <div class="contacto-servicios-grid">
                             <label class="contacto-opcion">
                                 <input id="contacto-servicio-negacion" type="radio" name="servicio" value="negacion"
-                                    required>
+                                    aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Negación de servicios</strong><small>Te niegan un tratamiento o
                                         procedimiento.</small></span>
                             </label>
                             <label class="contacto-opcion">
                                 <input id="contacto-servicio-medicamentos" type="radio" name="servicio"
-                                    value="medicamentos" required>
+                                    value="medicamentos" aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Medicamentos</strong><small>Retraso o falta de entrega de
                                         medicamentos.</small></span>
                             </label>
                             <label class="contacto-opcion">
-                                <input id="contacto-servicio-citas" type="radio" name="servicio" value="citas" required>
+                                <input id="contacto-servicio-citas" type="radio" name="servicio" value="citas" aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Citas y autorizaciones</strong><small>Demoras con citas, especialistas
                                         o
                                         autorizaciones.</small></span>
                             </label>
                             <label class="contacto-opcion">
                                 <input id="contacto-servicio-incapacidades" type="radio" name="servicio"
-                                    value="incapacidades" required>
+                                    value="incapacidades" aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Incapacidades y prestaciones</strong><small>Dudas sobre incapacidades
                                         u
                                         otras prestaciones.</small></span>
                             </label>
                             <label class="contacto-opcion">
                                 <input id="contacto-servicio-eps-ips" type="radio" name="servicio" value="eps-ips"
-                                    required>
+                                    aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Dificultades con EPS o IPS</strong><small>Barreras con tu entidad o
                                         centro
                                         de atención.</small></span>
                             </label>
                             <label class="contacto-opcion">
                                 <input id="contacto-servicio-reclamacion" type="radio" name="servicio"
-                                    value="reclamacion" required>
+                                    value="reclamacion" aria-describedby="contacto-servicio-error" required>
                                 <span><strong>Rutas de reclamación</strong><small>Quieres saber qué canales o
                                         alternativas existen.</small></span>
                             </label>
@@ -351,7 +396,7 @@
                     <div class="contacto-autorizacion">
                         <label>
                             <input id="contacto-consentimiento" name="consentimiento" type="checkbox" required
-                                aria-describedby="contacto-politica-estado">
+                                aria-describedby="contacto-politica-estado contacto-consentimiento-error">
                             <span>Confirmo que consulté el <a href="./privacidad.html">aviso de privacidad</a> en
                                 borrador. Esta casilla no es una autorización de tratamiento de datos.</span>
                         </label>

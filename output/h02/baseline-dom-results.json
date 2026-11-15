@@ -1,0 +1,199 @@
+{
+  "environment": "jsdom 26.1.0 — DOM simulado, sin motor de renderizado",
+  "checks": [
+    {
+      "name": "Un registro de cada evento del controlador y estado inicial bloqueado",
+      "pass": true
+    },
+    {
+      "name": "Vacío: cinco errores, foco DOM en resumen y enlace al campo",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 1: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 2: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 3: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 4: nombre",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 5: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 6: email",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Caso inválido 7: email",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Caso inválido 8: email",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Caso inválido 9: email",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Caso inválido 10: email",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 11: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 12: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 13: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 14: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 15: telefono",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 16: ciudad",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Caso inválido 17: ciudad",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 18: ciudad",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 19: descripcion",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 20: descripcion",
+      "pass": true
+    },
+    {
+      "name": "Caso inválido 21: descripcion",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Servicio requerido y lista cerrada",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nnull !== 'true'\n"
+    },
+    {
+      "name": "Casilla de lectura requerida, sin afirmar consentimiento",
+      "pass": true
+    },
+    {
+      "name": "Datos válidos y campos opcionales vacíos",
+      "pass": true
+    },
+    {
+      "name": "Límites válidos y conteo Unicode compatible con mb_strlen",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "Errores asociados a todos los controles",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+    },
+    {
+      "name": "Una validación por cambio de radio y sin repetir anuncio idéntico",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\n2 !== 1\n"
+    },
+    {
+      "name": "Enlace y selección DOM: negacion",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "Enlace y selección DOM: medicamentos",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "Enlace y selección DOM: citas",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "Enlace y selección DOM: incapacidades",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "Enlace y selección DOM: eps-ips",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "Enlace y selección DOM: reclamacion",
+      "pass": false,
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(link)\n"
+    },
+    {
+      "name": "submit cancelado con atributo true",
+      "pass": true
+    },
+    {
+      "name": "submit cancelado con atributo false",
+      "pass": false,
+      "error": "The input did not match the regular expression /^Revisión local completada/. Input:\n\n'Tus datos están listos para cuando abramos el envío en línea. Mientras tanto puedes escribirnos o llamarnos con la información que preparaste.'\n"
+    },
+    {
+      "name": "submit cancelado con atributo null",
+      "pass": false,
+      "error": "The input did not match the regular expression /^Revisión local completada/. Input:\n\n'Tus datos están listos para cuando abramos el envío en línea. Mientras tanto puedes escribirnos o llamarnos con la información que preparaste.'\n"
+    },
+    {
+      "name": "submit antes de revisión presenta estado visible",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\ntrue !== false\n"
+    },
+    {
+      "name": "Contenido HTML en descripción se trata como texto",
+      "pass": true
+    },
+    {
+      "name": "Código sin transporte, almacenamiento o segundo controlador",
+      "pass": false,
+      "error": "Expected values to be strictly equal:\n\n2 !== 1\n"
+    }
+  ],
+  "limitations": [
+    "No acredita red real ni envío nativo del navegador.",
+    "Responsive, teclado físico, foco visual, axe y lectores de pantalla NO VERIFICADOS."
+  ],
+  "js/main.js": "5fc83e0643259edbe851e409ec488608754e387218485becb8668fc3d482d4b8",
+  "index.html": "0850cc461bd51b1c7496cbb4d2f432f4f30c3bc755dbb3b47ace1307af773826",
+  "css/style.css": "b3c35197673c9830f8c4e6040e7aa345075dda1d47e5934d73e45c8d2098ca9f",
+  "privacidad.html": "bd38a6897097993e2a4c13c77d4b9caf1ebdc55534bb165c1fcebde915611989",
+  "passed": 21,
+  "failed": 20
+}

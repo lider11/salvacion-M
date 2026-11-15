@@ -1,5 +1,19 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H02: controlador único del formulario (RESUELTO FUNCIONALMENTE)
+
+**Objetivo y causa:** eliminar los dos controladores de `orientacion-form`, sus validaciones divergentes y los mensajes que confundían lectura del borrador con consentimiento. HEAD de GitHub inspeccionado: `3d6e7833040583851d23531050599fa932573675`.
+
+**Implementación:** rama `fix/h02-formulario-controlador-unico`, commit base de código `35fe0ac6d0bec7ee5b9f177deede9c21f5193700`. Un único controlador y función de validación; revisión local; errores y foco asociados; seis enlaces con selección de servicio; bloqueo incondicional de submit y `method=dialog`, independiente de `data-preview-only`. Se conserva oculto y deshabilitado el envío; sin transporte ni persistencia. El detalle está en `docs/H02-verificacion.md`.
+
+**Archivos de la corrección:** `js/main.js`, `index.html`, `privacidad.html`, `docs/backend-hostinger.md`, pruebas H02, memoria y evidencias en `output/h02/`.
+
+**Pruebas realizadas:** 41/41 DOM y 48/48 Chromium/Playwright aprobadas; los cinco anchos 320/375/768/1024/1440 sin overflow; seis enlaces, menú móvil, privacidad, foco y estados revisados. Axe no confirmó violaciones, pero dejó `color-contrast` incompleto para inspección manual. Red: cero POST/API, navegación de envío o excepciones. Resultados y SHA-256 de archivos probados en `output/h02/results.json`; capturas móvil/escritorio en `output/h02/`.
+
+**Resultado:** RESUELTO en el alcance funcional de H02; rama lista para PR en borrador. Sin merge, despliegue ni activación de recepción.
+
+**Riesgos pendientes:** lectores de pantalla reales NO VERIFICADOS; el contraste señalado como incompleto por axe necesita revisión manual y no se acredita WCAG integral. Aviso jurídico, configuración API/Hostinger y recepción real permanecen bloqueados y fuera de alcance. SHA del commit de verificación y PR: consultar el historial Git/enlace de PR.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
