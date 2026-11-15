@@ -1,5 +1,32 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — Hostinger: frontend instalado; E2E pendiente de acceso protegido
+
+Fuente desplegada: `e70070b28158ea0057c939f7a06c2c1df2480fc9` (PR #21). Sesión hPanel autenticada con 2FA y verificada. Plan Business Web Hosting. Ruta comprobada: `/home/u270515629/domains/darkviolet-hippopotamus-789000.hostingersite.com/public_html`. PHP CLI 8.2.35, pdo_mysql y mbstring activos. Conexión PDO real a MariaDB 11.8.9-MariaDB-log PASS; tablas requests, request_rate_limits y request_network_rate_limits presentes. No se ha verificado aún una nueva escritura ni el esquema completo.
+
+Antes de cambiar se creó `backups/sm-final-20261115/before.tgz` fuera del webroot: 14 entradas, SHA256 `ea08f394cc317e24e362e1d16f0dac348740981be73a0078245628c3f96b85f0`. Listado del archivo y extracción en stdout de default.php verificados; restauración completa NOT_RUN. Contiene configuración privada; no publicarlo. Se recuperó la rama directamente en una copia de trabajo del servidor, sin tocar el portátil ni stashes.
+
+Se instalaron index.html, privacidad.html, css/, js/ y assets/. Nuevo public_html/.htaccess con DirectoryIndex index.html default.php y Options -Indexes. default.php conservado byte a byte: SHA256 `60ac62a68df8c20921467d735b12fda34fcf270b4069be63ed9f276c22b439ebbe`. private/ y backups/ modo 700; private/salvacion.php modo 600. No se reemplazaron API, backend, migraciones o secretos.
+
+API desplegada conserva la variante H03 con límite por red; difiere de la API de PR #21 y no se declara reconciliada. SHA256 API instalada `a78bacaf5f7883e4324ae0f22b8021e0d8247d5626a617a931cc2fc7b1135910`; bootstrap `838e36f54a8caa449547e0deeb6833a313b08c890d84174a65fefeafaa35c888`; migración MySQL `7b897cd2fc74c22dde935f02248e8b43f0ff4c7ec98b4555dd9c6d95eaa9ba79`.
+
+HTTPS raíz HTTP 200 y navegador muestran Salvación M. Validación vacía real muestra resumen de cinco errores y mueve foco al resumen PASS. Suite Node reejecutada sobre copia integrada conciliada: 13/13 PASS con mocks, no MySQL. No se atribuyen a la app los errores observados de una extensión chrome-extension. Visual móvil/tablet, zoom, contraste integral, E2E y rollback completo pendientes.
+
+El formulario permanece data-preview-only=true y sin envío. Privacidad y producción no autorizadas. Configuración existente declara aviso QA `sm-hostinger-sintetico-v1`, no aprobación jurídica pública. No hubo POST en esta ejecución. El acceso al sitio aún no está protegido; se abrió hPanel > Directorios protegidos con contraseña, raíz /, usuario propuesto salvacionqa, para intervención del titular al crear la contraseña. No se habilita envío hasta verificar esa protección. G3 sigue retirado como gate global.
+
+| Estado | Booleano | Diagnóstico |
+| --- | --- | --- |
+| FRONTEND_HOSTINGER_STAGING | TRUE | PASS |
+| HTTPS | TRUE | PASS |
+| PDO_MYSQL_CONEXION | TRUE | PASS |
+| API_PHP_OPERATIVA | FALSE | NO_ACREDITADO |
+| MYSQL_PERSISTENCIA | FALSE | NOT_RUN |
+| FORMULARIO_E2E_STAGING | FALSE | BLOCKED |
+| STAGING_PROTEGIDO | FALSE | BLOCKED |
+| PRIVACIDAD_APROBADA | FALSE | NO_ACREDITADO |
+| PRODUCCION_AUTORIZADA | FALSE | NO_ACREDITADO |
+| FORMULARIO_PRODUCCION_OPERATIVO | FALSE | NOT_RUN |
+
 ## 2026-11-15 — Conciliación con archivo del portátil
 
 Inspeccionado `salvacion-M(2).7z`: HEAD `3d6e7833040583851d23531050599fa932573675`, dos stashes conservados. Único cambio versionado de contenido, ignorando CRLF: `backend/migrate.php`. Frontend coincide con base del PR #21. Copia independiente integrada con frontend del SHA remoto `11c2d75d655962a4b5ccc2d560a7541038867281`; migrador, work y output preservados. Sintaxis JS PASS, Node 13/13 PASS en esa copia. Sin cambios del portátil, sin POST ni despliegue. Migrador local pendiente de revisión MySQL; excluido del PR frontend. Detalle: `docs/conciliacion-portatil-20261115.md`.
