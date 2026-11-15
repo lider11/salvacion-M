@@ -126,11 +126,10 @@ try {
     @chmod($configPath, 0600);
     putenv('SALVACION_CONFIG=' . $configPath);
 
-    $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    // Never target a production database. The workflow creates a dedicated disposable schema.
-    foreach (['requests', 'request_rate_limits', 'request_network_rate_limits'] as $table) {
-        $pdo->exec('DROP TABLE IF EXISTS ' . $table);
+    if (getenv('H03_CI_ONLY') !== '1' || preg_match('/(?:^|;)dbname=salvacion_h03_ci(?:;|$)/', $dsn) !== 1) {
+        throw new RuntimeException('MySQL test is restricted to the disposable CI schema.');
     }
+    $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
     $migration = escapeshellarg(PHP_BINARY) . ' '
         . escapeshellarg($root . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'migrate.php');
