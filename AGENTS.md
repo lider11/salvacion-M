@@ -10,6 +10,13 @@ INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → DOCUMENTAR.
 
 Corregir defectos relevantes y volver a probar lo afectado. Preferir entregas pequeñas. No usar puertas de aprobación acumulativas, certificaciones artificiales ni SDD extensos que bloqueen el avance.
 
+
+## Decisión vigente: G3 y SDD extenso retirados (2026-11-15)
+
+Por instrucción expresa del titular, **G3 queda deshabilitado como gate global de Salvación M**. No exigir la matriz G3 de siete criterios, `G3_PASS`, `READY_FOR_VERIFICATION` ni las ceremonias o entregables acumulativos del SDD como condición para desarrollar, probar o entregar funcionalidades. Las referencias a G3/SDD en ramas, memorias y proyectos QA anteriores son **históricas**, no instrucciones activas de la línea `main`. No eliminar ese historial.
+
+Cada entrega tendrá criterios funcionales proporcionales a su alcance, pruebas pertinentes y evidencia verificable. Se mantienen la autorización para desplegar, la privacidad y protección de datos, el control de acceso cuando aplique, las validaciones de seguridad, la accesibilidad y la prohibición de afirmar éxito sin persistencia real. El retiro de G3 **no activa** formularios, CRM, scheduler ni recordatorios y tampoco autoriza cambios de producción.
+
 ## Restricciones
 
 - Frontend: HTML5, CSS3 y JavaScript Vanilla. No introducir frameworks sin autorización.
