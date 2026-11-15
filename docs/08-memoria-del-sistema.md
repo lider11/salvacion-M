@@ -1,5 +1,21 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-15 — H01: reconciliación PHP/MySQL y retiro de obligaciones históricas
+
+**Objetivo y decisión:** aplicar SM-H01-ARQUITECTURA-2026-002 v2.0. HTML5/CSS3/JS Vanilla, API PHP 8.2+/PDO, MySQL compatible en Hostinger previsto; SQLite solo local. CRM futuro independiente. G3/SDD extenso retirados; Sites QA, ramas, PR #5/#6 e historial conservados sin modificaciones.
+
+**Problema y cambios:** README, PRODUCT y ADN aún presentaban Express/persistencia indecisa; guía y arquitectura describían incorrectamente el formulario y omitían `mbstring`. Se reconciliaron documentos y anotó la vigencia histórica. API cerrada por defecto mediante `accept_requests` booleano; ejemplos de secretos rechazados, configuración privada revalidada sin caché de rutas, bootstrap ausente responde JSON 503 y campo trampa malformado responde 400. Terminología del manejador frontend alternativo alineada con lectura del borrador, sin habilitar envío.
+
+**Archivos:** 19 en total, detallados en [H01-reconciliacion.md](H01-reconciliacion.md): README, AGENTS, PRODUCT, arquitectura, guía Hostinger, ADN, cinco informes/identidad históricos, memoria e informe H01, API, bootstrap, ejemplo de configuración, JS principal y dos archivos de prueba.
+
+**Pruebas de esta ejecución:** PHP 8.4.27 y SQLite, 37/37 comprobaciones HTTP aprobadas; sintaxis de 5 PHP y 3 JS/CJS correcta; 56 recursos/anclas HTML locales correctos; `git diff --check` correcto. Se corrigió un fallo reproducible de caché de ruta antes de repetir satisfactoriamente la suite. Hashes de fuentes probadas en el informe. Playwright preparado y validado sintácticamente, pero navegador/teclado/responsive/WCAG no ejecutados: Chromium bloqueado por permiso de socket. No se reutilizan pruebas históricas.
+
+**SHA de implementación probado:** `61ebed4c6f1eaf395358142598d7225da464c3b0`, basado en `3d6e7833040583851d23531050599fa932573675`. Rama publicada `fix/h01-hostinger-architecture-20261115`. Esta anotación posterior solo cambia memoria e informe; su SHA final está en el historial Git, evitando una referencia circular al propio commit.
+
+**Resultado:** H01 RESUELTO en la rama de corrección; integración en `main` pendiente. Implementación y prueba local acreditadas, despliegue/operación Hostinger no acreditados. No se hizo merge ni despliegue. Frontend en vista previa; API desactivada por defecto.
+
+**Pendientes/riesgos:** privacidad, responsable/canal y retención; coherencia del teléfono opcional con finalidad de llamada; staging/MySQL real/HTTPS/extensiones/permisos y rutas; protección antiabuso de volumen; navegador y accesibilidad; CRM y futuras integraciones. Solo se encontró conexión Hostinger Mail, sin acceso al alojamiento. Estos pendientes operativos no reabren el hallazgo documental ni reintroducen G3.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
@@ -84,6 +100,8 @@
 
 ## 2026-11-11 — Portal: contenido ADN y formulario sin fake-success
 
+> Antecedente sustituido: el frontend actual no envía solicitudes; la API inicial usa `/api/requests.php`, cerrada por defecto.
+
 **Cambio:** ampliar servicios (6), sección de transparencia, aviso de privacidad borrador (`privacidad.html`) y formulario accesible en `#contacto`.
 
 **Regla de producto:** el envío intenta `POST /api/v1/requests`; si no hay API o no hay identificador, se muestra error claro y no se simula éxito. Consentimiento no preseleccionado.
@@ -93,6 +111,8 @@
 **Estado:** UI de solicitud lista; persistencia pendiente; texto de privacidad sujeto a revisión jurídica; producción sin cambios.
 
 ## 2026-11-11 — Unificación de rama y docs (salida del SDD complejo)
+
+> Antecedente: la previsión Node/Express fue sustituida por PHP/PDO/MySQL el 2026-11-14 y reconciliada mediante H01 el 2026-11-15. Los resultados originales se conservan.
 
 **Decisión:** consolidar la línea canónica en `main`. Abandonar el enfoque SDD extenso (especificaciones por módulo, gates globales tipo G3, artefactos de verificación acumulativos) que generó complejidad sin acelerar el producto.
 

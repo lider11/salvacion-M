@@ -6,7 +6,7 @@ Leer `README.md` y `docs/08-memoria-del-sistema.md`. Revisar el código afectado
 
 ## Método
 
-INSPECCIONAR → DISEÑAR → IMPLEMENTAR → PROBAR → DOCUMENTAR.
+INSPECCIONAR → PLANIFICAR → IMPLEMENTAR → PROBAR → DOCUMENTAR.
 
 Corregir defectos relevantes y volver a probar lo afectado. Preferir entregas pequeñas. No usar puertas de aprobación acumulativas, certificaciones artificiales ni SDD extensos que bloqueen el avance.
 
@@ -25,7 +25,9 @@ Cada entrega tendrá criterios funcionales proporcionales a su alcance, pruebas 
 - No tocar producción sin autorización expresa.
 - No registrar secretos, datos personales reales ni información de salud en el repositorio.
 - Persistir solicitudes antes de afirmar éxito.
-- Separar portal público, CRM y servicios internos.
+- Hostinger es alojamiento previsto, no despliegue acreditado. MySQL compatible en servidor; SQLite solo en pruebas locales.
+- Separar portal público, API y futuro CRM administrativo. Sites QA históricos son sistemas separados: no sincronizar ni migrar sus bases sin decisión expresa.
+- Mantener `accept_requests` desactivado y el frontend en vista previa hasta aprobación de privacidad, configuración segura y pruebas de staging.
 - Autenticación, RBAC, CSRF, controles contra XSS e inyección SQL, auditoría y mínimo privilegio cuando exista backend.
 - Objetivo de accesibilidad: WCAG 2.2 AA.
 

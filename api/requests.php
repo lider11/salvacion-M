@@ -1,18 +1,24 @@
 <?php
 declare(strict_types=1);
 
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store, private');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: no-referrer');
+
 $bootstrapPath = getenv('SALVACION_BACKEND_BOOTSTRAP');
 if ($bootstrapPath === false || $bootstrapPath === '') {
     $outsideDocumentRoot = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'bootstrap.php';
     $localDevelopment = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'bootstrap.php';
     $bootstrapPath = is_file($outsideDocumentRoot) ? $outsideDocumentRoot : $localDevelopment;
 }
+if (!is_file($bootstrapPath) || !is_readable($bootstrapPath)) {
+    error_log('api_requests bootstrap unavailable');
+    http_response_code(503);
+    echo json_encode(['ok' => false, 'error' => 'service_unavailable']);
+    exit;
+}
 require_once $bootstrapPath;
-
-header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: no-store, private');
-header('X-Content-Type-Options: nosniff');
-header('Referrer-Policy: no-referrer');
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
@@ -24,6 +30,9 @@ try {
 } catch (Throwable) {
     error_log('api_requests configuration unavailable');
     api_respond(503, ['ok' => false, 'error' => 'service_unavailable']);
+}
+if (!$config['accept_requests']) {
+    api_respond(503, ['ok' => false, 'error' => 'requests_disabled']);
 }
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if ($origin === '' || !in_array($origin, $config['allowed_origins'], true)) {
@@ -61,7 +70,7 @@ if (!$decoded instanceof stdClass) {
 }
 
 $data = get_object_vars($decoded);
-if (trim((string) ($data['website'] ?? '')) !== '') {
+if (!is_string($data['website'] ?? '') || trim($data['website'] ?? '') !== '') {
     api_respond(400, ['ok' => false, 'error' => 'invalid_payload']);
 }
 

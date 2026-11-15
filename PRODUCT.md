@@ -20,27 +20,27 @@ Orientación comprensible sobre opciones y rutas ante barreras de acceso, con co
 
 ## Operating Context
 
-Portal público de orientación → formulario de solicitud → (previsto) API que valida y persiste → CRM separado para seguimiento. Canales de contacto informativos en el pie. Uso típico en móvil, con alfabetización digital variable y posible baja conectividad.
+Flujo objetivo: portal público → formulario → API PHP que valida y persiste → futuro CRM independiente. Hoy el formulario solo permite revisión local; no transmite datos. Canales de contacto informativos en el pie. Uso típico en móvil, con alfabetización digital variable y posible baja conectividad.
 
 ## Capabilities and Constraints
 
-- Portal HTML5 / CSS3 / JavaScript Vanilla; backend previsto Node.js LTS + Express; CRM separado del portal.
+- Portal HTML5 / CSS3 / JavaScript Vanilla; API PHP 8.2+ con PDO, MySQL compatible en Hostinger previsto y SQLite en pruebas locales; CRM administrativo independiente pendiente.
 - Formulario: validación local; envío real solo tras API/persistencia; nunca simular éxito.
 - Seis categorías de orientación: negación de servicios, medicamentos, citas y autorizaciones, incapacidades y prestaciones, dificultades con EPS/IPS, rutas de reclamación.
 - No tocar producción sin autorización expresa.
 - Textos legales (`privacidad.html` y afines) sujetos a revisión jurídica antes de producción.
-- Undecided: motor de persistencia (SQLite vs PostgreSQL) al implementar la API.
+- Persistencia decidida: MySQL en Hostinger; conexión real, permisos y despliegue pendientes. No hay scheduler ni notificaciones en la API inicial.
 
 ## Brand Commitments
 
 - Nombre: Salvación M.
 - Voz: profesional, serena, rigurosa, respetuosa, transparente y accesible.
 - Usar: orientación sobre opciones disponibles; claridad; confidencialidad. Evitar: garantías de tratamiento o tutela, urgencias artificiales, jerga sin explicación.
-- Logo vectorial aprobado: `assets/logo-salvacion-m.svg` (y monocromo). Guía de marca en `docs/ADN-MAESTRO-V2.md` e identidad en `docs/IDENTIDAD-GRAFICA-LOGO.md`.
+- Logo integrado actualmente: `assets/logo-salvacion-m.png` (aportado el 2026-11-14); SVG y monocromo se conservan como antecedentes. Guía de marca en `docs/ADN-MAESTRO-V2.md` e identidad en `docs/IDENTIDAD-GRAFICA-LOGO.md`.
 
 ## Evidence on Hand
 
-- Logo SVG aprobado e integrado.
+- Logo PNG integrado; SVG anterior conservado.
 - Imagen hero ilustrativa: `assets/hero-acompanamiento.jpg` (orientación civil; no acredita prestación clínica ni litigio).
 - Borrador de aviso de privacidad: `privacidad.html`.
 - Ausencias que el trabajo futuro no debe fabricar: testimonios, cifras de éxito, sellos, clientes o benchmarks no autorizados.

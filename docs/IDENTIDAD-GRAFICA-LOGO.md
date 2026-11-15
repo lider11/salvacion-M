@@ -1,5 +1,7 @@
 # Identidad gráfica — logo aprobado v1.0
 
+> Vigencia (2026-11-15): aprobación vectorial histórica. La landing y privacidad integran actualmente `assets/logo-salvacion-m.png`, aportado el 2026-11-14. Los SVG se conservan; este documento no acredita su integración actual.
+
 **Aprobación:** 2026-11-02, usuario responsable. **Alcance:** símbolo vectorial sin texto.
 
 ## Archivos
