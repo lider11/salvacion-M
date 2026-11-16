@@ -1,5 +1,17 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — CRM Hostinger: paquete recuperado, instalación bloqueada
+
+**Orden:** SM-CRM-HOSTINGER-INSTALL-2026-001. Se recuperó desde Google Drive el ZIP SalvacionM_CRM_Staging_v1_20261116.zip (13.434 bytes, nueve archivos; SHA-256 `831290a613314a6ee6fc6b791a6690ed1ca06a27aece10cd9d7a62c74c39ea8a`). Base de auditoría: `9f6b345a79e0f9a46e7d3ba6283cb154f132919e`.
+
+**Inspección:** LEEME, código CRM y migración contrastados estáticamente con bootstrap.php y mysql.sql del repositorio. La migración solo crea crm_audit y crm_login_attempts; no se ejecutó. El paquete mantiene PBKDF2-SHA-256 de 210.000 iteraciones. Requiere comprobar consola sin eco antes de usar crm-create-user.php: no cancela cuando stty no está disponible y mide la longitud en bytes. La conexión MySQL sigue compartida con la API.
+
+**Acceso:** hPanel redirigió a la página de inicio de sesión sin sesión autenticada. La capacidad del navegador informa una restricción de Hostinger para iniciar sesión desde el navegador en la nube; no se intentó autenticación ni evasión. El sitio de staging devolvió `net::ERR_INVALID_AUTH_CREDENTIALS` sin que se ingresaran credenciales; esto no acredita una contraseña incorrecta ni el estado del CRM.
+
+**Pruebas:** PHP CLI ausente; lint y los 15 chequeos de crm-smoke.php NOT_RUN. Respaldos, rotación MySQL/HMAC, esquema real, instalación, autenticación, RBAC, CSRF, auditoría, accesibilidad y persistencia remota NO VERIFICADOS. No hubo escrituras de Hostinger, migraciones, creación de usuarios, POST, eliminación de solicitudes ni cambios de producción.
+
+**Resultado:** `CRM_STAGING_OPERATIVO = FALSE`, diagnóstico BLOCKED. La dirección /crm/index.php es una previsión de la orden, no un acceso acreditado. No se modifican decisiones históricas de G3 ni se declara el gate como cumplido.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
