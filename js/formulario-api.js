@@ -99,10 +99,10 @@
     if (len(descripcion) < 20 || len(descripcion) > 1000 || /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/.test(descripcion)) {
       issues.descripcion = 'Descripción: escribe de 20 a 1000 caracteres, sin datos médicos.';
     }
-    if (!consentimiento) issues.consentimiento = 'Confirma que utilizas únicamente datos ficticios en staging.';
-    if (!/^Prueba(?:\s|$)/i.test(nombre)) issues.nombre = 'Solo pruebas: el nombre debe comenzar con Prueba.';
-    if (!/^[a-z0-9._+-]+@example\.test$/i.test(email)) issues.email = 'Solo pruebas: utiliza un correo @example.test.';
-    if (!/^Prueba\b/i.test(descripcion)) issues.descripcion = 'Solo pruebas: la descripción debe comenzar con Prueba.';
+    if (!consentimiento) issues.consentimiento = 'Confirma que consultaste el aviso de privacidad.';
+    if (!/^Prueba(?:\s|$)/i.test(nombre)) issues.nombre = 'Identificador no válido para este entorno. Debe comenzar por «Prueba».';
+    if (!/^[a-z0-9._+-]+@example\.test$/i.test(email)) issues.email = 'Este entorno solo admite direcciones @example.test.';
+    if (!/^Prueba\b/i.test(descripcion)) issues.descripcion = 'Para este entorno, la descripción debe comenzar por «Prueba».';
     return {
       issues,
       payload: {nombre, email, telefono, ciudad, servicio, descripcion, consentimiento,
@@ -115,14 +115,14 @@
   function updateConsentFeedback(announce = false) {
     if (!consentCheckbox || !consentState) return;
     consentState.textContent = consentCheckbox.checked
-      ? 'Casilla reconocida en el formulario. La versión del aviso también deberá ser aceptada por el servidor.'
-      : 'Marca la casilla únicamente para confirmar esta prueba privada con datos ficticios.';
+      ? 'Lectura del aviso de privacidad confirmada.'
+      : 'Marca la casilla para confirmar que consultaste el aviso de privacidad.';
     if (announce && !pending && !attempted) {
       const {issues} = collectAndValidate();
       showIssues(issues);
       showStatus('info', consentCheckbox.checked
-        ? 'Casilla marcada y reconocida. Todavía no se han enviado datos.'
-        : 'Casilla desmarcada. Todavía no se han enviado datos.');
+        ? 'Lectura del aviso confirmada. Aún no se ha enviado la solicitud.'
+        : 'Confirma la lectura del aviso para continuar. Aún no se ha enviado la solicitud.');
     }
   }
   consentCheckbox?.addEventListener('change', () => updateConsentFeedback(true));
