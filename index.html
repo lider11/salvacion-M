@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/social.js" defer></script>
     <script src="./js/main.js" defer></script>
-    <script src="./js/formulario-api.js" defer></script>
+    <script src="./js/formulario-api.js?v=staging-20261115" defer></script>
 </head>
 
 <body>
@@ -242,12 +242,9 @@
                 <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
                 <p class="contacto-aviso" id="contacto-privacidad">No incluyas historias clínicas, diagnósticos
                     ni documentos médicos en esta solicitud inicial.</p>
-                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Vista previa: envío no
-                        disponible.</strong> La recepción segura y la política de tratamiento de datos están
-                    pendientes de verificación. Usa solo datos ficticios; no incluyas datos personales ni
-                    información médica sensible.</p>
+                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Staging privado — solo pruebas técnicas.</strong> Utiliza exclusivamente datos ficticios, sin información personal o de salud. El formulario público continúa inactivo.</p>
 
-                <form id="orientacion-form" class="contacto-form" method="dialog" data-preview-only="true"
+                <form id="orientacion-form" class="contacto-form" method="dialog" data-preview-only="false" data-staging-synthetic="true" data-privacy-version="sm-hostinger-sintetico-v1"
                     aria-describedby="contacto-disponibilidad contacto-privacidad" novalidate autocomplete="off">
                     <p class="contacto-requeridos">Los campos con <span aria-hidden="true">*</span> son
                         obligatorios.
@@ -353,11 +350,9 @@
                         <label>
                             <input id="contacto-consentimiento" name="consentimiento" type="checkbox" required
                                 aria-describedby="contacto-politica-estado">
-                            <span>Confirmo que consulté el <a href="./privacidad.html">aviso de privacidad</a> en
-                                borrador. Esta casilla no es una autorización de tratamiento de datos.</span>
+                            <span>Confirmo que esta es una prueba técnica privada con datos ficticios y he consultado el <a href="./privacidad.html">aviso de privacidad</a>.</span>
                         </label>
-                        <p id="contacto-politica-estado">El aviso está en revisión jurídica. Esta vista previa no
-                            envía, guarda ni registra solicitudes o autorizaciones.</p>
+                        <p id="contacto-politica-estado">Esta prueba registra exclusivamente datos ficticios. No está habilitada la recepción de solicitudes reales.</p>
                         <p class="contacto-error" id="contacto-consentimiento-error" hidden></p>
                     </div>
                     <div class="contacto-acciones">
