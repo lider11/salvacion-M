@@ -34,7 +34,7 @@ El endpoint busca primero `backend/bootstrap.php` como carpeta hermana de `publi
 3. Para el usuario runtime, concede solo `SELECT`, `INSERT`, `UPDATE` y `DELETE` sobre las tablas `requests` y `request_rate_limits`. No necesita permisos DDL después de importar.
 4. Guarda la configuración a partir de `backend/config.example.php` como `private/salvacion.php`, fuera de `public_html` y del repositorio.
 5. Sustituye todos los valores `CAMBIAR_*`. Genera `email_hash_key` con al menos 32 bytes aleatorios; por ejemplo, usando un generador criptográfico confiable. No reutilices contraseñas ni claves del repositorio.
-6. En staging privado, alinea la clave `privacy_notice_version` con la versión sintética del HTML (`sm-hostinger-sintetico-v1`), sin considerarla una autorización jurídica pública. Configura `allowed_origins` exclusivamente como `['https://darkviolet-hippopotamus-789000.hostingersite.com']` (sin barra final). Solo añade otros orígenes con justificación y verificación explícitas.
+6. En staging privado, alinea la clave `privacy_notice_version` con la versión técnica de H03 y del HTML (`sm-h03-staging-sintetico-v1`), sin considerarla una autorización jurídica pública. Configura `allowed_origins` exclusivamente como `['https://darkviolet-hippopotamus-789000.hostingersite.com']` (sin barra final). Solo añade otros orígenes con justificación y verificación explícitas.
 
 La ruta predeterminada de configuración es `private/salvacion.php`, hermana de `backend/`. Puede indicarse otra ruta mediante `SALVACION_CONFIG`. El endpoint permite configurar `SALVACION_BACKEND_BOOTSTRAP` si Hostinger requiere otra ubicación para el código.
 
