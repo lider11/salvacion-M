@@ -1,5 +1,16 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Evidencia visual HTTP 201 del formulario en Hostinger
+
+**Evidencia:** el titular aportó capturas de Chromium/DevTools del dominio `darkviolet-hippopotamus-789000.hostingersite.com`, mostrando `POST requests.php` (Fetch/XHR), estado **201 Created** y mensaje visible de solicitud registrada con UUIDv4 `3268d9db-620c-48a1-a7c7-b7fd510572e9`.
+
+**Interpretación acotada:** el formulario envió una solicitud y recibió respuesta HTTP 201, con identificador sintácticamente válido y mensaje de éxito. El error anterior 422 de discrepancia de versión de privacidad no apareció en esa solicitud. La captura no acredita inspección independiente de fila en MySQL, envío de notificaciones, accesos CRM, seguridad del entorno ni aprobación jurídica del aviso; no afirmar certificación E2E completa.
+
+**Estados:** `FORMULARIO_FETCH_REMOTO = PASS` por capturas, `HTTP_201_REMOTO = PASS` por capturas, `UUIDV4_FORMATO = PASS`, `MYSQL_FILA_CONFIRMADA_INDEPENDIENTE = NO_ACREDITADO`, `PRIVACIDAD_APROBADA = FALSE`, `PRODUCCION_AUTORIZADA = FALSE`.
+
+**Próximo paso verificable:** consulta de solo lectura en MySQL (sin divulgar datos): `SELECT COUNT(*) AS coincidencias FROM requests WHERE id = '3268d9db-620c-48a1-a7c7-b7fd510572e9';` Resultado esperado 1. Verificar entorno exacto; proteger staging y rotar los secretos expuestos previamente antes de procesar datos reales. La pantalla de éxito no acredita por sí sola escritura real al SQL si el código desplegado H03 difiere de la versión auditada.
+
+
 ## 2026-11-16 — Conciliación de versión de privacidad H03 y alerta de secretos
 
 **Evidencia entregada por el titular:** el frontend del dominio de Hostinger enviaba `sm-hostinger-sintetico-v1`, mientras la configuración privada H03 mostró `sm-h03-staging-sintetico-v1`. Esto explica el `422` de `fields.consentimiento` si la API H03 mantiene el contrato observado; persiste la necesidad de corroboración con POST remoto.
