@@ -1,5 +1,16 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Ajuste de textos del formulario Hostinger staging
+
+**Solicitud:** retirar referencias visibles a pruebas técnicas y datos ficticios en el formulario.
+
+**Cambios:** en `index.html` se simplificaron la etiqueta de lectura del aviso y su estado accesible; en `js/formulario-api.js` se armonizaron mensajes del checkbox y errores de validación. Se versionó el recurso JavaScript para evitar caché antigua.
+
+**Límites:** el entorno de staging continúa sin autorización para solicitudes reales y conserva `data-staging-synthetic=true`, las restricciones de identificadores sintéticos y la validación del backend. No se modifica producción, MySQL ni configuración de privacidad.
+
+**Verificación:** comprobación sintáctica JavaScript y aserciones de fuente PASS; E2E real de Hostinger y persistencia MySQL NO_ACREDITADOS. No se realizó despliegue remoto.
+
+
 ## 2026-11-15 — Hostinger: frontend instalado; E2E pendiente de acceso protegido
 
 Fuente desplegada: `e70070b28158ea0057c939f7a06c2c1df2480fc9` (PR #21). Sesión hPanel autenticada con 2FA y verificada. Plan Business Web Hosting. Ruta comprobada: `/home/u270515629/domains/darkviolet-hippopotamus-789000.hostingersite.com/public_html`. PHP CLI 8.2.35, pdo_mysql y mbstring activos. Conexión PDO real a MariaDB 11.8.9-MariaDB-log PASS; tablas requests, request_rate_limits y request_network_rate_limits presentes. No se ha verificado aún una nueva escritura ni el esquema completo.
