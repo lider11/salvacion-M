@@ -1,5 +1,16 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Conciliación de versión de privacidad H03 y alerta de secretos
+
+**Evidencia entregada por el titular:** el frontend del dominio de Hostinger enviaba `sm-hostinger-sintetico-v1`, mientras la configuración privada H03 mostró `sm-h03-staging-sintetico-v1`. Esto explica el `422` de `fields.consentimiento` si la API H03 mantiene el contrato observado; persiste la necesidad de corroboración con POST remoto.
+
+**Corrección de código:** `index.html` de la rama aislada declara ahora `data-privacy-version="sm-h03-staging-sintetico-v1"`. La casilla, backend y secretos no fueron modificados. Solo procede ensayar con datos sintéticos y después de confirmar acceso protegido.
+
+**Seguridad:** el contenido de configuración privada y credenciales se divulgó en una conversación. Tratar la contraseña MySQL y `email_hash_key` HMAC como comprometidas: rotarlas en Hostinger por canal privado sin publicarlas en GitHub ni en chats. Rotar HMAC puede reiniciar la correlación con ventanas de rate limiting previas; documentar operación con cuidado. Corregir `allowed_origins` si el archivo contiene literalmente sintaxis de enlace Markdown: debe ser un origen HTTPS puro.
+
+**Resultado:** comprobaciones estáticas de HTML PASS; HTTP `201`, escritura MariaDB y configuración remota después del cambio `NOT_RUN`. Aviso jurídico y consentimiento público `NO_ACREDITADO`. Sin acceso hPanel ni despliegue remoto.
+
+
 ## 2026-11-16 — La casilla controla la habilitación de Enviar
 
 **Solicitud:** que el clic de la casilla de lectura valide ese requisito y habilite `Enviar solicitud`, sin exigir una acción adicional de revisión previa.
