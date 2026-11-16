@@ -122,9 +122,6 @@
       issues.descripcion = 'Descripción: escribe de 20 a 1000 caracteres, sin datos médicos.';
     }
     if (!consentimiento) issues.consentimiento = 'Confirma que consultaste el aviso de privacidad.';
-    if (!/^Prueba(?:\s|$)/i.test(nombre)) issues.nombre = 'Identificador no válido para este entorno. Debe comenzar por «Prueba».';
-    if (!/^[a-z0-9._+-]+@example\.test$/i.test(email)) issues.email = 'Este entorno solo admite direcciones @example.test.';
-    if (!/^Prueba\b/i.test(descripcion)) issues.descripcion = 'Para este entorno, la descripción debe comenzar por «Prueba».';
     return {
       issues,
       payload: {nombre, email, telefono, ciudad, servicio, descripcion, consentimiento,
