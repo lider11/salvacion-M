@@ -1,5 +1,16 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Retiro de restricciones artificiales de entrada
+
+**Solicitud explícita:** retirar las tres restricciones que exigían el prefijo `Prueba` en nombre/descripcion y dominio de correo `@example.test`, que seguían activas después de simplificar los textos visibles.
+
+**Corrección:** eliminadas las tres condiciones exclusivamente en `js/formulario-api.js`, manteniendo las validaciones normales de formato, longitud, consentimiento, ruta same-origin, bloqueo de reenvíos ambiguos y verificación de `privacy_version`. `index.html` incrementa el parámetro de versión del JavaScript para evitar caché del navegador.
+
+**Evidencia:** 7/7 comprobaciones con simulación controlada PASS (nombre común, correo convencional normalizado, descripción válida, botón visible, origen permitido, construcción del POST, sintaxis JS). No hubo POST remoto, publicación ni escritura MySQL en esta sesión.
+
+**Límites jurídicos y operativos:** la eliminación de estas restricciones permite enviar valores no sintéticos al backend si el código se despliega. Esto **no equivale** a aprobar el aviso de privacidad, autorización de tratamiento, acceso seguro ni puesta en producción. No subir a un sitio público para datos personales hasta superar esas verificaciones. La configuración privada de Hostinger y API H03 instalada no se han revisado en este cambio.
+
+
 ## 2026-11-16 — Alineación de staging con dirección Hostinger
 
 **URL seleccionada por el titular:** `https://darkviolet-hippopotamus-789000.hostingersite.com/`. Se adopta como origen exacto del frontend de pruebas en la rama aislada `feat/formulario-hostinger-staging-20261115`.
