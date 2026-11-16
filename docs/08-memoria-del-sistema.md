@@ -1,5 +1,20 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Saneamiento de cuatro hallazgos del formulario staging
+
+**Alcance:** solo rama `feat/formulario-hostinger-staging-20261115`; sin despliegue de Hostinger ni cambios de producción, bases de datos o secretos.
+
+**Correcciones:**
+- Navegación de tarjetas: `data-servicio` incorporado a tres enlaces; preselección de radio, `scrollIntoView` compatible con movimiento reducido, `history.replaceState` sin salto por `location.hash`, margen CSS de 6 rem ante header fijo.
+- Respuestas ambiguas: `submit` y `review` bloqueados en el mismo procedimiento. Para HTTP 429 inequívoco, se guarda `Retry-After`, no se reenvía automáticamente y se permite solo el intento manual después de la ventana; otros errores ambiguos permanecen bloqueados.
+- Email: normalizado con trim y minúsculas en el control antes de aplicar validación y enviarlo. La validación definitiva continúa en PHP.
+- Errores accesibles: corrección en vivo por `input`/`change`, limpieza de errores corregidos sin mover el foco y `aria-invalid` aplicado a todos los radios del grupo.
+
+**Evidencia:** evaluación JavaScript en entorno controlado, 10/10 escenarios simulados PASS (incluye movimiento reducido, navegación, email, errores, consentimiento, 201, 422, 429, timeout y UUID inválido); 13/13 comprobaciones de estructura, sintaxis y contrato PHP PASS. El backend de la rama contempla JSON 201+UUID, 422 `validation_failed` y rechazo del honeypot `website`. Estas pruebas **no acreditan** MySQL ni despliegue real: API Hostinger H03 distinta, sin reconciliación verificada.
+
+**Pendientes:** confirmar integración web/API/MySQL del release instalado con datos QA; verificar privacidad y consentimiento jurídico antes de cualquier dato real. La rama conserva `data-staging-synthetic=true` y limitaciones QA. No se autoriza producción.
+
+
 ## 2026-11-16 — Ajuste de textos del formulario Hostinger staging
 
 **Solicitud:** retirar referencias visibles a pruebas técnicas y datos ficticios en el formulario.
