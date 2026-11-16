@@ -9,8 +9,12 @@
 
   const privacyVersion = form.dataset.privacyVersion || '';
   if (!/^[\w.-]{1,80}$/.test(privacyVersion)) return;
-  const endpoint = new URL('./api/requests.php', document.baseURI);
-  if (endpoint.origin !== window.location.origin) return;
+  // API en la raíz del mismo dominio, independiente de document.baseURI.
+  const siteOrigin = form.dataset.siteOrigin || '';
+  const currentOrigin = window.location.origin;
+  const isLocalDevelopment = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const endpoint = new URL('/api/requests.php', currentOrigin);
+  if (endpoint.origin !== currentOrigin) return;
 
   const status = document.getElementById('contacto-estado');
   const errorBox = document.getElementById('contacto-errores');
@@ -19,6 +23,16 @@
   const submit = form.querySelector('.contacto-enviar');
   const contactTitle = document.getElementById('contacto-titulo');
   if (!status || !errorBox || !errorList || !review || !submit) return;
+
+  if ((!isLocalDevelopment && currentOrigin !== siteOrigin) ||
+      siteOrigin !== 'https://darkviolet-hippopotamus-789000.hostingersite.com') {
+    submit.hidden = false;
+    submit.disabled = true;
+    status.hidden = false;
+    status.className = 'contacto-estado is-error';
+    status.textContent = 'El formulario no está configurado para esta dirección. No se enviaron datos.';
+    return;
+  }
 
   const ids = {
     nombre: 'contacto-nombre', email: 'contacto-email', telefono: 'contacto-telefono',
