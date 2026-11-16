@@ -29,6 +29,8 @@
   const validServices = new Set(['negacion', 'medicamentos', 'citas', 'incapacidades', 'eps-ips', 'reclamacion']);
   let pending = false;
   let attempted = false; // Evitar reintento ciego después de POST de resultado ambiguo.
+  let rateLimitedUntil = 0;
+  let currentIssues = {};
 
   function showStatus(kind, message) {
     status.hidden = false;
@@ -40,17 +42,21 @@
     const id = key === 'servicio' ? 'contacto-servicio' : ids[key];
     const errorElement = document.getElementById(`${id}-error`);
     const field = get(key);
+    const controls = key === 'servicio'
+      ? [...form.querySelectorAll('input[name="servicio"]')]
+      : field ? [field] : [];
     if (errorElement) {
       errorElement.textContent = message || '';
       errorElement.hidden = !message;
     }
-    if (field) {
-      if (message) field.setAttribute('aria-invalid', 'true');
-      else field.removeAttribute('aria-invalid');
-    }
+    controls.forEach(control => {
+      if (message) control.setAttribute('aria-invalid', 'true');
+      else control.removeAttribute('aria-invalid');
+    });
   }
 
-  function showIssues(issues) {
+  function showIssues(issues, focusSummary = true) {
+    currentIssues = {...issues};
     errorList.replaceChildren();
     Object.keys(ids).forEach(key => fieldError(key, issues[key] || ''));
     for (const [key, message] of Object.entries(issues)) {
@@ -66,13 +72,15 @@
       errorList.append(li);
     }
     errorBox.hidden = Object.keys(issues).length === 0;
-    if (!errorBox.hidden) errorBox.focus();
+    if (!errorBox.hidden && focusSummary) errorBox.focus();
   }
 
   function collectAndValidate() {
     const trim = key => get(key)?.value.trim() || '';
     const nombre = trim('nombre');
     const email = trim('email').toLowerCase();
+    const emailField = get('email');
+    if (emailField && emailField.value !== email) emailField.value = email;
     const telefono = trim('telefono');
     const ciudad = trim('ciudad');
     const descripcion = trim('descripcion');
@@ -85,7 +93,7 @@
     if (len(nombre) < 3 || len(nombre) > 100 || !allowedText.test(nombre) || !/\p{L}/u.test(nombre)) {
       issues.nombre = 'Nombre: escribe de 3 a 100 caracteres válidos.';
     }
-    if (email.length > 254 || !get('email')?.validity.valid || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email.length > 254 || !email || emailField?.validity.typeMismatch === true || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       issues.email = 'Correo electrónico: escribe una dirección válida.';
     }
     const digits = telefono.replace(/\D/g, '');
@@ -118,8 +126,6 @@
       ? 'Lectura del aviso de privacidad confirmada.'
       : 'Marca la casilla para confirmar que consultaste el aviso de privacidad.';
     if (announce && !pending && !attempted) {
-      const {issues} = collectAndValidate();
-      showIssues(issues);
       showStatus('info', consentCheckbox.checked
         ? 'Lectura del aviso confirmada. Aún no se ha enviado la solicitud.'
         : 'Confirma la lectura del aviso para continuar. Aún no se ha enviado la solicitud.');
@@ -131,8 +137,25 @@
   function markAmbiguous() {
     attempted = true;
     submit.disabled = true;
+    review.disabled = true;
     showStatus('error', 'No pudimos confirmar si la solicitud se guardó. Por seguridad, no reenvíes el formulario. Contacta a Salvación M para verificarlo.');
   }
+
+  function refreshCorrectedField(event) {
+    const key = event.target?.name;
+    if (!key || !Object.hasOwn(ids, key) || !Object.hasOwn(currentIssues, key)) return;
+    const {issues} = collectAndValidate();
+    if (Object.hasOwn(issues, key)) return;
+    const remaining = {...currentIssues};
+    delete remaining[key];
+    showIssues(remaining, false);
+    if (Object.keys(remaining).length === 0 && !pending && !attempted) {
+      showStatus('info', 'Los campos señalados fueron corregidos. Aún no se ha enviado nada.');
+    }
+  }
+
+  form.addEventListener('input', refreshCorrectedField);
+  form.addEventListener('change', refreshCorrectedField);
 
   function validateDisplay() {
     const {issues} = collectAndValidate();
@@ -158,7 +181,11 @@
       if (!choice) return;
       event.preventDefault();
       choice.checked = true;
-      location.hash = '#contacto';
+      const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+      document.getElementById('contacto')?.scrollIntoView({
+        behavior: reducedMotion ? 'auto' : 'smooth', block: 'start'
+      });
+      window.history.replaceState(window.history.state, '', '#contacto');
       contactTitle?.focus({preventScroll: true});
       choice.dispatchEvent(new Event('change', {bubbles: true}));
     });
@@ -167,6 +194,10 @@
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (pending || attempted) return;
+    if (Date.now() < rateLimitedUntil) {
+      showStatus('error', 'Límite temporal de solicitudes. Intenta de nuevo después del tiempo indicado.');
+      return;
+    }
     const {issues, payload} = collectAndValidate();
     showIssues(issues);
     if (Object.keys(issues).length !== 0) {
@@ -223,7 +254,12 @@
         return;
       }
       if (response.status === 429) {
-        showStatus('error', 'Se alcanzó el límite temporal de solicitudes. No vuelvas a enviar ahora.');
+        const rawRetryAfter = Number(response.headers?.get?.('Retry-After'));
+        const retryAfterSeconds = Number.isFinite(rawRetryAfter) && rawRetryAfter > 0
+          ? Math.max(60, rawRetryAfter) : 3600;
+        rateLimitedUntil = Date.now() + retryAfterSeconds * 1000;
+        attempted = false; // 429 explícito: no se insertó solicitud; sin reenvío automático.
+        showStatus('error', 'Se alcanzó el límite temporal de solicitudes. Podrás intentar manualmente después del tiempo indicado.');
         return;
       }
       if (response.status >= 400) {
