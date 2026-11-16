@@ -5,7 +5,7 @@
 (() => {
   'use strict';
   const form = document.getElementById('orientacion-form');
-  if (!form || form.dataset.previewOnly !== 'false' || form.dataset.privacyApproved !== 'true') return;
+  if (!form || form.dataset.previewOnly !== 'false' || form.dataset.stagingSynthetic !== 'true') return;
 
   const privacyVersion = form.dataset.privacyVersion || '';
   if (!/^[\w.-]{1,80}$/.test(privacyVersion)) return;
@@ -99,7 +99,10 @@
     if (len(descripcion) < 20 || len(descripcion) > 1000 || /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/.test(descripcion)) {
       issues.descripcion = 'Descripción: escribe de 20 a 1000 caracteres, sin datos médicos.';
     }
-    if (!consentimiento) issues.consentimiento = 'Debes autorizar expresamente el tratamiento de los datos informados.';
+    if (!consentimiento) issues.consentimiento = 'Confirma que utilizas únicamente datos ficticios en staging.';
+    if (!/^Prueba(?:\s|$)/i.test(nombre)) issues.nombre = 'Solo pruebas: el nombre debe comenzar con Prueba.';
+    if (!/^[a-z0-9._+-]+@example\.test$/i.test(email)) issues.email = 'Solo pruebas: utiliza un correo @example.test.';
+    if (!/^Prueba\b/i.test(descripcion)) issues.descripcion = 'Solo pruebas: la descripción debe comenzar con Prueba.';
     return {
       issues,
       payload: {nombre, email, telefono, ciudad, servicio, descripcion, consentimiento,
