@@ -2,7 +2,7 @@
 
 ## Estado y alcance
 
-La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. Está probada localmente, pero **no está conectada al formulario ni desplegada**. La página conserva `data-preview-only="true"`, el envío deshabilitado y el aviso jurídico pendiente.
+La API inicial de solicitudes está implementada en `api/requests.php`, con utilidades PHP en `backend/` y migraciones MySQL/SQLite. En la rama aislada de Hostinger el frontend incluye `fetch` hacia `/api/requests.php` y el formulario se limita a pruebas sintéticas. Hay indicios históricos de API/MariaDB en Hostinger, pero la versión desplegada y una escritura real del formulario no están reconciliadas ni acreditadas. La privacidad pública sigue pendiente.
 
 La API solo debe recibir solicitudes cuando estén aprobados el aviso de privacidad, la finalidad y retención de datos, el consentimiento y los canales de atención. No usar datos personales reales durante pruebas. No se toca producción desde este trabajo.
 
@@ -34,9 +34,22 @@ El endpoint busca primero `backend/bootstrap.php` como carpeta hermana de `publi
 3. Para el usuario runtime, concede solo `SELECT`, `INSERT`, `UPDATE` y `DELETE` sobre las tablas `requests` y `request_rate_limits`. No necesita permisos DDL después de importar.
 4. Guarda la configuración a partir de `backend/config.example.php` como `private/salvacion.php`, fuera de `public_html` y del repositorio.
 5. Sustituye todos los valores `CAMBIAR_*`. Genera `email_hash_key` con al menos 32 bytes aleatorios; por ejemplo, usando un generador criptográfico confiable. No reutilices contraseñas ni claves del repositorio.
-6. Configura `privacy_notice_version` con una versión aprobada, no con el texto de ejemplo. Añade a `allowed_origins` el origen exacto del portal, como `https://dominio-real` (sin ruta ni barra final). Incluye el origen `www` únicamente si se sirve de verdad.
+6. En staging privado, alinea la clave `privacy_notice_version` con la versión sintética del HTML (`sm-hostinger-sintetico-v1`), sin considerarla una autorización jurídica pública. Configura `allowed_origins` exclusivamente como `['https://darkviolet-hippopotamus-789000.hostingersite.com']` (sin barra final). Solo añade otros orígenes con justificación y verificación explícitas.
 
 La ruta predeterminada de configuración es `private/salvacion.php`, hermana de `backend/`. Puede indicarse otra ruta mediante `SALVACION_CONFIG`. El endpoint permite configurar `SALVACION_BACKEND_BOOTSTRAP` si Hostinger requiere otra ubicación para el código.
+
+## Dominio Hostinger de referencia — 2026-11-16
+
+- Portal: `https://darkviolet-hippopotamus-789000.hostingersite.com/`
+- Formulario: `https://darkviolet-hippopotamus-789000.hostingersite.com/#contacto`
+- Aviso: `https://darkviolet-hippopotamus-789000.hostingersite.com/privacidad.html`
+- API: `https://darkviolet-hippopotamus-789000.hostingersite.com/api/requests.php`
+- Origen exacto permitido para el backend: `https://darkviolet-hippopotamus-789000.hostingersite.com`
+- Directorio web de referencia según memoria anterior: `/home/u270515629/domains/darkviolet-hippopotamus-789000.hostingersite.com/public_html` (reconfirmar en hPanel).
+- `js/formulario-api.js` construye la ruta `/api/requests.php` desde `window.location.origin`; no se usan CORS ni claves en el navegador.
+- `index.html` declara `data-site-origin` y bloquea el envío si se sirve en otro hostname, salvo localhost/127.0.0.1 para ensayos locales.
+- Mantener `noindex, nofollow` en staging. No instalar archivos de QA en un sitio público sin control de acceso.
+- No modificar `private/salvacion.php` a ciegas: comprobar el valor vigente de `allowed_origins` y `privacy_notice_version` con operador autorizado, sin revelar secretos.
 
 ## Endpoint
 
@@ -53,7 +66,7 @@ No hay panel CRM, autenticación de operador, correo, borrado/retención automat
 
 ## Activación futura del formulario
 
-No se debe quitar `data-preview-only="true"`, habilitar el checkbox ni conectar `fetch()` hasta contar con:
+El código de staging utiliza `data-preview-only="false"` para ensayar el flujo con entradas sintéticas, sin que eso autorice la recepción pública. Para recibir datos reales se exige:
 
 1. aviso y finalidad aprobados jurídicamente;
 2. versión de privacidad coordinada entre configuración del servidor y payload;
