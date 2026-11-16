@@ -1,5 +1,20 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Alineación de staging con dirección Hostinger
+
+**URL seleccionada por el titular:** `https://darkviolet-hippopotamus-789000.hostingersite.com/`. Se adopta como origen exacto del frontend de pruebas en la rama aislada `feat/formulario-hostinger-staging-20261115`.
+
+**Archivos modificados:** `index.html` (origen declarado y `og:url`, nueva versión de JS), `privacidad.html` (referencia de URL de la página), `js/formulario-api.js` (endpoint absoluto de ruta `/api/requests.php` sobre el origen actual y comprobación de host, con localhost autorizado únicamente para desarrollo), `backend/config.example.php` (origen exacto, sin secretos), `docs/backend-hostinger.md` (rutas de despliegue, configuración requerida, estado real y controles).
+
+**Rutas:** raíz `/`, `/#contacto`, `/privacidad.html`, `/api/requests.php`. El valor para `allowed_origins` es `https://darkviolet-hippopotamus-789000.hostingersite.com`, sin barra final. No se habilita CORS.
+
+**Pruebas:** JavaScript sintácticamente válido y 8/8 comprobaciones con harness simulado PASS: POST bajo origen correcto, bloqueo de origen ajeno, localhost, noindex, URL del ejemplo PHP, enlaces de privacidad, metadatos y documentación. Verificación estática de la coincidencia de rutas y del `noindex` conservado.
+
+**Pendientes / bloqueos:** el origen real almacenado en `private/salvacion.php` del hosting no se leyó ni cambió. Tampoco se verificó una nueva escritura MySQL, autenticación del directorio staging, HTTPS actual ni la URL remota desde esta sesión (herramienta de consulta pública no recuperó la página). El servidor conserva históricamente variante API H03 distinta de la fuente inspeccionada. No desplegar en producción, ni aceptar datos reales sin aviso jurídico válido y controles de acceso. El correo `info@salvacionm.com` es independiente del dominio web y no se modifica sin comprobar la cuenta de correo.
+
+**Estado:** `CODE_DOMAIN_ALIGNMENT = TRUE` en rama, `REMOTE_DOMAIN_DEPLOYED = FALSE/NO_ACREDITADO`, `MYSQL_E2E = FALSE/NO_ACREDITADO`, `PRODUCTION_MODIFIED = FALSE`.
+
+
 ## 2026-11-16 — Saneamiento de cuatro hallazgos del formulario staging
 
 **Alcance:** solo rama `feat/formulario-hostinger-staging-20261115`; sin despliegue de Hostinger ni cambios de producción, bases de datos o secretos.
