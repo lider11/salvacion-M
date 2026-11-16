@@ -133,6 +133,9 @@
   const consentState = document.getElementById('contacto-politica-estado');
   function updateConsentFeedback(announce = false) {
     if (!consentCheckbox || !consentState) return;
+    // La casilla controla únicamente la habilitación del envío.
+    // Las validaciones de campos y privacidad del servidor permanecen obligatorias.
+    if (!pending) submit.disabled = attempted || !consentCheckbox.checked;
     consentState.textContent = consentCheckbox.checked
       ? 'Lectura del aviso de privacidad confirmada.'
       : 'Marca la casilla para confirmar que consultaste el aviso de privacidad.';
@@ -176,7 +179,7 @@
 
   review.hidden = false;
   submit.hidden = false;
-  submit.disabled = false;
+  submit.disabled = attempted || !consentCheckbox.checked;
   review.addEventListener('click', () => {
     if (pending || attempted) return;
     if (validateDisplay()) showStatus('info', 'Datos revisados. Puedes enviar la solicitud cuando confirmes tu autorización.');
@@ -256,7 +259,7 @@
           delete serverIssues.consentimiento;
           showIssues(serverIssues);
           updateConsentFeedback();
-          showStatus('error', 'Casilla reconocida y enviada como true. La API rechazó la autorización o la versión del aviso configurada. Comprueba que data-privacy-version del HTML coincide con privacy_notice_version del servidor. No se guardó la solicitud.');
+          showStatus('error', 'La casilla fue marcada correctamente. El servidor rechazó la versión del aviso de privacidad. Debe coincidir con la configurada en el servidor; no se guardó la solicitud.');
         } else {
           showIssues(serverIssues);
           showStatus('error', 'El servidor rechazó los datos. Revisa las indicaciones; no se ha guardado la solicitud.');
@@ -284,7 +287,7 @@
     } finally {
       pending = false;
       review.disabled = attempted;
-      submit.disabled = attempted;
+      submit.disabled = attempted || !consentCheckbox.checked;
     }
   });
 })();
