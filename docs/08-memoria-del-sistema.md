@@ -1,5 +1,16 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — La casilla controla la habilitación de Enviar
+
+**Solicitud:** que el clic de la casilla de lectura valide ese requisito y habilite `Enviar solicitud`, sin exigir una acción adicional de revisión previa.
+
+**Implementación:** `js/formulario-api.js` mantiene el botón desactivado inicialmente, lo habilita al marcar y lo deshabilita al desmarcar, conservando el bloqueo de envíos ambiguos y el control del tiempo de espera `429`. El formulario aún valida los campos obligatorios al enviar. `index.html` actualiza la versión del recurso JS para evitar caché.
+
+**Verificación:** 7/7 pruebas JavaScript con DOM simulado PASS: inicio deshabilitado, marcar habilita, desmarcar deshabilita, POST `201` con datos válidos y `consentimiento:true`, tratamiento del `422` del backend, nueva versión del script, sintaxis JS. No se efectuó despliegue ni solicitud remota en esta sesión.
+
+**Bloqueo independiente:** la API de Hostinger aún rechaza el contrato de privacidad en capturas anteriores. Un clic reconocido no corrige diferencias de `privacy_notice_version`. No se alteraron las comprobaciones de consentimiento ni privacidad del servidor; la recepción de datos personales reales sigue sujeta a aprobación jurídica y verificación remota.
+
+
 ## 2026-11-16 — Retiro de restricciones artificiales de entrada
 
 **Solicitud explícita:** retirar las tres restricciones que exigían el prefijo `Prueba` en nombre/descripcion y dominio de correo `@example.test`, que seguían activas después de simplificar los textos visibles.
