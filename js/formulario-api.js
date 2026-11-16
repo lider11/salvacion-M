@@ -110,6 +110,24 @@
     };
   }
 
+  const consentCheckbox = get('consentimiento');
+  const consentState = document.getElementById('contacto-politica-estado');
+  function updateConsentFeedback(announce = false) {
+    if (!consentCheckbox || !consentState) return;
+    consentState.textContent = consentCheckbox.checked
+      ? 'Casilla reconocida en el formulario. La versión del aviso también deberá ser aceptada por el servidor.'
+      : 'Marca la casilla únicamente para confirmar esta prueba privada con datos ficticios.';
+    if (announce && !pending && !attempted) {
+      const {issues} = collectAndValidate();
+      showIssues(issues);
+      showStatus('info', consentCheckbox.checked
+        ? 'Casilla marcada y reconocida. Todavía no se han enviado datos.'
+        : 'Casilla desmarcada. Todavía no se han enviado datos.');
+    }
+  }
+  consentCheckbox?.addEventListener('change', () => updateConsentFeedback(true));
+  updateConsentFeedback();
+
   function markAmbiguous() {
     attempted = true;
     submit.disabled = true;
@@ -191,8 +209,16 @@
         for (const [key, message] of Object.entries(data.fields || {})) {
           if (Object.hasOwn(map, key) && typeof message === 'string') serverIssues[map[key]] = message;
         }
-        showIssues(serverIssues);
-        showStatus('error', 'El servidor rechazó los datos. Revisa las indicaciones; no se ha guardado la solicitud.');
+        const rejectedConsent = Object.hasOwn(serverIssues, 'consentimiento') && payload.consentimiento === true;
+        if (rejectedConsent) {
+          delete serverIssues.consentimiento;
+          showIssues(serverIssues);
+          updateConsentFeedback();
+          showStatus('error', 'Casilla reconocida y enviada como true. La API rechazó la autorización o la versión del aviso configurada. Comprueba que data-privacy-version del HTML coincide con privacy_notice_version del servidor. No se guardó la solicitud.');
+        } else {
+          showIssues(serverIssues);
+          showStatus('error', 'El servidor rechazó los datos. Revisa las indicaciones; no se ha guardado la solicitud.');
+        }
         attempted = false; // 422 declara validación fallida y ausencia de persistencia.
         return;
       }
