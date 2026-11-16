@@ -1,0 +1,21 @@
+✔ Preview is inert even with a fictitious valid form (2.837114ms)
+✔ Requires explicit privacy approval flag (0.850466ms)
+✔ A confirmed HTTP 201 with UUID shows success and resets once (2.556435ms)
+✔ Ambiguous network failure never causes a resend (1.414005ms)
+✔ Invalid form does not send (0.989874ms)
+✔ invalid UUID never reports success or retries (1.208008ms)
+✔ invalid JSON never reports success or retries (1.034149ms)
+✔ HTTP 500 never reports success or retries (1.839248ms)
+✔ unexpected HTTP 200 never reports success or retries (1.241538ms)
+✔ HTTP 429 never reports success or retries (1.049523ms)
+✔ HTTP 422 shows field errors and permits an explicit corrected submission (1.22908ms)
+✔ A double click while a request is pending sends once (1.278053ms)
+✔ Consent, categories, control characters and punctuation-only cities are rejected locally (5.683912ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 155.922653

@@ -1,5 +1,127 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-16 — Evidencia visual HTTP 201 del formulario en Hostinger
+
+**Evidencia:** el titular aportó capturas de Chromium/DevTools del dominio `darkviolet-hippopotamus-789000.hostingersite.com`, mostrando `POST requests.php` (Fetch/XHR), estado **201 Created** y mensaje visible de solicitud registrada con UUIDv4 `3268d9db-620c-48a1-a7c7-b7fd510572e9`.
+
+**Interpretación acotada:** el formulario envió una solicitud y recibió respuesta HTTP 201, con identificador sintácticamente válido y mensaje de éxito. El error anterior 422 de discrepancia de versión de privacidad no apareció en esa solicitud. La captura no acredita inspección independiente de fila en MySQL, envío de notificaciones, accesos CRM, seguridad del entorno ni aprobación jurídica del aviso; no afirmar certificación E2E completa.
+
+**Estados:** `FORMULARIO_FETCH_REMOTO = PASS` por capturas, `HTTP_201_REMOTO = PASS` por capturas, `UUIDV4_FORMATO = PASS`, `MYSQL_FILA_CONFIRMADA_INDEPENDIENTE = NO_ACREDITADO`, `PRIVACIDAD_APROBADA = FALSE`, `PRODUCCION_AUTORIZADA = FALSE`.
+
+**Próximo paso verificable:** consulta de solo lectura en MySQL (sin divulgar datos): `SELECT COUNT(*) AS coincidencias FROM requests WHERE id = '3268d9db-620c-48a1-a7c7-b7fd510572e9';` Resultado esperado 1. Verificar entorno exacto; proteger staging y rotar los secretos expuestos previamente antes de procesar datos reales. La pantalla de éxito no acredita por sí sola escritura real al SQL si el código desplegado H03 difiere de la versión auditada.
+
+
+## 2026-11-16 — Conciliación de versión de privacidad H03 y alerta de secretos
+
+**Evidencia entregada por el titular:** el frontend del dominio de Hostinger enviaba `sm-hostinger-sintetico-v1`, mientras la configuración privada H03 mostró `sm-h03-staging-sintetico-v1`. Esto explica el `422` de `fields.consentimiento` si la API H03 mantiene el contrato observado; persiste la necesidad de corroboración con POST remoto.
+
+**Corrección de código:** `index.html` de la rama aislada declara ahora `data-privacy-version="sm-h03-staging-sintetico-v1"`. La casilla, backend y secretos no fueron modificados. Solo procede ensayar con datos sintéticos y después de confirmar acceso protegido.
+
+**Seguridad:** el contenido de configuración privada y credenciales se divulgó en una conversación. Tratar la contraseña MySQL y `email_hash_key` HMAC como comprometidas: rotarlas en Hostinger por canal privado sin publicarlas en GitHub ni en chats. Rotar HMAC puede reiniciar la correlación con ventanas de rate limiting previas; documentar operación con cuidado. Corregir `allowed_origins` si el archivo contiene literalmente sintaxis de enlace Markdown: debe ser un origen HTTPS puro.
+
+**Resultado:** comprobaciones estáticas de HTML PASS; HTTP `201`, escritura MariaDB y configuración remota después del cambio `NOT_RUN`. Aviso jurídico y consentimiento público `NO_ACREDITADO`. Sin acceso hPanel ni despliegue remoto.
+
+
+## 2026-11-16 — La casilla controla la habilitación de Enviar
+
+**Solicitud:** que el clic de la casilla de lectura valide ese requisito y habilite `Enviar solicitud`, sin exigir una acción adicional de revisión previa.
+
+**Implementación:** `js/formulario-api.js` mantiene el botón desactivado inicialmente, lo habilita al marcar y lo deshabilita al desmarcar, conservando el bloqueo de envíos ambiguos y el control del tiempo de espera `429`. El formulario aún valida los campos obligatorios al enviar. `index.html` actualiza la versión del recurso JS para evitar caché.
+
+**Verificación:** 7/7 pruebas JavaScript con DOM simulado PASS: inicio deshabilitado, marcar habilita, desmarcar deshabilita, POST `201` con datos válidos y `consentimiento:true`, tratamiento del `422` del backend, nueva versión del script, sintaxis JS. No se efectuó despliegue ni solicitud remota en esta sesión.
+
+**Bloqueo independiente:** la API de Hostinger aún rechaza el contrato de privacidad en capturas anteriores. Un clic reconocido no corrige diferencias de `privacy_notice_version`. No se alteraron las comprobaciones de consentimiento ni privacidad del servidor; la recepción de datos personales reales sigue sujeta a aprobación jurídica y verificación remota.
+
+
+## 2026-11-16 — Retiro de restricciones artificiales de entrada
+
+**Solicitud explícita:** retirar las tres restricciones que exigían el prefijo `Prueba` en nombre/descripcion y dominio de correo `@example.test`, que seguían activas después de simplificar los textos visibles.
+
+**Corrección:** eliminadas las tres condiciones exclusivamente en `js/formulario-api.js`, manteniendo las validaciones normales de formato, longitud, consentimiento, ruta same-origin, bloqueo de reenvíos ambiguos y verificación de `privacy_version`. `index.html` incrementa el parámetro de versión del JavaScript para evitar caché del navegador.
+
+**Evidencia:** 7/7 comprobaciones con simulación controlada PASS (nombre común, correo convencional normalizado, descripción válida, botón visible, origen permitido, construcción del POST, sintaxis JS). No hubo POST remoto, publicación ni escritura MySQL en esta sesión.
+
+**Límites jurídicos y operativos:** la eliminación de estas restricciones permite enviar valores no sintéticos al backend si el código se despliega. Esto **no equivale** a aprobar el aviso de privacidad, autorización de tratamiento, acceso seguro ni puesta en producción. No subir a un sitio público para datos personales hasta superar esas verificaciones. La configuración privada de Hostinger y API H03 instalada no se han revisado en este cambio.
+
+
+## 2026-11-16 — Alineación de staging con dirección Hostinger
+
+**URL seleccionada por el titular:** `https://darkviolet-hippopotamus-789000.hostingersite.com/`. Se adopta como origen exacto del frontend de pruebas en la rama aislada `feat/formulario-hostinger-staging-20261115`.
+
+**Archivos modificados:** `index.html` (origen declarado y `og:url`, nueva versión de JS), `privacidad.html` (referencia de URL de la página), `js/formulario-api.js` (endpoint absoluto de ruta `/api/requests.php` sobre el origen actual y comprobación de host, con localhost autorizado únicamente para desarrollo), `backend/config.example.php` (origen exacto, sin secretos), `docs/backend-hostinger.md` (rutas de despliegue, configuración requerida, estado real y controles).
+
+**Rutas:** raíz `/`, `/#contacto`, `/privacidad.html`, `/api/requests.php`. El valor para `allowed_origins` es `https://darkviolet-hippopotamus-789000.hostingersite.com`, sin barra final. No se habilita CORS.
+
+**Pruebas:** JavaScript sintácticamente válido y 8/8 comprobaciones con harness simulado PASS: POST bajo origen correcto, bloqueo de origen ajeno, localhost, noindex, URL del ejemplo PHP, enlaces de privacidad, metadatos y documentación. Verificación estática de la coincidencia de rutas y del `noindex` conservado.
+
+**Pendientes / bloqueos:** el origen real almacenado en `private/salvacion.php` del hosting no se leyó ni cambió. Tampoco se verificó una nueva escritura MySQL, autenticación del directorio staging, HTTPS actual ni la URL remota desde esta sesión (herramienta de consulta pública no recuperó la página). El servidor conserva históricamente variante API H03 distinta de la fuente inspeccionada. No desplegar en producción, ni aceptar datos reales sin aviso jurídico válido y controles de acceso. El correo `info@salvacionm.com` es independiente del dominio web y no se modifica sin comprobar la cuenta de correo.
+
+**Estado:** `CODE_DOMAIN_ALIGNMENT = TRUE` en rama, `REMOTE_DOMAIN_DEPLOYED = FALSE/NO_ACREDITADO`, `MYSQL_E2E = FALSE/NO_ACREDITADO`, `PRODUCTION_MODIFIED = FALSE`.
+
+
+## 2026-11-16 — Saneamiento de cuatro hallazgos del formulario staging
+
+**Alcance:** solo rama `feat/formulario-hostinger-staging-20261115`; sin despliegue de Hostinger ni cambios de producción, bases de datos o secretos.
+
+**Correcciones:**
+- Navegación de tarjetas: `data-servicio` incorporado a tres enlaces; preselección de radio, `scrollIntoView` compatible con movimiento reducido, `history.replaceState` sin salto por `location.hash`, margen CSS de 6 rem ante header fijo.
+- Respuestas ambiguas: `submit` y `review` bloqueados en el mismo procedimiento. Para HTTP 429 inequívoco, se guarda `Retry-After`, no se reenvía automáticamente y se permite solo el intento manual después de la ventana; otros errores ambiguos permanecen bloqueados.
+- Email: normalizado con trim y minúsculas en el control antes de aplicar validación y enviarlo. La validación definitiva continúa en PHP.
+- Errores accesibles: corrección en vivo por `input`/`change`, limpieza de errores corregidos sin mover el foco y `aria-invalid` aplicado a todos los radios del grupo.
+
+**Evidencia:** evaluación JavaScript en entorno controlado, 10/10 escenarios simulados PASS (incluye movimiento reducido, navegación, email, errores, consentimiento, 201, 422, 429, timeout y UUID inválido); 13/13 comprobaciones de estructura, sintaxis y contrato PHP PASS. El backend de la rama contempla JSON 201+UUID, 422 `validation_failed` y rechazo del honeypot `website`. Estas pruebas **no acreditan** MySQL ni despliegue real: API Hostinger H03 distinta, sin reconciliación verificada.
+
+**Pendientes:** confirmar integración web/API/MySQL del release instalado con datos QA; verificar privacidad y consentimiento jurídico antes de cualquier dato real. La rama conserva `data-staging-synthetic=true` y limitaciones QA. No se autoriza producción.
+
+
+## 2026-11-16 — Ajuste de textos del formulario Hostinger staging
+
+**Solicitud:** retirar referencias visibles a pruebas técnicas y datos ficticios en el formulario.
+
+**Cambios:** en `index.html` se simplificaron la etiqueta de lectura del aviso y su estado accesible; en `js/formulario-api.js` se armonizaron mensajes del checkbox y errores de validación. Se versionó el recurso JavaScript para evitar caché antigua.
+
+**Límites:** el entorno de staging continúa sin autorización para solicitudes reales y conserva `data-staging-synthetic=true`, las restricciones de identificadores sintéticos y la validación del backend. No se modifica producción, MySQL ni configuración de privacidad.
+
+**Verificación:** comprobación sintáctica JavaScript y aserciones de fuente PASS; E2E real de Hostinger y persistencia MySQL NO_ACREDITADOS. No se realizó despliegue remoto.
+
+
+## 2026-11-15 — Hostinger: frontend instalado; E2E pendiente de acceso protegido
+
+Fuente desplegada: `e70070b28158ea0057c939f7a06c2c1df2480fc9` (PR #21). Sesión hPanel autenticada con 2FA y verificada. Plan Business Web Hosting. Ruta comprobada: `/home/u270515629/domains/darkviolet-hippopotamus-789000.hostingersite.com/public_html`. PHP CLI 8.2.35, pdo_mysql y mbstring activos. Conexión PDO real a MariaDB 11.8.9-MariaDB-log PASS; tablas requests, request_rate_limits y request_network_rate_limits presentes. No se ha verificado aún una nueva escritura ni el esquema completo.
+
+Antes de cambiar se creó `backups/sm-final-20261115/before.tgz` fuera del webroot: 14 entradas, SHA256 `ea08f394cc317e24e362e1d16f0dac348740981be73a0078245628c3f96b85f0`. Listado del archivo y extracción en stdout de default.php verificados; restauración completa NOT_RUN. Contiene configuración privada; no publicarlo. Se recuperó la rama directamente en una copia de trabajo del servidor, sin tocar el portátil ni stashes.
+
+Se instalaron index.html, privacidad.html, css/, js/ y assets/. Nuevo public_html/.htaccess con DirectoryIndex index.html default.php y Options -Indexes. default.php conservado byte a byte: SHA256 `60ac62a68df8c20921467d735b12fda34fcf270b4069be63ed9f276c22b439ebbe`. private/ y backups/ modo 700; private/salvacion.php modo 600. No se reemplazaron API, backend, migraciones o secretos.
+
+API desplegada conserva la variante H03 con límite por red; difiere de la API de PR #21 y no se declara reconciliada. SHA256 API instalada `a78bacaf5f7883e4324ae0f22b8021e0d8247d5626a617a931cc2fc7b1135910`; bootstrap `838e36f54a8caa449547e0deeb6833a313b08c890d84174a65fefeafaa35c888`; migración MySQL `7b897cd2fc74c22dde935f02248e8b43f0ff4c7ec98b4555dd9c6d95eaa9ba79`.
+
+HTTPS raíz HTTP 200 y navegador muestran Salvación M. Validación vacía real muestra resumen de cinco errores y mueve foco al resumen PASS. Suite Node reejecutada sobre copia integrada conciliada: 13/13 PASS con mocks, no MySQL. No se atribuyen a la app los errores observados de una extensión chrome-extension. Visual móvil/tablet, zoom, contraste integral, E2E y rollback completo pendientes.
+
+El formulario permanece data-preview-only=true y sin envío. Privacidad y producción no autorizadas. Configuración existente declara aviso QA `sm-hostinger-sintetico-v1`, no aprobación jurídica pública. No hubo POST en esta ejecución. El acceso al sitio aún no está protegido; se abrió hPanel > Directorios protegidos con contraseña, raíz /, usuario propuesto salvacionqa, para intervención del titular al crear la contraseña. No se habilita envío hasta verificar esa protección. G3 sigue retirado como gate global.
+
+| Estado | Booleano | Diagnóstico |
+| --- | --- | --- |
+| FRONTEND_HOSTINGER_STAGING | TRUE | PASS |
+| HTTPS | TRUE | PASS |
+| PDO_MYSQL_CONEXION | TRUE | PASS |
+| API_PHP_OPERATIVA | FALSE | NO_ACREDITADO |
+| MYSQL_PERSISTENCIA | FALSE | NOT_RUN |
+| FORMULARIO_E2E_STAGING | FALSE | BLOCKED |
+| STAGING_PROTEGIDO | FALSE | BLOCKED |
+| PRIVACIDAD_APROBADA | FALSE | NO_ACREDITADO |
+| PRODUCCION_AUTORIZADA | FALSE | NO_ACREDITADO |
+| FORMULARIO_PRODUCCION_OPERATIVO | FALSE | NOT_RUN |
+
+## 2026-11-15 — Conciliación con archivo del portátil
+
+Inspeccionado `salvacion-M(2).7z`: HEAD `3d6e7833040583851d23531050599fa932573675`, dos stashes conservados. Único cambio versionado de contenido, ignorando CRLF: `backend/migrate.php`. Frontend coincide con base del PR #21. Copia independiente integrada con frontend del SHA remoto `11c2d75d655962a4b5ccc2d560a7541038867281`; migrador, work y output preservados. Sintaxis JS PASS, Node 13/13 PASS en esa copia. Sin cambios del portátil, sin POST ni despliegue. Migrador local pendiente de revisión MySQL; excluido del PR frontend. Detalle: `docs/conciliacion-portatil-20261115.md`.
+
+## 2026-11-15 — Integración frontend/API en rama aislada
+
+Base `3d6e7833040583851d23531050599fa932573675`. Nuevo módulo `js/formulario-api.js`, integración en `index.html`, retiro de controlador duplicado en `js/main.js`, estado CSS y 13 pruebas mock PASS. Aplicador Python 1/1 PASS; sintaxis y diff PASS. Corregida validación de ciudad sin letras. Envío sigue bloqueado. Sin modificaciones de backend, MySQL o producción.
+
+Staging observado: «Próximamente». Publicación BLOCKED por restricción de acceso cloud a hPanel; navegador no alcanzó localhost. Visual/móvil/teclado NOT_RUN. Checkout Windows no accesible. Informe y rollback condicionado en `docs/formulario-hostinger-fase2-20261115.md`; log Node en `docs/evidencias/formulario-node-20261115.txt`. SHA de entrega en historial de esta rama; PR en borrador, sin fusión.
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.

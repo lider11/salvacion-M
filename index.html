@@ -13,9 +13,11 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Salvación M | Orientación en salud">
     <meta property="og:locale" content="es_CO">
+    <meta property="og:url" content="https://darkviolet-hippopotamus-789000.hostingersite.com/">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/social.js" defer></script>
     <script src="./js/main.js" defer></script>
+    <script src="./js/formulario-api.js?v=staging-20261116-checkbox-1" defer></script>
 </head>
 
 <body>
@@ -82,7 +84,7 @@
                 </header>
                 <div class="servicios-grid">
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="negacion"
                             aria-label="Solicitar orientación sobre negación de servicios">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -98,7 +100,7 @@
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="medicamentos"
                             aria-label="Solicitar orientación sobre medicamentos">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -114,7 +116,7 @@
                         </a>
                     </article>
                     <article class="servicio">
-                        <a class="servicio-enlace" href="#contacto"
+                        <a class="servicio-enlace" href="#contacto" data-servicio="citas"
                             aria-label="Solicitar orientación sobre citas médicas">
                             <span class="servicio-icono" aria-hidden="true"><svg viewBox="0 0 24 24" width="32"
                                     height="32" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -241,12 +243,9 @@
                 <p class="contacto-intro">Cuéntanos tu situación. La consulta inicial es gratuita.</p>
                 <p class="contacto-aviso" id="contacto-privacidad">No incluyas historias clínicas, diagnósticos
                     ni documentos médicos en esta solicitud inicial.</p>
-                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Vista previa: envío no
-                        disponible.</strong> La recepción segura y la política de tratamiento de datos están
-                    pendientes de verificación. Usa solo datos ficticios; no incluyas datos personales ni
-                    información médica sensible.</p>
+                <p class="contacto-bloqueo" id="contacto-disponibilidad"><strong>Formulario en verificación.</strong> La recepción de solicitudes reales aún no está habilitada. No ingreses información personal o de salud.</p>
 
-                <form id="orientacion-form" class="contacto-form" method="dialog" data-preview-only="true"
+                <form id="orientacion-form" class="contacto-form" method="dialog" data-preview-only="false" data-staging-synthetic="true" data-site-origin="https://darkviolet-hippopotamus-789000.hostingersite.com" data-privacy-version="sm-h03-staging-sintetico-v1"
                     aria-describedby="contacto-disponibilidad contacto-privacidad" novalidate autocomplete="off">
                     <p class="contacto-requeridos">Los campos con <span aria-hidden="true">*</span> son
                         obligatorios.
@@ -352,16 +351,14 @@
                         <label>
                             <input id="contacto-consentimiento" name="consentimiento" type="checkbox" required
                                 aria-describedby="contacto-politica-estado">
-                            <span>Confirmo que consulté el <a href="./privacidad.html">aviso de privacidad</a> en
-                                borrador. Esta casilla no es una autorización de tratamiento de datos.</span>
+                            <span>Confirmo que he consultado el <a href="./privacidad.html">aviso de privacidad</a>.</span>
                         </label>
-                        <p id="contacto-politica-estado">El aviso está en revisión jurídica. Esta vista previa no
-                            envía, guarda ni registra solicitudes o autorizaciones.</p>
+                        <p id="contacto-politica-estado" role="status" aria-live="polite">Marca la casilla para confirmar que consultaste el aviso de privacidad.</p>
                         <p class="contacto-error" id="contacto-consentimiento-error" hidden></p>
                     </div>
                     <div class="contacto-acciones">
                         <button class="contacto-revisar" type="button" hidden>Revisar mi solicitud</button>
-                        <button class="contacto-enviar" type="submit" disabled hidden
+                        <button class="contacto-enviar" type="submit" style="background:#102a43;color:#fff;border-color:#102a43;cursor:pointer"
                             aria-describedby="contacto-disponibilidad">Enviar solicitud</button>
                     </div>
                     <p id="contacto-estado" class="contacto-estado" role="status" aria-atomic="true" hidden></p>
