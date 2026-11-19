@@ -1,5 +1,18 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-18 — Glassmorphism experimental en rama de prueba
+
+**Alcance:** rama `feat/glassmorphism-visual-qa-20261118` exclusivamente; no se modifican `main`, el despliegue de Hostinger ni componentes de datos.
+
+**Cambio inicial:** se añadió `css/glassmorphism.css` como capa opcional y su enlace después de `css/style.css` en `index.html`.
+
+**Hallazgo y corrección:** el primer estilo del hero modificaba `.hero-parallax` pero `.hero-parallax-stage` y `.hero-parallax-veil` tienen fondos propios que tapaban el nuevo degradado; adicionalmente, las tarjetas casi blancas dificultaban percibir el cristal. Se movieron los efectos a las capas visibles, se incorporaron formas decorativas detrás del contenido, se reforzó la transparencia y se añadió `?v=2` a la hoja para evitar caché de la primera iteración.
+
+**Seguridad y accesibilidad:** sin cambios en formularios, API o CRM; fallback si `backdrop-filter` no está disponible; `prefers-reduced-motion`, `forced-colors`, contraste de texto y foco preservados en el diseño. Estas disposiciones requieren comprobación visual en el navegador objetivo.
+
+**Pruebas y límites:** verificación remota de archivos y diff sobre GitHub. Sin acceso al equipo local, no se puede acreditar que Visual Studio Code esté en la rama correcta, que Live Server la haya recargado o que Hostinger refleje el diseño. Se mantienen pruebas visuales E2E y WCAG de la rama como pendientes.
+
+
 ## 2026-11-15 — Retiro expreso de G3 como requisito global
 
 **Decisión del titular:** deshabilitar el Gate G3 por provenir de un SDD que creó obligaciones excesivamente complejas. Se confirma su retiro de la gobernanza vigente de la rama `main`. No exigir siete criterios, `G3_PASS`, estados del gate ni ceremonias SDD como condiciones para terminar tareas.
