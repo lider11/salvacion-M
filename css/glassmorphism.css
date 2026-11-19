@@ -1,176 +1,138 @@
 /*
- * Salvación M | Glassmorphism visible · iteración 2
- * Solo capa de presentación; cargar después de css/style.css.
- * Para revertir: eliminar <link> de glassmorphism.css en index.html.
- * No modifica formularios ni servicios internos.
+ * Salvación M — Glassmorphism + detalles neomórficos (QA visual v2)
+ * Se carga DESPUÉS de css/style.css. Reversión: retirar el link en index.html.
+ * Sin cambios de JS, formulario, API, CRM ni datos.
  */
 :root {
-  --sm-glass-border: rgb(255 255 255 / 49%);
-  --sm-glass-navy: rgb(9 28 45 / 70%);
-  --sm-glass-light: rgb(255 255 255 / 78%);
+  --sm-glass-dark: rgb(8 30 49 / 54%);
+  --sm-glass-surface: rgb(240 250 252 / 74%);
+  --sm-glass-border: rgb(255 255 255 / 54%);
+  --sm-glass-shadow: 0 16px 38px rgb(1 17 31 / 24%);
 }
 
-/* El cristal del header es apreciable cuando se desplaza la página. */
+/* El encabezado permite distinguir el fondo traslúcido del sólido anterior. */
 .site-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgb(16 42 67 / 85%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
+  background: rgb(10 36 57 / 88%);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
 }
-.skip-link { z-index: 50; }
 
 /*
- * Corrección de la causa raíz:
- * El fondo de .hero-parallax no se veía porque .hero-parallax-stage
- * (opaco) y .hero-parallax-veil lo tapaban. Decorar esas capas reales.
+ * Corrección raíz v1: la capa VISIBLE es .hero-parallax-stage / .hero-parallax-veil,
+ * no el fondo de #inicio, que estaba cubierto por la etapa cinematográfica opaca.
+ * Las luces se mantienen visibles cuando la intro termina (veil opacity: 1).
  */
 #inicio.hero-parallax .hero-parallax-stage {
   background:
-    radial-gradient(circle at 16% 28%, rgb(29 172 197 / 72%), transparent 39%),
-    radial-gradient(circle at 88% 82%, rgb(72 147 209 / 67%), transparent 43%),
-    linear-gradient(125deg, #0c233b 7%, #145b82 94%);
+    radial-gradient(circle at 78% 19%, rgb(23 172 202 / 55%), transparent 28%),
+    radial-gradient(circle at 15% 77%, rgb(78 140 216 / 42%), transparent 33%),
+    linear-gradient(135deg, #102a43 12%, #145b82 100%);
 }
 #inicio.hero-parallax .hero-parallax-veil {
-  background: linear-gradient(125deg, rgb(9 28 45 / 53%), rgb(20 91 130 / 34%));
+  background:
+    radial-gradient(circle at 83% 21%, rgb(49 211 220 / 78%) 0%, rgb(28 125 183 / 42%) 10%, transparent 27%),
+    radial-gradient(circle at 14% 84%, rgb(48 145 210 / 70%) 0%, transparent 29%),
+    radial-gradient(circle at 53% 12%, rgb(240 195 91 / 30%) 0%, transparent 20%),
+    linear-gradient(130deg, #0b2744, #15577a 78%, #08334f);
 }
-
-/* Orbes decorativos solo aparecen al revelarse el contenido. */
-#inicio.hero-parallax .hero-parallax-stage::before,
-#inicio.hero-parallax .hero-parallax-stage::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  width: clamp(13rem, 30vw, 25rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 600ms ease;
-}
-#inicio.hero-parallax .hero-parallax-stage::before {
-  top: 6%;
-  left: -7%;
-  background: radial-gradient(circle at 32% 25%, #c5f5fa, #27a8c4 38%, #0b6386 76%);
-}
-#inicio.hero-parallax .hero-parallax-stage::after {
-  right: -7%;
-  bottom: -21%;
-  background: radial-gradient(circle at 32% 23%, #fff1c8, #e3ad4f 34%, #12768f 77%);
-}
-#inicio.hero-parallax.is-revealing .hero-parallax-stage::before,
-#inicio.hero-parallax.is-revealing .hero-parallax-stage::after,
-#inicio.hero-parallax.is-settled .hero-parallax-stage::before,
-#inicio.hero-parallax.is-settled .hero-parallax-stage::after { opacity: .83; }
-
-/* Panel de vidrio y foto enmarcada, sin comprometer el texto. */
 #inicio.hero-parallax .hero-copy {
   position: relative;
-  padding: clamp(1.4rem, 3.3vw, 2.6rem);
+  padding: clamp(1.35rem, 3.3vw, 2.55rem);
   border: 1px solid var(--sm-glass-border);
-  border-radius: 1.3rem;
-  background: var(--sm-glass-navy);
-  -webkit-backdrop-filter: blur(22px) saturate(125%);
-  backdrop-filter: blur(22px) saturate(125%);
-  box-shadow: 0 16px 40px rgb(2 16 29 / 21%), inset 0 1px 0 rgb(255 255 255 / 22%);
+  border-radius: 1.4rem;
+  background: var(--sm-glass-dark);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(22px) saturate(140%);
+  box-shadow: var(--sm-glass-shadow), inset 0 1px 0 rgb(255 255 255 / 29%);
 }
 #inicio.hero-parallax .hero-copy h1,
 #inicio.hero-parallax .hero-copy p { color: #fff; }
 #inicio.hero-parallax .hero-copy .hero-accent { color: #f0c35b; }
 #inicio.hero-parallax .hero-visual {
-  padding: .5rem;
-  border: 1px solid rgb(255 255 255 / 48%);
-  border-radius: 1.35rem;
-  background: rgb(255 255 255 / 14%);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  padding: clamp(.4rem, 1.2vw, .8rem);
+  border: 1px solid rgb(255 255 255 / 54%);
+  border-radius: 1.45rem;
+  background: rgb(233 249 255 / 14%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 42px rgb(2 18 31 / 24%), inset 0 1px 0 rgb(255 255 255 / 36%);
 }
-#inicio.hero-parallax .hero-visual img { border-radius: .95rem; }
+#inicio.hero-parallax .hero-visual img { border-radius: 1rem; }
 
-/* El fondo tiene zonas luminosas debajo del vidrio (no sobre el texto). */
+/* Los orbes hacen observable el desenfoque dentro de las superficies translúcidas. */
 #servicios {
   background:
-    radial-gradient(circle at 16% 30%, rgb(26 172 194 / 63%), transparent 44%),
-    radial-gradient(circle at 86% 70%, rgb(82 148 201 / 51%), transparent 43%),
+    radial-gradient(circle at 7% 18%, rgb(18 189 206 / 75%) 0%, transparent 27%),
+    radial-gradient(circle at 95% 82%, rgb(79 153 224 / 63%) 0%, transparent 30%),
+    radial-gradient(circle at 54% 47%, rgb(240 195 91 / 26%) 0%, transparent 28%),
     #102a43;
 }
 #servicios .servicio {
-  border: 1px solid rgb(255 255 255 / 66%);
-  background: var(--sm-glass-light);
-  -webkit-backdrop-filter: blur(18px) saturate(125%);
-  backdrop-filter: blur(18px) saturate(125%);
-  box-shadow: 0 10px 28px rgb(2 19 35 / 19%), inset 0 1px 0 rgb(255 255 255 / 40%);
+  border: 1px solid rgb(255 255 255 / 78%);
+  border-radius: 1.15rem;
+  background: var(--sm-glass-surface);
+  -webkit-backdrop-filter: blur(22px) saturate(130%);
+  backdrop-filter: blur(22px) saturate(130%);
+  box-shadow:
+    11px 15px 28px rgb(1 17 31 / 26%),
+    -4px -4px 14px rgb(255 255 255 / 8%),
+    inset 0 1px 0 rgb(255 255 255 / 75%);
 }
-#servicios .servicio-enlace:hover { background: rgb(255 255 255 / 20%); }
-#servicios .servicio-enlace:focus-visible {
-  outline: 3px solid #086c72;
-  outline-offset: -5px;
+#servicios .servicio-enlace { background: transparent; }
+#servicios .servicio-enlace:hover,
+#servicios .servicio-enlace:focus-visible { background: rgb(255 255 255 / 21%); }
+#servicios .servicio-icono {
+  background: #ecf5fa;
+  box-shadow: 5px 6px 10px rgb(117 146 161 / 32%), -4px -4px 10px rgb(255 255 255 / 90%);
 }
+#servicios .servicio-enlace:focus-visible { outline: 3px solid #086c72; outline-offset: -4px; }
+
+/* El recuadro institucional también presenta profundidad y vidrio. */
 #nosotros {
   background:
-    radial-gradient(circle at 86% 49%, rgb(30 149 175 / 48%), transparent 39%),
+    radial-gradient(circle at 84% 52%, rgb(22 143 175 / 58%), transparent 40%),
     #102a43;
 }
 #nosotros .nosotros-conceptos {
-  border: 1px solid rgb(255 255 255 / 73%);
-  background: rgb(255 255 255 / 85%);
+  border: 1px solid rgb(255 255 255 / 78%);
+  background: rgb(245 250 252 / 80%);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  box-shadow: 0 12px 32px rgb(2 19 35 / 18%);
+  box-shadow: 13px 17px 36px rgb(1 14 26 / 24%), inset 0 1px 0 #fff;
+}
+#nosotros .nosotros-icono {
+  box-shadow: inset 3px 3px 6px rgb(150 171 183 / 25%), inset -3px -3px 6px #fff;
 }
 
-/* Degradación progresiva: el contenido es legible sin backdrop-filter. */
+/* Sin soporte para blur, las superficies conservan contraste y contenido. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .site-header { background: #102a43; }
-  #inicio.hero-parallax .hero-copy { background: #091c2d; }
-  #servicios .servicio, #nosotros .nosotros-conceptos { background: #fff; }
+  #inicio.hero-parallax .hero-copy { background: #092238; }
+  #inicio.hero-parallax .hero-visual { background: #16435d; }
+  #servicios .servicio,
+  #nosotros .nosotros-conceptos { background: #fff; }
 }
-
-/* Vista móvil: impedir que los orbes tapen el contenido interactivo. */
 @media (max-width: 600px) {
-  #inicio.hero-parallax .hero-copy {
-    padding: 1.25rem;
-    border-radius: 1rem;
-  }
-  #inicio.hero-parallax .hero-parallax-stage::before {
-    width: 13rem;
-    top: 3%;
-    left: -7rem;
-  }
-  #inicio.hero-parallax .hero-parallax-stage::after {
-    width: 11rem;
-    right: -5rem;
-    bottom: -3rem;
-  }
-  #servicios .servicio { box-shadow: 0 6px 18px rgb(2 19 35 / 12%); }
-}
-
-/* Interacciones discretas y respetuosas con reducción de movimiento. */
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  #servicios .servicio { transition: transform 180ms ease, box-shadow 180ms ease; }
-  #servicios .servicio:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 30px rgb(2 19 35 / 21%);
-  }
+  #inicio.hero-parallax .hero-copy { padding: 1.2rem; border-radius: 1rem; }
+  #inicio.hero-parallax .hero-visual { padding: .4rem; }
+  #servicios .servicio { box-shadow: 5px 9px 20px rgb(2 19 34 / 21%); }
 }
 @media (prefers-reduced-motion: reduce) {
-  #inicio.hero-parallax .hero-parallax-stage::before,
-  #inicio.hero-parallax .hero-parallax-stage::after,
-  #servicios .servicio { transition: none; }
+  #inicio.hero-parallax .hero-copy,
+  #servicios .servicio,
+  #nosotros .nosotros-conceptos { transition: none; }
 }
-
-/* Alto contraste: evitar superficies translúcidas problemáticas. */
 @media (forced-colors: active) {
-  .site-header, #inicio.hero-parallax .hero-parallax-stage,
-  #servicios, #nosotros { background: Canvas; color: CanvasText; }
-  #inicio.hero-parallax .hero-parallax-stage::before,
-  #inicio.hero-parallax .hero-parallax-stage::after { display: none; }
+  .site-header, #inicio.hero-parallax .hero-parallax-stage, #servicios, #nosotros {
+    background: Canvas;
+    color: CanvasText;
+  }
+  #inicio.hero-parallax .hero-parallax-veil { background: Canvas; }
   #inicio.hero-parallax .hero-copy, #inicio.hero-parallax .hero-visual,
   #servicios .servicio, #nosotros .nosotros-conceptos {
     background: Canvas;
-    color: CanvasText;
     border: 1px solid CanvasText;
+    color: CanvasText;
     box-shadow: none;
   }
   #inicio.hero-parallax .hero-copy h1,
