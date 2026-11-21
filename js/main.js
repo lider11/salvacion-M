@@ -259,54 +259,87 @@
 (() => {
   const consultationLink = document.querySelector('.hero .btn-primary[href="#contacto"]');
   const contactTitle = document.getElementById('contacto-titulo');
-  const contactContent = contactTitle?.closest('.container');
+  const contactContent = document.querySelector('#contacto .contacto-form');
   if (!consultationLink || !contactTitle || !contactContent) return;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let buttonEffect;
   let destinationEffect;
+  let rippleEffect;
+  let ripple;
   let activation = 0;
 
   consultationLink.addEventListener('click', async (event) => {
     if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
 
     event.preventDefault();
+    rippleEffect?.cancel();
     const currentActivation = ++activation;
-    buttonEffect?.cancel();
+    ripple?.remove();
+    if (!reducedMotion.matches && typeof consultationLink.animate === 'function') {
+      const bounds = consultationLink.getBoundingClientRect();
+      const x = event.detail === 0 ? bounds.width / 2 : event.clientX - bounds.left;
+      const y = event.detail === 0 ? bounds.height / 2 : event.clientY - bounds.top;
+      const diameter = 2 * Math.hypot(Math.max(x, bounds.width - x), Math.max(y, bounds.height - y));
+      const wave = document.createElement('span');
+      wave.className = 'consultation-ripple';
+      wave.setAttribute('aria-hidden', 'true');
+      Object.assign(wave.style, { left: `${x}px`, top: `${y}px`, width: `${diameter}px`, height: `${diameter}px` });
+      consultationLink.append(wave);
+      ripple = wave;
+      rippleEffect = wave.animate([
+        { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+        { transform: 'translate(-50%, -50%) scale(0.65)', opacity: 0.85, offset: 0.45 },
+        { transform: 'translate(-50%, -50%) scale(1)', opacity: 0 }
+      ], { duration: 650, easing: 'ease-out' });
+      await rippleEffect.finished.then(() => wave.remove(), () => wave.remove());
+    }
     destinationEffect?.cancel();
 
-    if (!reducedMotion.matches && typeof consultationLink.animate === 'function') {
-      buttonEffect = consultationLink.animate([
-        { transform: 'scale(1)', backgroundColor: '#ffffff' },
-        { transform: 'scale(0.95)', backgroundColor: '#ffda85', offset: 0.4 },
-        { transform: 'scale(1)', backgroundColor: '#ffffff' }
-      ], { duration: 320, easing: 'ease-out' });
-      try {
-        await buttonEffect.finished;
-      } catch {
-        // cancelación por clic repetido o prefers-reduced-motion
-      }
-    }
-
     if (currentActivation !== activation) return;
-    if (window.location.hash !== '#contacto') window.location.hash = 'contacto';
+    if (window.location.hash !== '#contacto') window.history.pushState(null, '', '#contacto');
     contactTitle.closest('section').scrollIntoView({
       behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start'
     });
+    if (!reducedMotion.matches) {
+      const section = contactTitle.closest('section');
+      const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+      const target = Math.max(0, Math.min(
+        window.scrollY + section.getBoundingClientRect().top - margin,
+        document.documentElement.scrollHeight - window.innerHeight
+      ));
+      const arrived = await new Promise(resolve => {
+        const started = performance.now();
+        function checkArrival(now) {
+          if (currentActivation !== activation) return resolve(false);
+          if (reducedMotion.matches) {
+            section.scrollIntoView({ behavior: 'instant', block: 'start' });
+            return resolve(true);
+          }
+          if (Math.abs(window.scrollY - target) <= 2) return resolve(true);
+          if (now - started > 2500) return resolve(false);
+          requestAnimationFrame(checkArrival);
+        }
+        requestAnimationFrame(checkArrival);
+      });
+      if (!arrived) return;
+    }
+    if (currentActivation !== activation) return;
     contactTitle.focus({ preventScroll: true });
 
     if (!reducedMotion.matches && typeof contactContent.animate === 'function') {
+      const restingShadow = getComputedStyle(contactContent).boxShadow;
       destinationEffect = contactContent.animate([
-        { backgroundColor: '#fff0c2', boxShadow: '0 0 0 12px #fff0c2' },
-        { backgroundColor: '#fff0c2', boxShadow: '0 0 0 12px #fff0c2', offset: 0.45 },
-        { backgroundColor: 'transparent', boxShadow: '0 0 0 12px transparent' }
-      ], { duration: 2400, easing: 'ease-out' });
+        { boxShadow: restingShadow },
+        { boxShadow: '0 0 0 3px #f0c35b, 0 0 24px 4px rgb(240 195 91 / 45%)', offset: 0.3 },
+        { boxShadow: restingShadow }
+      ], { duration: 1000, easing: 'ease-out' });
     }
   });
 
   reducedMotion.addEventListener('change', () => {
     if (reducedMotion.matches) {
-      buttonEffect?.cancel();
+      rippleEffect?.cancel();
+      ripple?.remove();
       destinationEffect?.cancel();
     }
   });

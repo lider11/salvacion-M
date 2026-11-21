@@ -1,5 +1,59 @@
 # Memoria canónica — Salvación M
 
+## 2026-11-21 — Onda completa antes del desplazamiento
+
+**Cambio:** el botón espera la finalización real de la onda de 650 ms antes de iniciar el desplazamiento, sustituyendo la espera parcial de 180 ms. Conserva cancelación por clic repetido y movimiento reducido. Riesgo: espera intencional de 650 ms con animación habilitada.
+
+**Verificación real:** Chromium confirma onda activa a 300 ms sin llamada de desplazamiento y llamada posterior únicamente después de retirar la onda. `node --check js/main.js` y `git diff --check` correctos. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`; cambio local sin commit ni despliegue.
+
+## 2026-11-21 — Corrección de visibilidad de la onda
+
+**Cambio:** onda sobre el fondo y bajo una etiqueta de texto independiente, dorado más intenso, duración de 650 ms y pausa de 180 ms antes del desplazamiento para poder percibirla. Riesgo: breve demora intencional antes de navegar; movimiento reducido la omite.
+
+**Verificación real:** Chromium local muestra onda activa con opacidad 0,958 y capa 1; captura `output/ripple-check.png` revisada con onda visible y texto legible. Al finalizar no quedan ondas y el foco llega a `contacto-titulo`. Sintaxis JS y diff correctos. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`; sin commit ni despliegue.
+
+## 2026-11-21 — Onda dorada en el botón de consulta
+
+**Cambio:** onda de luz de 550 ms desde el punto del clic, centrada para activación por teclado y recortada dentro del botón del hero. No retrasa el desplazamiento. Elemento decorativo sin eventos ni exposición a lectores de pantalla; se limpia al terminar, cancelar o repetir clic. Movimiento reducido omite la onda.
+
+**Verificación:** `node --check js/main.js` y `git diff --check` correctos. Resultado visual e interacción en navegador: NO VERIFICADOS. Riesgo acotado a composición visual del botón. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`; cambio local sin commit ni despliegue.
+
+## 2026-11-21 — Llegada suave desde Solicitar consulta
+
+**Cambio:** desplazamiento suave nativo sin espera previa del botón ni salto por cambio de hash; al llegar se enfoca el título y se ilumina el borde del formulario durante un segundo. Se conserva su fondo. Clics repetidos invalidan recorridos anteriores; movimiento reducido omite animaciones.
+
+**Verificación:** sintaxis `node --check js/main.js` y `git diff --check` correctos. Interacción y resultado visual en navegador: NO VERIFICADOS. Riesgo: diferencias de duración del scroll nativo entre navegadores; espera acotada a 2,5 segundos y sin resaltado si no llega. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`; sin commit ni despliegue.
+
+## 2026-11-21 — Colores continuos en las palabras del hero
+
+**Cambio:** `Orientación` y `salud` comparten una animación CSS infinita de seis segundos entre dorado, turquesa y lila, con retorno suave al dorado. Se conserva color fijo cuando se solicita movimiento reducido.
+
+**Verificación:** `git diff --check` correcto. Prueba Chromium intentada, bloqueada al iniciar por `spawn EPERM`; ciclo en navegador y contraste durante las transiciones: NO VERIFICADOS. Riesgo acotado al estilo del texto. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`; cambio local sin commit ni despliegue.
+
+## 2026-11-21 — Retiro del círculo decorativo del hero
+
+**Cambio:** eliminado el pseudoelemento circular del hero en `css/glass.css`, incluidas sus reglas de escritorio y móvil, para evitar su superposición a la imagen inicial. Se conservan las esferas de las demás secciones.
+
+**Verificación:** comprobación estática confirma ausencia del selector del círculo en el hero y conservación de los selectores decorativos restantes; `git diff --check` correcto. Resultado visual en navegador: NO VERIFICADO.
+
+**Riesgos:** cambio decorativo acotado; sin cambios en la transición del hero. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`. Cambio local sin commit ni despliegue.
+
+## 2026-11-18 — Efecto de vidrio esmerilado
+
+**Cambio:** capa CSS independiente `css/glass.css`, enlazada desde inicio: paneles translúcidos, desenfoque de fondo, bordes luminosos, sombras, degradados y esferas decorativas. Fondos sólidos de respaldo y preferencia de transparencia reducida. Se conservan los cambios locales previos.
+
+**Verificación:** Chromium local con movimiento reducido, sin desbordamiento horizontal a 320, 375, 768 y 1440 px; `backdrop-filter` calculado de 14 px en tarjetas. Captura completa revisada en `output/glass-desktop.png`; se corrigió el contraste del aviso de privacidad exterior al formulario. `git diff --check` correcto. WCAG integral, otros navegadores y rendimiento en dispositivos reales: NO VERIFICADOS.
+
+**Riesgos:** coste del desenfoque en móviles y diferencias de soporte; fondos de respaldo incluidos. SHA base `ec4f50e0a93f9aa59930080a0aeef990c2c820aa`. Cambios locales sin commit ni despliegue.
+
+## 2026-11-15 — Cobertura ampliada de submit único y bloqueo público
+
+**Revisión:** js/main.js ya tiene un solo submit con fetch JSON; index.html conserva preview y envío oculto/deshabilitado; API sin cambios desde ec4f50e. No se modificó código funcional ni producción.
+
+**Pruebas nuevas:** 34 comprobaciones Chromium aprobadas: submit repetidos durante guardado generan un POST y una fila, errores HTTP, HTML inesperado, red interrumpida y submit forzado en preview sin envío. Evidencia de ID/fila actualizada. Suites API anteriores: 52 SQLite y 55 MySQL, no repetidas en esta ampliación porque la API no cambió.
+
+**Límites:** no hay idempotencia entre reintentos separados; privacidad y staging siguen pendientes para activar público. Informe: docs/informe-verificacion-formulario-local.md. Base ec4f50e; ampliación local sin commit.
+
 ## 2026-11-15 — Verificación solicitada Constructor, Crítico y Árbitro
 
 **Alcance:** fases secuenciales en una sesión para esta entrega, sin reactivar G3 global. Se conservaron los cambios locales. Se corrigieron migración DDL MySQL, tipos JSON inesperados, respuesta de bootstrap ausente, lectura acotada de cuerpo y avisos PHP que contaminaban JSON; se bloquearon campos durante envío.

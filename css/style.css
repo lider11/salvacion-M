@@ -64,11 +64,29 @@ p { margin-top: 0; }
 .hero-visual img { display: block; width: 100%; height: auto; border-radius: 1.25rem; }
 .hero h1 { color: #fff; }
 .hero-accent { color: var(--gold-bright); }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-accent { animation: hero-accent-colors 6s ease-in-out infinite; }
+}
+@keyframes hero-accent-colors {
+  0%, 100% { color: var(--gold-bright); }
+  33% { color: #7de7ed; }
+  66% { color: #e0b5ff; }
+}
 .hero p { max-width: 65ch; font-size: clamp(1rem, 1.6vw, 1.2rem); margin-bottom: 1.75rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem 1rem; }
 .btn-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .85rem 1.35rem; border: 0; border-radius: .55rem; background: #fff; color: var(--navy); text-decoration: none; font: inherit; font-weight: 750; cursor: pointer; }
 .btn-primary:hover { background: #e6f2f7; }
 .btn-primary:disabled { opacity: .65; cursor: not-allowed; }
+.hero .btn-primary { position: relative; overflow: hidden; isolation: isolate; }
+.hero .btn-primary > .consultation-label { position: relative; z-index: 2; pointer-events: none; }
+.consultation-ripple {
+  position: absolute;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f0c35b 0%, rgb(240 195 91 / 80%) 55%, transparent 72%);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+}
 #contacto { background: var(--soft); }
 #nosotros p, #contacto p { max-width: 70ch; }
 .site-footer { background: #091e30; color: #fff; padding-block: clamp(2.5rem, 5vw, 4rem) 1.5rem; }
